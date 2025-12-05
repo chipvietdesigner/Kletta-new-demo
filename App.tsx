@@ -1,4 +1,11 @@
 
+
+
+
+
+
+
+
 import React, { useState, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import TopHeader from './components/TopHeader';
@@ -8,13 +15,17 @@ import ClientTable from './components/ClientTable';
 import VatReturnsTable from './components/VatReturnsTable';
 import TaxReturnTable from './components/TaxReturnTable';
 import BankTransactionsTable from './components/BankTransactionsTable';
+import InvitationsTable from './components/InvitationsTable';
+import MileagesList from './components/MileagesList';
+import Reports from './components/Reports';
+import InvoicesTable from './components/InvoicesTable';
 import Chat from './components/Chat';
 import Account from './components/Account';
 import Login from './components/Login';
 import AISupport from './components/AISupport';
 import Dashboard from './components/Dashboard';
 import Welcome from './components/Welcome';
-import { NavItemType, IncomeTransaction, Client, ExpenseTransaction, VatReturn, TaxReturnRow, BankTransaction, DashboardData } from './types';
+import { NavItemType, IncomeTransaction, Client, ExpenseTransaction, VatReturn, TaxReturnRow, BankTransaction, DashboardData, Invitation, MileageTrip, MOCK_INVOICES } from './types';
 import { 
   Tray, 
   TrendUp, 
@@ -830,6 +841,103 @@ const generateMockClients = (): Client[] => {
 
 const MOCK_CLIENT_DATA = generateMockClients();
 
+const MOCK_INVITATIONS: Invitation[] = [
+  { id: '1', email: 'david.fisher@example.com', phone: '+358 40 123 4567', firstName: 'David', lastName: 'Fisher', status: 'INVITE SENT', lastUpdated: 'Today 10:42', paymentLink: 'kletta.com/p/xh82' },
+  { id: '2', email: 'sarah.smith@consult.co', phone: '+44 7700 900077', firstName: 'Sarah', lastName: 'Smith', status: 'ACCEPTED', lastUpdated: 'Yesterday', paymentLink: 'PAID' },
+  { id: '3', email: 'mike.ross@pearson.com', phone: '+1 555 0199', firstName: 'Mike', lastName: 'Ross', status: 'EXPIRED', lastUpdated: '2 days ago', paymentLink: 'kletta.com/p/aa91' },
+  { id: '4', email: 'jessica.p@pearson.com', phone: '+1 555 0123', firstName: 'Jessica', lastName: 'Pearson', status: 'DRAFT', lastUpdated: '1 week ago', paymentLink: 'Generate link' },
+  { id: '5', email: 'louis.litt@pearson.com', phone: '+1 555 0144', firstName: 'Louis', lastName: 'Litt', status: 'INVITE SENT', lastUpdated: 'Today 09:15', paymentLink: 'kletta.com/p/bb22' },
+  { id: '6', email: 'harvey.specter@pearson.com', phone: '+1 555 0100', firstName: 'Harvey', lastName: 'Specter', status: 'ACCEPTED', lastUpdated: '3 days ago', paymentLink: 'PAID' },
+  { id: '7', email: 'rachel.zane@pearson.com', phone: '+1 555 0111', firstName: 'Rachel', lastName: 'Zane', status: 'PENDING', lastUpdated: 'Yesterday', paymentLink: 'kletta.com/p/cc33' }
+];
+
+const MOCK_MILEAGES: MileageTrip[] = [
+  {
+    id: '1',
+    startAddress: 'Mannerheimintie 1',
+    endAddress: 'Aleksanterinkatu 52',
+    startCityCountry: 'Helsinki, Finland',
+    endCityCountry: 'Helsinki, Finland',
+    duration: '00:15:00',
+    distanceKm: 5.2,
+    claimAmount: 2.76,
+    vehicle: 'KIA (ABC-123)',
+    drivePurpose: 'Client work',
+    country: 'Finland',
+    date: '20.11.2025 09:00'
+  },
+  {
+    id: '2',
+    startAddress: 'Helsinki Airport',
+    endAddress: 'Tampere Central Station',
+    startCityCountry: 'Vantaa, Finland',
+    endCityCountry: 'Tampere, Finland',
+    duration: '01:50:00',
+    distanceKm: 170.5,
+    claimAmount: 90.36,
+    vehicle: 'Tesla Model 3',
+    drivePurpose: 'Meeting',
+    country: 'Finland',
+    date: '18.11.2025 14:30'
+  },
+  {
+    id: '3',
+    startAddress: 'Turku Castle',
+    endAddress: 'Logomo',
+    startCityCountry: 'Turku, Finland',
+    endCityCountry: 'Turku, Finland',
+    duration: '00:12:00',
+    distanceKm: 3.5,
+    claimAmount: 1.85,
+    vehicle: 'VW Golf',
+    drivePurpose: 'Client work',
+    country: 'Finland',
+    date: '15.11.2025 10:15'
+  },
+  {
+    id: '4',
+    startAddress: 'Tampere Central Station',
+    endAddress: 'Helsinki Airport',
+    startCityCountry: 'Tampere, Finland',
+    endCityCountry: 'Vantaa, Finland',
+    duration: '01:55:00',
+    distanceKm: 170.5,
+    claimAmount: 90.36,
+    vehicle: 'Tesla Model 3',
+    drivePurpose: 'Between offices',
+    country: 'Finland',
+    date: '18.11.2025 18:00'
+  },
+  {
+    id: '5',
+    startAddress: 'Espoo Metro',
+    endAddress: 'Kauniainen Center',
+    startCityCountry: 'Espoo, Finland',
+    endCityCountry: 'Kauniainen, Finland',
+    duration: '00:20:00',
+    distanceKm: 8.4,
+    claimAmount: 4.45,
+    vehicle: 'KIA (ABC-123)',
+    drivePurpose: 'Personal',
+    country: 'Finland',
+    date: '10.11.2025 17:30'
+  },
+  {
+    id: '6',
+    startAddress: 'Oulu Technology Park',
+    endAddress: 'Oulu Airport',
+    startCityCountry: 'Oulu, Finland',
+    endCityCountry: 'Oulu, Finland',
+    duration: '00:25:00',
+    distanceKm: 15.0,
+    claimAmount: 7.95,
+    vehicle: 'Audi A4',
+    drivePurpose: 'Airport/Travel',
+    country: 'Finland',
+    date: '05.11.2025 07:00'
+  }
+];
+
 const App: React.FC = () => {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -849,6 +957,9 @@ const App: React.FC = () => {
   const [taxReturnTab, setTaxReturnTab] = useState<'SENT' | 'NOT SENT'>('SENT');
   const [taxReturnYear, setTaxReturnYear] = useState('2024');
   const [taxReturnSearch, setTaxReturnSearch] = useState('');
+
+  // Invoices State
+  const [invoiceStatusFilter, setInvoiceStatusFilter] = useState<'All' | 'Open' | 'Paid' | 'Due'>('All');
 
   const filteredTransactions = useMemo(() => {
     if (!filterCategory) return MOCK_INCOME_DATA;
@@ -958,6 +1069,14 @@ const App: React.FC = () => {
       );
     }
 
+    if (activeItem === NavItemType.REPORTS) {
+      return (
+        <main className="flex-1 overflow-hidden flex flex-col">
+          <Reports />
+        </main>
+      );
+    }
+
     if (activeItem === NavItemType.VAT_RETURNS) {
       return (
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
@@ -1050,6 +1169,126 @@ const App: React.FC = () => {
            </div>
 
            <TaxReturnTable data={filteredTaxReturns} />
+        </main>
+      );
+    }
+
+    if (activeItem === NavItemType.INVITATIONS) {
+      return (
+        <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
+           {/* Page Title */}
+           <div className="mb-6 flex items-center justify-between">
+             <h1 className="text-2xl font-bold text-[#002b31]">Invitations</h1>
+           </div>
+
+           {/* Toolbar (Search & Filter) */}
+           <div className="mb-2 flex items-center justify-between">
+             <div className="flex items-center gap-2">
+                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                   All statuses
+                   <CaretDown size={12} className="text-gray-400" />
+                </button>
+             </div>
+             <div className="flex items-center gap-2">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
+                    <MagnifyingGlass size={14} />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Search invitations..."
+                    className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[220px] shadow-sm focus:outline-none"
+                  />
+                </div>
+                <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
+                   <Plus size={14} weight="bold" />
+                   Create Invitation
+                </button>
+             </div>
+           </div>
+
+           <InvitationsTable invitations={MOCK_INVITATIONS} />
+        </main>
+      );
+    }
+    
+    if (activeItem === NavItemType.MILEAGES) {
+      return (
+        <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
+           {/* Page Title */}
+           <div className="mb-6 flex items-center justify-between">
+             <h1 className="text-2xl font-bold text-[#002b31]">Mileages</h1>
+           </div>
+
+           {/* Toolbar (Filter & Actions) */}
+           <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                  <div className="bg-gray-100 p-1 rounded-lg flex">
+                      <button className="px-4 py-1.5 bg-white shadow-sm rounded-md text-[13px] font-medium text-[#002b31]">Recorded trips</button>
+                      <button className="px-4 py-1.5 text-[13px] font-medium text-gray-600 hover:text-gray-900 transition-colors">Imported mileage</button>
+                  </div>
+              </div>
+               <div className="flex items-center gap-2">
+                    <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                       Last 30 days
+                       <CaretDown size={12} className="text-gray-400" />
+                    </button>
+                    <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
+                       <Plus size={14} weight="bold" />
+                       Add Trip
+                    </button>
+               </div>
+           </div>
+
+           {/* List */}
+           <div className="flex-1 overflow-y-auto custom-scrollbar">
+              <MileagesList mileages={MOCK_MILEAGES} />
+           </div>
+        </main>
+      );
+    }
+    
+    if (activeItem === NavItemType.INVOICES) {
+      return (
+        <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
+           {/* Page Title */}
+           <div className="mb-6 flex items-center justify-between">
+             <h1 className="text-2xl font-bold text-[#002b31]">Invoices</h1>
+           </div>
+
+           {/* Toolbar (Tabs) */}
+           <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                  <div className="bg-gray-100 p-1 rounded-lg flex">
+                      {(['All', 'Open', 'Paid', 'Due'] as const).map((status) => (
+                        <button
+                          key={status}
+                          onClick={() => setInvoiceStatusFilter(status)}
+                          className={`px-4 py-1.5 text-[13px] font-medium rounded-md transition-all ${
+                            invoiceStatusFilter === status 
+                              ? 'bg-white text-[#002b31] shadow-sm' 
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
+                        >
+                          {status}
+                        </button>
+                      ))}
+                  </div>
+              </div>
+               <div className="flex items-center gap-2">
+                    <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                       Last 30 days
+                       <CaretDown size={12} className="text-gray-400" />
+                    </button>
+                    <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
+                       <Plus size={14} weight="bold" />
+                       Create Invoice
+                    </button>
+               </div>
+           </div>
+
+           {/* List */}
+           <InvoicesTable invoices={MOCK_INVOICES} statusFilter={invoiceStatusFilter} />
         </main>
       );
     }

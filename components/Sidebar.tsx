@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { 
   HandWaving, 
@@ -18,7 +19,11 @@ import {
   Check,
   SignOut,
   Scroll,
-  SquaresFour
+  SquaresFour,
+  RoadHorizon,
+  X,
+  Copy,
+  DeviceMobile
 } from '@phosphor-icons/react';
 import { NavItemType } from '../types';
 
@@ -61,6 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
   const [isAIEnabled, setIsAIEnabled] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState('Sami+1@kletta.com');
+  const [isClientLoginOpen, setIsClientLoginOpen] = useState(false);
 
   const accounts = [
     'Sami+1@kletta.com',
@@ -83,11 +89,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
     { type: NavItemType.TRANSACTIONS, icon: ArrowsClockwise },
     { type: NavItemType.INCOME, icon: Money },
     { type: NavItemType.EXPENSES, icon: ArrowDown },
+    { type: NavItemType.MILEAGES, icon: RoadHorizon },
     { type: NavItemType.INVOICES, icon: Receipt },
     { type: NavItemType.REPORTS, icon: Desktop },
   ];
 
   return (
+    <>
     <div className="w-[230px] min-w-[230px] bg-[#002b31] text-white flex flex-col h-full flex-shrink-0 font-sans border-r border-[#002b31] relative z-20">
       {/* Fixed Header */}
       <div className="flex-shrink-0">
@@ -210,7 +218,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
       {/* Fixed Footer Actions */}
       <div className="flex-shrink-0 px-6 pb-8 pt-4 border-t border-white/5 bg-[#002b31]">
         <div className="space-y-3">
-          <button className="w-full bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] font-semibold text-[12px] py-2.5 rounded-lg transition-colors shadow-sm tracking-wide">
+          <button 
+            onClick={() => setIsClientLoginOpen(true)}
+            className="w-full bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] font-semibold text-[12px] py-2.5 rounded-lg transition-colors shadow-sm tracking-wide"
+          >
             Login to Client App
           </button>
           
@@ -224,6 +235,98 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
         </div>
       </div>
     </div>
+
+    {/* Login to Client App Modal */}
+    {isClientLoginOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#002b31]/60 backdrop-blur-sm transition-all duration-300">
+          {/* Modal Container */}
+          <div 
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-[440px] relative animate-in fade-in zoom-in-95 slide-in-from-bottom-2 duration-300 overflow-hidden flex flex-col" 
+            onClick={e => e.stopPropagation()}
+          >
+             {/* Close Button */}
+             <button 
+               onClick={() => setIsClientLoginOpen(false)} 
+               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all z-10"
+             >
+               <X size={20} weight="bold" />
+             </button>
+
+             {/* Header Content */}
+             <div className="px-8 pt-10 pb-6 text-center">
+               <div className="w-16 h-16 bg-[#fffdf5] border border-[#fef3c7] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm transform rotate-3">
+                  <DeviceMobile size={32} weight="duotone" className="text-[#002b31]" />
+               </div>
+               
+               <h2 className="text-[22px] font-bold text-[#002b31] mb-2 tracking-tight">Login to Client App</h2>
+               <p className="text-[14px] text-gray-500 leading-relaxed max-w-[280px] mx-auto">
+                 Enter these credentials on the client's device to access the Kletta dashboard.
+               </p>
+             </div>
+
+             {/* Main Body */}
+             <div className="px-8 pb-8 space-y-8">
+                
+                {/* Credentials Card */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm space-y-5">
+                    {/* Email */}
+                    <div className="space-y-1.5">
+                       <label className="text-[10px] uppercase tracking-wider font-bold text-gray-400 ml-1">Client E-mail</label>
+                       <div className="group flex items-center justify-between bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg px-3 py-2.5 shadow-sm">
+                          <span className="text-[14px] font-semibold text-[#002b31] font-mono truncate mr-3 select-all">sami+client@kletta.com</span>
+                          <button 
+                            className="text-gray-400 hover:text-[#002b31] p-1.5 rounded-md transition-colors" 
+                            title="Copy email"
+                          >
+                             <Copy size={16} />
+                          </button>
+                       </div>
+                    </div>
+
+                    {/* PIN */}
+                    <div className="space-y-1.5">
+                       <label className="text-[10px] uppercase tracking-wider font-bold text-gray-400 ml-1">PIN Code</label>
+                       <div className="flex gap-3">
+                          {[5, 2, 9, 1].map((digit, i) => (
+                             <div key={i} className="flex-1 h-14 bg-white border border-gray-200 rounded-lg flex items-center justify-center text-2xl font-bold text-[#002b31] shadow-sm font-mono tracking-tight">
+                                {digit}
+                             </div>
+                          ))}
+                       </div>
+                    </div>
+                </div>
+
+                {/* Instructions */}
+                <div>
+                    <h3 className="text-[11px] font-bold text-gray-900 mb-3 uppercase tracking-wide">Instructions</h3>
+                    <div className="space-y-3">
+                      {[
+                        'Open Kletta app on device',
+                        'Tap "Login with accountant"',
+                        'Enter credentials shown above'
+                      ].map((step, idx) => (
+                         <div key={idx} className="flex gap-3 items-center">
+                           <div className="w-5 h-5 rounded-full bg-[#002b31] text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-sm">
+                              {idx + 1}
+                           </div>
+                           <span className="text-[13px] text-gray-600 font-medium" dangerouslySetInnerHTML={{ __html: step.replace('"Login with accountant"', '<span class="text-[#002b31] font-bold">"Login with accountant"</span>') }} />
+                         </div>
+                      ))}
+                    </div>
+                </div>
+             </div>
+
+             {/* Footer */}
+             <div className="py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                <p className="text-[12px] text-gray-500 font-medium">
+                  Code expires <span className="text-[#002b31] font-bold">Today, 14:00</span>
+                </p>
+             </div>
+          </div>
+        </div>
+    )}
+    </>
   );
 };
 
