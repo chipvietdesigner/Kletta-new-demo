@@ -172,7 +172,12 @@ export interface WelcomeSectionItem {
   cta: string;
   secondary_cta?: string;
   image_url?: string;
+  video_url?: string; // New: Optional video URL
+  gallery_images?: string[]; // New: Optional gallery images
   items?: string[]; // For list cards
+  // New fields for detail modal
+  modalSubtitle?: string;
+  longDescription?: string;
 }
 
 export interface WelcomeData {
