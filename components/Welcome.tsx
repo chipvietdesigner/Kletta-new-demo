@@ -157,7 +157,7 @@ const Welcome: React.FC = () => {
           {/* Header */}
           <div>
             <h1 className="text-2xl font-bold text-[#002b31] mb-2">Welcome to Kletta</h1>
-            <p className="text-[14px] text-gray-500">Everything you need to get started and support your clients.</p>
+            <p className="text-[13px] text-gray-500">Everything you need to get started and support your clients.</p>
           </div>
 
           {/* SECTION A: Let's Get Started */}

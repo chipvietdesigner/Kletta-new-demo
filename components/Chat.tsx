@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   MagnifyingGlass, 
@@ -100,17 +99,17 @@ const Chat: React.FC = () => {
   return (
     <div className="flex h-full bg-white font-sans overflow-hidden">
       {/* LEFT SIDEBAR: Conversation List */}
-      <div className="w-[320px] border-r border-gray-200 flex flex-col flex-shrink-0 bg-white">
+      <div className="w-[320px] border-r border-[#E5E7EB] flex flex-col flex-shrink-0 bg-white">
         {/* Sidebar Header / Search */}
-        <div className="h-[64px] px-4 border-b border-gray-200 flex items-center flex-shrink-0">
+        <div className="h-[64px] px-4 border-b border-[#E5E7EB] flex items-center flex-shrink-0">
            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <MagnifyingGlass size={14} />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                <MagnifyingGlass size={16} />
               </div>
               <input 
                 type="text" 
                 placeholder="Search conversations..."
-                className="w-full h-[32px] pl-9 pr-3 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors focus:outline-none"
+                className="w-full h-[42px] pl-10 pr-3 bg-white border border-[#E5E7EB] hover:border-[#D1D5DB] rounded-xl text-[14px] text-[#0F2F33] font-medium placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors focus:outline-none"
               />
            </div>
         </div>
@@ -121,41 +120,41 @@ const Chat: React.FC = () => {
             <div 
               key={conv.id}
               onClick={() => setActiveConversationId(conv.id)}
-              className={`h-[72px] px-4 flex items-center gap-3 cursor-pointer border-b border-gray-50 transition-colors ${
+              className={`h-[72px] px-4 flex items-center gap-3 cursor-pointer border-b border-[#F9FAFB] transition-colors ${
                 activeConversationId === conv.id 
-                  ? 'bg-[#fffdf5] border-l-4 border-l-[#fcd34d] pl-[12px]' // Kletta active style
-                  : 'bg-white hover:bg-gray-50 border-l-4 border-l-transparent pl-[12px]'
+                  ? 'bg-[#FFF7D6] border-l-4 border-l-[#F7D84A] pl-[12px]' // Kletta active style
+                  : 'bg-white hover:bg-[#F9FAFB] border-l-4 border-l-transparent pl-[12px]'
               }`}
             >
               {/* Avatar */}
               <div className="relative flex-shrink-0">
-                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center border border-gray-200">
+                <div className="w-10 h-10 rounded-full bg-[#E5E7EB] overflow-hidden flex items-center justify-center border border-[#E5E7EB]">
                   {conv.customerAvatar ? (
                     <img src={conv.customerAvatar} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-gray-500 font-semibold text-xs">{conv.customerName.substring(0, 2).toUpperCase()}</span>
+                    <span className="text-[#6B7280] font-semibold text-xs">{conv.customerName.substring(0, 2).toUpperCase()}</span>
                   )}
                 </div>
                 {/* Status dot */}
-                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></div>
+                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#166534] rounded-full border-2 border-white"></div>
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0 flex flex-col justify-center h-full py-2">
                 <div className="flex justify-between items-baseline mb-0.5">
-                  <span className={`text-[13px] truncate ${activeConversationId === conv.id ? 'font-bold text-[#002b31]' : 'font-medium text-gray-900'}`}>
+                  <span className={`text-[13px] truncate ${activeConversationId === conv.id ? 'font-bold text-[#0F2F33]' : 'font-medium text-[#0F2F33]'}`}>
                     {conv.customerName}
                   </span>
-                  <span className="text-[11px] text-gray-400 ml-2 flex-shrink-0 whitespace-nowrap">
+                  <span className="text-[11px] text-[#9CA3AF] ml-2 flex-shrink-0 whitespace-nowrap">
                     {conv.timestamp}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                   <p className="text-[12px] text-gray-500 truncate pr-2">
+                   <p className="text-[12px] text-[#6B7280] truncate pr-2">
                      {conv.lastMessage}
                    </p>
                    {conv.unreadCount > 0 && (
-                     <div className="w-4 h-4 rounded-full bg-[#fcd34d] text-[#002b31] text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                     <div className="w-4 h-4 rounded-full bg-[#F7D84A] text-[#0F3A3E] text-[10px] font-bold flex items-center justify-center flex-shrink-0">
                        {conv.unreadCount}
                      </div>
                    )}
@@ -169,49 +168,49 @@ const Chat: React.FC = () => {
       {/* CENTER AREA: Chat Thread */}
       <div className="flex-1 flex flex-col min-w-0 bg-white">
         {/* Chat Header */}
-        <div className="h-[64px] px-6 border-b border-gray-200 flex items-center justify-between flex-shrink-0 bg-white">
+        <div className="h-[64px] px-6 border-b border-[#E5E7EB] flex items-center justify-between flex-shrink-0 bg-white">
            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200">
+              <div className="w-10 h-10 rounded-full bg-[#F9FAFB] flex items-center justify-center border border-[#E5E7EB]">
                   {activeConversation.customerAvatar ? (
                     <img src={activeConversation.customerAvatar} alt="" className="w-full h-full object-cover rounded-full" />
                   ) : (
-                    <span className="text-gray-500 font-bold text-sm">{activeConversation.customerName.substring(0, 2)}</span>
+                    <span className="text-[#6B7280] font-bold text-sm">{activeConversation.customerName.substring(0, 2)}</span>
                   )}
               </div>
               <div className="flex flex-col">
                  <div className="flex items-center gap-2">
-                    <h2 className="text-[14px] font-bold text-[#002b31]">{activeConversation.customerName}</h2>
-                    <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-semibold border border-gray-200 uppercase tracking-wide">
+                    <h2 className="text-[14px] font-bold text-[#0F2F33]">{activeConversation.customerName}</h2>
+                    <span className="bg-[#F9FAFB] text-[#6B7280] px-2 py-0.5 rounded-lg text-[10px] font-semibold border border-[#E5E7EB] uppercase tracking-wide">
                       {activeConversation.plan}
                     </span>
                  </div>
                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span className="text-[11px] text-gray-500 font-medium">Active now</span>
-                    <span className="text-[11px] text-gray-300">•</span>
-                    <span className="text-[11px] text-gray-500">Local time 14:22</span>
+                    <span className="w-2 h-2 rounded-full bg-[#166534]"></span>
+                    <span className="text-[11px] text-[#6B7280] font-medium">Active now</span>
+                    <span className="text-[11px] text-[#E5E7EB]">•</span>
+                    <span className="text-[11px] text-[#6B7280]">Local time 14:22</span>
                  </div>
               </div>
            </div>
 
            <div className="flex items-center gap-2">
-              <button className="h-[32px] w-[32px] flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors">
-                 <Phone size={16} />
+              <button className="h-[36px] w-[36px] flex items-center justify-center rounded-xl border border-[#E5E7EB] text-[#6B7280] hover:bg-[#F9FAFB] hover:text-[#0F2F33] transition-colors">
+                 <Phone size={18} />
               </button>
-              <button className="h-[32px] w-[32px] flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors">
-                 <VideoCamera size={16} />
+              <button className="h-[36px] w-[36px] flex items-center justify-center rounded-xl border border-[#E5E7EB] text-[#6B7280] hover:bg-[#F9FAFB] hover:text-[#0F2F33] transition-colors">
+                 <VideoCamera size={18} />
               </button>
-              <div className="h-4 w-px bg-gray-200 mx-1"></div>
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <DownloadSimple size={14} className="text-gray-500" />
+              <div className="h-4 w-px bg-[#E5E7EB] mx-1"></div>
+              <button className="h-[36px] px-3 bg-white border border-[#E5E7EB] hover:border-[#D1D5DB] rounded-xl text-[13px] text-[#0F2F33] font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <DownloadSimple size={16} className="text-[#9CA3AF]" />
                 History
               </button>
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <PencilSimple size={14} className="text-gray-500" />
+              <button className="h-[36px] px-3 bg-white border border-[#E5E7EB] hover:border-[#D1D5DB] rounded-xl text-[13px] text-[#0F2F33] font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <PencilSimple size={16} className="text-[#9CA3AF]" />
                 Edit
               </button>
-              <button className="h-[32px] w-[32px] flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors ml-1">
-                 <DotsThreeVertical size={16} />
+              <button className="h-[36px] w-[36px] flex items-center justify-center rounded-xl border border-[#E5E7EB] text-[#6B7280] hover:bg-[#F9FAFB] hover:text-[#0F2F33] transition-colors ml-1">
+                 <DotsThreeVertical size={18} />
               </button>
            </div>
         </div>
@@ -220,7 +219,7 @@ const Chat: React.FC = () => {
         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-white space-y-6">
            {/* Date Divider */}
            <div className="flex justify-center">
-             <span className="text-[11px] text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+             <span className="text-[11px] text-[#9CA3AF] bg-[#F9FAFB] px-3 py-1 rounded-full border border-[#E5E7EB]">
                Yesterday
              </span>
            </div>
@@ -234,15 +233,15 @@ const Chat: React.FC = () => {
                    {/* Avatar for message */}
                    <div className="flex-shrink-0 mt-auto">
                      {msg.sender === 'internal' ? (
-                       <div className="w-8 h-8 rounded-full bg-[#002b31] flex items-center justify-center text-[#fcd34d] text-xs font-bold border border-gray-200">
+                       <div className="w-8 h-8 rounded-full bg-[#0F3A3E] flex items-center justify-center text-[#F7D84A] text-xs font-bold border border-[#E5E7EB]">
                           YOU
                        </div>
                      ) : (
-                       <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden border border-gray-200">
+                       <div className="w-8 h-8 rounded-full bg-[#E5E7EB] overflow-hidden border border-[#E5E7EB]">
                           {activeConversation.customerAvatar ? (
                              <img src={activeConversation.customerAvatar} alt="" className="w-full h-full object-cover" />
                           ) : (
-                             <div className="w-full h-full flex items-center justify-center text-gray-500 text-[10px] font-bold">
+                             <div className="w-full h-full flex items-center justify-center text-[#6B7280] text-[10px] font-bold">
                                {activeConversation.customerName.substring(0, 2)}
                              </div>
                           )}
@@ -255,14 +254,14 @@ const Chat: React.FC = () => {
                       <div 
                         className={`px-4 py-3 rounded-2xl text-[13px] leading-relaxed shadow-sm ${
                           msg.sender === 'internal' 
-                            ? 'bg-[#fffdf5] border border-[#fcd34d]/30 text-[#002b31] rounded-br-none' 
-                            : 'bg-white border border-gray-100 text-gray-900 rounded-bl-none'
+                            ? 'bg-[#FFF7D6] border border-[#F7D84A]/50 text-[#0F3A3E] rounded-br-none' 
+                            : 'bg-white border border-[#E5E7EB] text-[#0F2F33] rounded-bl-none'
                         }`}
                       >
                          {msg.text}
                       </div>
                       <span 
-                        className={`text-[10px] text-gray-400 ${
+                        className={`text-[10px] text-[#9CA3AF] ${
                           msg.sender === 'internal' ? 'text-right' : 'text-left'
                         }`}
                       >
@@ -275,17 +274,16 @@ const Chat: React.FC = () => {
         </div>
 
         {/* Input Area */}
-        <div className="flex-shrink-0 p-4 bg-white border-t border-gray-200">
+        <div className="flex-shrink-0 p-4 bg-white border-t border-[#E5E7EB]">
            <div className="flex flex-col gap-3">
               {/* Toolbar */}
               <div className="flex items-center gap-2">
-                 {/* Reusing Income table filter button style */}
-                 <button className="h-[28px] px-2 bg-white border border-gray-200 hover:bg-gray-50 rounded text-[11px] text-gray-600 font-medium flex items-center gap-1.5 transition-colors">
-                    <CheckCircle size={14} className="text-gray-400" />
+                 <button className="h-[32px] px-3 bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] rounded-xl text-[11px] text-[#6B7280] font-medium flex items-center gap-1.5 transition-colors">
+                    <CheckCircle size={14} className="text-[#9CA3AF]" />
                     Mark as resolved
                  </button>
-                 <button className="h-[28px] px-2 bg-white border border-gray-200 hover:bg-gray-50 rounded text-[11px] text-gray-600 font-medium flex items-center gap-1.5 transition-colors">
-                    <Archive size={14} className="text-gray-400" />
+                 <button className="h-[32px] px-3 bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] rounded-xl text-[11px] text-[#6B7280] font-medium flex items-center gap-1.5 transition-colors">
+                    <Archive size={14} className="text-[#9CA3AF]" />
                     Archive
                  </button>
               </div>
@@ -297,17 +295,17 @@ const Chat: React.FC = () => {
                    value={newMessage}
                    onChange={(e) => setNewMessage(e.target.value)}
                    placeholder="Type a message..."
-                   className="w-full h-[48px] pl-4 pr-[120px] bg-white border border-gray-200 rounded-lg text-[13px] text-gray-900 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-all shadow-sm focus:outline-none"
+                   className="w-full h-[48px] pl-4 pr-[120px] bg-white border border-[#E5E7EB] rounded-xl text-[14px] font-medium text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-all shadow-sm focus:outline-none"
                  />
                  
                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-                    <button className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-50 transition-colors">
+                    <button className="p-2 text-[#9CA3AF] hover:text-[#6B7280] rounded-lg hover:bg-[#F9FAFB] transition-colors">
                        <Paperclip size={18} />
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-50 transition-colors">
+                    <button className="p-2 text-[#9CA3AF] hover:text-[#6B7280] rounded-lg hover:bg-[#F9FAFB] transition-colors">
                        <Smiley size={18} />
                     </button>
-                    <button className="h-[32px] px-4 bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] rounded text-[12px] font-bold flex items-center gap-2 transition-colors ml-1">
+                    <button className="h-[36px] px-4 bg-[#F7D84A] hover:bg-[#fbbf24] text-[#0F3A3E] rounded-xl text-[12px] font-bold flex items-center gap-2 transition-colors ml-1 shadow-sm">
                        Send
                        <PaperPlaneRight size={14} weight="bold" />
                     </button>
@@ -316,7 +314,7 @@ const Chat: React.FC = () => {
            </div>
            
            <div className="text-center mt-2">
-              <span className="text-[10px] text-gray-400">
+              <span className="text-[10px] text-[#9CA3AF]">
                 Press Enter to send • Shift + Enter for new line
               </span>
            </div>

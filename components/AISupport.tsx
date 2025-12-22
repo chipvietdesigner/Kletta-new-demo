@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { DownloadSimple } from '@phosphor-icons/react';
 
@@ -32,22 +31,22 @@ const AISupport: React.FC = () => {
   const [messages, setMessages] = useState(MOCK_MESSAGES);
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-gray-50 flex flex-col h-full">
+    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-[#F9FAFB]/50 flex flex-col h-full">
       {/* Page Header */}
       <div className="mb-6 flex items-center justify-between flex-shrink-0">
-        <h1 className="text-2xl font-bold text-[#002b31]">AI Support Intelligence</h1>
-        <button className="bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] text-xs font-medium px-3 py-1.5 rounded flex items-center gap-2 transition-colors shadow-sm">
-          <DownloadSimple size={14} />
+        <h1 className="text-2xl font-bold text-[#0F2F33]">AI Support Intelligence</h1>
+        <button className="bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-sm h-[36px]">
+          <DownloadSimple size={16} weight="bold" />
           Download CSV
         </button>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full">
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col flex-1 overflow-hidden">
+        <div className="bg-white border border-[#E5E7EB] rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden">
           {/* Card Header */}
-          <div className="px-8 py-6 border-b border-gray-100 flex-shrink-0">
-            <h2 className="text-[14px] font-bold text-gray-500 uppercase tracking-wide">MESSAGES</h2>
+          <div className="px-8 py-6 border-b border-[#E5E7EB] flex-shrink-0">
+            <h2 className="text-[14px] font-bold text-[#9CA3AF] uppercase tracking-wide">MESSAGES</h2>
           </div>
 
           {/* Text Area Container */}
@@ -55,15 +54,15 @@ const AISupport: React.FC = () => {
             <textarea
               value={messages}
               onChange={(e) => setMessages(e.target.value)}
-              className="w-full h-full p-4 bg-gray-50 border border-gray-200 rounded-lg text-[13px] text-gray-900 leading-relaxed focus:outline-none focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors resize-none custom-scrollbar"
+              className="w-full h-full p-4 bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl text-[14px] font-medium text-[#0F2F33] leading-relaxed focus:outline-none focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors resize-none custom-scrollbar"
               placeholder="Enter AI support messages here..."
             />
           </div>
 
           {/* Card Footer */}
-          <div className="px-8 py-6 border-t border-gray-100 flex justify-end flex-shrink-0 bg-white rounded-b-lg">
+          <div className="px-8 py-6 border-t border-[#E5E7EB] flex justify-end flex-shrink-0 bg-white rounded-b-xl">
             <button 
-              className="h-[40px] px-6 bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] text-[13px] font-bold rounded-lg transition-colors shadow-sm"
+              className="h-[42px] px-6 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[13px] font-bold rounded-xl transition-colors shadow-sm"
             >
               Save
             </button>

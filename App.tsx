@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import React, { useState, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import TopHeader from './components/TopHeader';
@@ -25,6 +17,9 @@ import Login from './components/Login';
 import AISupport from './components/AISupport';
 import Dashboard from './components/Dashboard';
 import Welcome from './components/Welcome';
+import CreateExpenseModal from './components/CreateExpenseModal';
+import CreateIncomeModal from './components/CreateIncomeModal';
+import ChooseExpensesModal from './components/ChooseExpensesModal';
 import { NavItemType, IncomeTransaction, Client, ExpenseTransaction, VatReturn, TaxReturnRow, BankTransaction, DashboardData, Invitation, MileageTrip, MOCK_INVOICES } from './types';
 import { 
   Tray, 
@@ -48,7 +43,10 @@ import {
   Buildings,
   Check,
   Bank,
-  CalendarBlank
+  CalendarBlank,
+  SteeringWheel,
+  MapPin,
+  FileText
 } from '@phosphor-icons/react';
 
 // Mock Data based on the Income screenshot + Additional data
@@ -336,7 +334,7 @@ const EXPENSE_CATEGORIES = [
   'Vehicle depreciation'
 ];
 
-const INITIAL_EXPENSES_DATA: ExpenseTransaction[] = [
+const MOCK_EXPENSES_DATA: ExpenseTransaction[] = [
   {
     id: 'e1',
     date: '12.05.2025',
@@ -564,378 +562,216 @@ const INITIAL_EXPENSES_DATA: ExpenseTransaction[] = [
   },
 ];
 
-const MOCK_EXPENSES_DATA: ExpenseTransaction[] = [
-    ...INITIAL_EXPENSES_DATA,
-    ...INITIAL_EXPENSES_DATA.map(e => ({ ...e, id: e.id + '_d1' })),
-    ...INITIAL_EXPENSES_DATA.map(e => ({ ...e, id: e.id + '_d2' }))
-];
-
 const EXPENSE_SUMMARY = [
-    { label: 'All', value: 94908.11, id: 'All', icon: Tray },
-    { label: 'External services', value: 4399.45, id: 'External services', icon: Handshake },
-    { label: 'Non-allowable expenses', value: 978.00, id: 'Non-allowable expenses', icon: XCircle },
-    { label: 'Other deductible expenses', value: 305.23, id: 'Other deductible expenses', icon: Check },
-    { label: 'Purchases and inventory changes', value: 4452.48, id: 'Purchases and inventory changes', icon: Package },
-    { label: 'Rents', value: 415.00, id: 'Rents', icon: Buildings },
-    { label: 'Vehicle cost', value: 5000.00, id: 'Vehicle cost', icon: Car },
-    { label: 'Vehicle depreciation', value: 80335.94, id: 'Vehicle depreciation', icon: WarningCircle },
+    { id: 'All', label: 'All expenses', value: 29626.26, icon: Tray },
+    { id: 'Vehicle cost', label: 'Vehicle cost', value: 5000.00, icon: Car },
+    { id: 'External services', label: 'External services', value: 4399.45, icon: Handshake },
+    { id: 'Non-allowable expenses', label: 'Non-allowable expenses', value: 978.00, icon: XCircle },
+    { id: 'Purchases and inventory changes', label: 'Purchases & inventory', value: 4385.96, icon: Package },
+    { id: 'Rents', label: 'Rents', value: 415.00, icon: Buildings },
+    { id: 'Vehicle depreciation', label: 'Vehicle depreciation', value: 16750.00, icon: Check },
+    { id: 'Other deductible expenses', label: 'Other deductible', value: 21.65, icon: FileText },
 ];
 
-// NEW TRANSACTIONS (BANK) DATA
+// UPDATED MOCK BANK TRANSACTIONS TO MATCH SCREENSHOT
 const MOCK_BANK_TRANSACTIONS: BankTransaction[] = [
-  { id: "T0001", date: "02.12.2025", description: "Coffee shop purchase", category: "Meals", reconciled: false, reference: "COF-8821", amount: -4.50 },
-  { id: "T0002", date: "02.12.2025", description: "Client payment – invoice 4582", category: "Income", reconciled: true, reference: "INV-4582", amount: 1200.00 },
-  { id: "T0003", date: "01.12.2025", description: "Uber ride", category: "Transport", reconciled: false, reference: "UBR-3382", amount: -17.90 },
-  { id: "T0004", date: "30.11.2025", description: "Laptop purchase", category: "Equipment", reconciled: true, reference: "RCPT-9921", amount: -899.00 },
-  { id: "T0005", date: "29.11.2025", description: "Monthly subscription", category: "Software", reconciled: true, reference: "SUB-2025-11", amount: -19.99 },
-  { id: "T0006", date: "27.11.2025", description: "Office supplies", category: "Supplies", reconciled: false, reference: "ST-1182", amount: -12.30 },
-  { id: "T0007", date: "26.11.2025", description: "Refund from vendor", category: "Income", reconciled: true, reference: "RF-7712", amount: 32.00 },
-  { id: "T0008", date: "25.11.2025", description: "Car fuel", category: "Vehicle expenses", reconciled: false, reference: "FUEL-2261", amount: -54.90 },
-  { id: "T0009", date: "24.11.2025", description: "Restaurant meeting", category: "Meals", reconciled: false, reference: "MEET-5531", amount: -68.20 },
-  { id: "T0010", date: "23.11.2025", description: "External consultant fee", category: "Services", reconciled: true, reference: "SRV-9012", amount: -430.00 },
-  { id: "T0011", date: "22.11.2025", description: "Client payment – invoice 4481", category: "Income", reconciled: true, reference: "INV-4481", amount: 850.00 },
-  { id: "T0012", date: "20.11.2025", description: "Online ads", category: "Marketing", reconciled: false, reference: "ADS-2301", amount: -120.00 }
+  {
+    id: '12748',
+    date: '15.12.2025',
+    amount: -5.40,
+    description: 'Uber 063015 SF**POOL**',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r1', type: 'Expense', amount: -5.40, date: '15.12.2025', label: 'Expenses 62925', description: 'Uber 063015 SF*...', categoryLabel: 'Car, van and travel expenses', pillColor: 'gray' }
+    ]
+  },
+  {
+    id: '12733',
+    date: '13.12.2025',
+    amount: 500.00,
+    description: 'United Airlines',
+    reference: '',
+    reconciled: false
+  },
+  {
+    id: '12726',
+    date: '12.12.2025',
+    amount: -4.33,
+    description: 'Starbucks',
+    reference: '',
+    reconciled: false
+  },
+  {
+    id: '12725',
+    date: '12.12.2025',
+    amount: -12.00,
+    description: "McDonald's",
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r2', type: 'Expense', amount: -12.00, date: '12.12.2025', label: 'Expenses 62901', description: "McDonald's", categoryLabel: 'Costs of goods bought for res...', pillColor: 'gray' }
+    ]
+  },
+  {
+    id: '12720',
+    date: '11.12.2025',
+    amount: -89.40,
+    description: 'SparkFun',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r3a', type: 'Expense', amount: -10000.00, date: '11.12.2025', label: 'Expenses 62869', description: 'Chevrolet', categoryLabel: 'Non-allowable business expe...', pillColor: 'gray' },
+      { id: 'r3b', type: 'Income', amount: 11910.60, date: '11.12.2025', label: 'Income 62923', description: 'SparkFun', categoryLabel: 'Unclassified income', pillColor: 'yellow' }
+    ]
+  },
+  {
+    id: '12678',
+    date: '28.11.2025',
+    amount: -6.33,
+    description: 'Uber 072515 SF**POOL**',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r4', type: 'Expense', amount: -6.33, date: '28.11.2025', label: 'Expenses 62798', description: 'Uber 072515 SF*...', categoryLabel: 'Car, van and travel expenses', pillColor: 'gray' }
+    ]
+  },
+  {
+    id: '12605',
+    date: '15.11.2025',
+    amount: -5.40,
+    description: 'Uber 063015 SF**POOL**',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r5', type: 'Expense', amount: -5.40, date: '15.11.2025', label: 'Expenses 62786', description: 'Uber 063015 SF*...', categoryLabel: 'Car, van and travel expenses', pillColor: 'gray' }
+    ]
+  },
+  {
+    id: '12606',
+    date: '13.11.2025',
+    amount: 500.00,
+    description: 'United Airlines',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r6a', type: 'Invoice', amount: 40.00, date: '13.11.2025', label: 'Invoice 1175', description: 'Sami', categoryLabel: 'Business Income', pillColor: 'gray', iconType: 'invoice' },
+      { id: 'r6b', type: 'Income', amount: 460.00, date: '13.11.2025', label: 'Income 62824', description: 'United Airlines', categoryLabel: 'Unclassified income', pillColor: 'yellow' }
+    ]
+  },
+  {
+    id: '12608',
+    date: '12.11.2025',
+    amount: -4.33,
+    description: 'Starbucks',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r7', type: 'Receipt', amount: -4.33, date: '12.11.2025', label: 'Receipt 202520026', description: 'Starbucks', categoryLabel: 'Car, van and travel expenses', pillColor: 'gray', iconType: 'receipt' }
+    ]
+  },
+  {
+    id: '12607',
+    date: '12.11.2025',
+    amount: -12.00,
+    description: "McDonald's",
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r8', type: 'Expense', amount: -12.00, date: '12.11.2025', label: 'Expenses 62840', description: "McDonald's", categoryLabel: 'Costs of goods bought for res...', pillColor: 'gray' }
+    ]
+  },
+  {
+    id: '12609',
+    date: '11.11.2025',
+    amount: -89.40,
+    description: 'SparkFun',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r9a', type: 'Expense', amount: -120.00, date: '11.11.2025', label: 'Expenses 62848', description: 'SparkFun', categoryLabel: 'Unclassified expense', pillColor: 'yellow' },
+      { id: 'r9b', type: 'Income', amount: 30.60, date: '11.11.2025', label: 'Income 62849', description: 'SparkFun', categoryLabel: 'Unclassified income', pillColor: 'yellow' }
+    ]
+  },
+  {
+    id: '12610',
+    date: '29.10.2025',
+    amount: -6.33,
+    description: 'Uber 072515 SF**POOL**',
+    reference: '',
+    reconciled: false
+  },
+  {
+    id: '12611',
+    date: '16.10.2025',
+    amount: -5.40,
+    description: 'Uber 063015 SF**POOL**',
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r10', type: 'Expense', amount: -5.40, date: '16.10.2025', label: 'Expenses 62787', description: 'Uber 063015 SF*...', categoryLabel: 'Car, van and travel expenses', pillColor: 'gray' }
+    ]
+  },
+  {
+    id: '12612',
+    date: '14.10.2025',
+    amount: 500.00,
+    description: 'United Airlines',
+    reference: '',
+    reconciled: false
+  },
+  {
+    id: '12613',
+    date: '13.10.2025',
+    amount: -12.00,
+    description: "McDonald's",
+    reference: '',
+    reconciled: true,
+    reconciledItems: [
+      { id: 'r11', type: 'Expense', amount: -12.00, date: '13.10.2025', label: 'Expenses 62841', description: "McDonald's", categoryLabel: 'Costs of goods bought for res...', pillColor: 'gray' }
+    ]
+  }
 ];
 
 const MOCK_VAT_RETURNS_DATA: VatReturn[] = [
-  {
-    id: '1',
-    email: 'dmitri+klettauser@timma.fi',
-    companyName: 'Dmitri Oy',
-    firstName: '—',
-    lastName: '—',
-    utr: '1234567-1',
-    isUtrVerified: true,
-    taxPeriod: '01.10.2025–31.10.2025',
-    edited: ''
-  },
-  {
-    id: '2',
-    email: 'origamhi@gmail.com',
-    companyName: 'da nang',
-    firstName: 'huy hank',
-    lastName: 'razzle',
-    utr: '2323421-2',
-    isUtrVerified: true,
-    taxPeriod: '01.10.2025–31.10.2025',
-    edited: ''
-  },
-  {
-    id: '3',
-    email: 'sami+user@kletta.com',
-    companyName: 'Sami Consulting',
-    firstName: 'Sami',
-    lastName: 'Tester',
-    utr: '9876543-2',
-    isUtrVerified: true,
-    taxPeriod: '01.10.2025–31.10.2025',
-    edited: ''
-  },
-  // Generate more rows
-  ...Array.from({ length: 17 }).map((_, i) => ({
-    id: `${i + 4}`,
-    email: `user${i+4}@example.com`,
-    companyName: i % 2 === 0 ? `Company ${i+4} Oy` : '—',
-    firstName: i % 3 === 0 ? `First${i+4}` : '—',
-    lastName: i % 3 === 0 ? `Last${i+4}` : '—',
-    utr: `${1000000 + i}-1`,
-    isUtrVerified: i % 4 !== 0,
-    taxPeriod: '01.10.2025–31.10.2025',
-    edited: i % 5 === 0 ? 'Yesterday' : ''
-  }))
+  { id: '1', email: 'sami@kletta.com', companyName: 'Sami Tmi', firstName: 'Sami', lastName: 'Kletta', utr: '12345 67890', isUtrVerified: true, taxPeriod: 'Q1 2025', edited: '2 days ago' },
+  { id: '2', email: 'danny@pham.com', companyName: 'Danny Design', firstName: 'Danny', lastName: 'Pham', utr: '55522 33311', isUtrVerified: false, taxPeriod: 'Q1 2025', edited: 'Today' },
 ];
 
-// NEW MOCK DATA FOR TAX RETURN
 const MOCK_TAX_RETURNS_DATA: TaxReturnRow[] = [
-  {
-    id: '1',
-    sendStatus: 'SENT',
-    email: 'sami+918@kletta.com',
-    companyName: '',
-    firstName: 'Sami',
-    lastName: 'Verkkopera',
-    plan: 'PRO',
-    status: 'TRIAL',
-    utr: '1234567-8',
-    isUtrVerified: true,
-    year: 2024
-  },
-  {
-    id: '2',
-    sendStatus: 'SENT',
-    email: 'origamih+6@gmail.com',
-    companyName: '',
-    firstName: '',
-    lastName: '',
-    plan: 'PRO',
-    status: 'TRIAL',
-    utr: '2123122-3',
-    isUtrVerified: true,
-    year: 2024
-  },
-  {
-    id: '3',
-    sendStatus: 'SENT',
-    email: 'sami+3@kletta.com',
-    companyName: 'Samin Hieronta',
-    firstName: 'Sami',
-    lastName: 'Verkkopera',
-    plan: 'DUO_39',
-    status: 'ACTIVE',
-    utr: '2274938-9',
-    isUtrVerified: true,
-    year: 2024
-  },
-  {
-    id: '4',
-    sendStatus: 'SENT',
-    email: 'danny+6@kletta.com',
-    companyName: 'DanhpPC',
-    firstName: 'Danny',
-    lastName: 'Pham',
-    plan: 'DUO',
-    status: 'ACTIVE',
-    utr: '9431516-4',
-    isUtrVerified: true,
-    year: 2024
-  },
-  {
-    id: '5',
-    sendStatus: 'NOT SENT',
-    email: 'james.bond@mi6.co.uk',
-    companyName: 'Universal Exports',
-    firstName: 'James',
-    lastName: 'Bond',
-    plan: 'PRO',
-    status: 'ACTIVE',
-    utr: '0070070-7',
-    isUtrVerified: true,
-    year: 2024
-  },
-  // Generate more rows
-  ...Array.from({ length: 20 }).map((_, i) => ({
-    id: `${i + 6}`,
-    sendStatus: i % 3 === 0 ? 'NOT SENT' as const : 'SENT' as const,
-    email: `user${i+6}@example.com`,
-    companyName: i % 2 === 0 ? `Test Company ${i+6}` : '',
-    firstName: `First${i+6}`,
-    lastName: `Last${i+6}`,
-    plan: i % 2 === 0 ? 'PRO' : 'DUO_39',
-    status: i % 4 === 0 ? 'TRIAL' : 'ACTIVE',
-    utr: `${2000000 + i}-X`,
-    isUtrVerified: i % 5 !== 0,
-    year: 2024
-  }))
+  { id: '1', sendStatus: 'SENT', email: 'sami@kletta.com', companyName: 'Sami Tmi', firstName: 'Sami', lastName: 'Kletta', plan: 'Kletta Solo', status: 'Submitted', utr: '12345 67890', isUtrVerified: true, year: 2024 },
+  { id: '2', sendStatus: 'NOT SENT', email: 'john@doe.com', companyName: 'JD LLC', firstName: 'John', lastName: 'Doe', plan: 'Kletta Pro', status: 'Draft', utr: '99988 77766', isUtrVerified: true, year: 2024 },
 ];
 
-// DASHBOARD MOCK DATA
 const MOCK_DASHBOARD_DATA: DashboardData = {
   kpi: {
-    income: 7795.57,
-    expenses: 94908.11,
-    profit: -87112.54
+    income: 45250.50,
+    expenses: 12400.00,
+    profit: 32850.50
   },
   chart: [
-    { month: "Jan", income: 5000, expenses: 65000, profit: -60000 },
-    { month: "Feb", income: 4000, expenses: 9000, profit: -5000 },
-    { month: "Mar", income: 3000, expenses: 7000, profit: -4000 },
-    { month: "Apr", income: 2000, expenses: 3000, profit: -1000 },
-    { month: "May", income: 5500, expenses: 4000, profit: 1500 },
-    { month: "Jun", income: 6000, expenses: 3500, profit: 2500 },
-    { month: "Jul", income: 7000, expenses: 3000, profit: 4000 },
-    { month: "Aug", income: 8000, expenses: 2500, profit: 5500 },
-    { month: "Sep", income: 7500, expenses: 3000, profit: 4500 },
-    { month: "Oct", income: 8500, expenses: 3500, profit: 5000 },
-    { month: "Nov", income: 9000, expenses: 4000, profit: 5000 },
-    { month: "Dec", income: 9500, expenses: 4500, profit: 5000 }
+    { month: 'Jan', income: 5000, expenses: 2000, profit: 3000 },
+    { month: 'Feb', income: 7500, expenses: 2500, profit: 5000 },
+    { month: 'Mar', income: 4000, expenses: 3000, profit: 1000 },
+    { month: 'Apr', income: 8000, expenses: 1500, profit: 6500 },
+    { month: 'May', income: 6000, expenses: 2000, profit: 4000 },
+    { month: 'Jun', income: 9000, expenses: 3000, profit: 6000 },
   ]
 };
 
-// Generate 50 mock clients
-const generateMockClients = (): Client[] => {
-  const plans = ['Kletta Solo', 'Kletta Care', 'PARTNER', 'COLLECT', 'UNSUBSCRIBED'];
-  const countries = ['FI', 'UK'];
-  const salesPersons = ['Danny', 'Sami', 'James', 'Not set'];
-  
-  const baseClients: Client[] = [
-    {
-      id: 1,
-      email: 'sami+newmandate@kletta.com',
-      countryCode: 'FI',
-      plan: 'Kletta Solo',
-      utr: '1234567-8',
-      isUtrVerified: true,
-      isPrepaymentRegistered: false,
-      companyName: 'Sami Mandate',
-      firstName: 'Sami',
-      lastName: 'Mandate',
-      phone: '+358 40 123 4567',
-      salesPerson: 'Not set',
-      cardAddedDate: '01.01.2025',
-      bankName: 'Nordea',
-      profession: 'Syömies',
-      city: 'Helsinki'
-    },
-    {
-      id: 2,
-      email: 'timma+pro@business.com',
-      countryCode: 'FI',
-      plan: 'Kletta Care',
-      utr: '9876543-2',
-      isUtrVerified: true,
-      isPrepaymentRegistered: true,
-      companyName: 'Timma Oy',
-      firstName: 'Tim',
-      lastName: 'Ma',
-      phone: '+358 50 999 8888',
-      salesPerson: 'Sami',
-      cardAddedDate: '15.02.2025',
-      bankName: 'OP',
-      profession: 'Barber',
-      city: 'Espoo'
-    },
-     {
-      id: 3,
-      email: 'james.consulting@uk.co',
-      countryCode: 'UK',
-      plan: 'PARTNER',
-      utr: 'GB123456789',
-      isUtrVerified: true,
-      isPrepaymentRegistered: false,
-      companyName: 'James Consulting Ltd',
-      firstName: 'James',
-      lastName: 'Bond',
-      phone: '+44 20 7946 0958',
-      salesPerson: 'James',
-      cardAddedDate: '10.03.2025',
-      bankName: 'Barclays',
-      profession: 'Consultant',
-      city: 'London'
-    }
-  ];
-
-  const generated: Client[] = [];
-  for (let i = 0; i < 47; i++) {
-    generated.push({
-      id: i + 4,
-      email: `user${i}@example.com`,
-      countryCode: countries[i % 2],
-      plan: plans[i % 5],
-      utr: i % 3 === 0 ? `${1000000 + i}-1` : '',
-      isUtrVerified: i % 3 === 0,
-      isPrepaymentRegistered: i % 4 === 0,
-      companyName: i % 2 === 0 ? `Company ${i}` : '',
-      firstName: `First${i}`,
-      lastName: `Last${i}`,
-      phone: `+358 40 000 ${1000 + i}`,
-      salesPerson: salesPersons[i % 4],
-      cardAddedDate: '',
-      bankName: '',
-      profession: '',
-      city: ''
-    });
-  }
-  
-  return [...baseClients, ...generated];
-};
-
-const MOCK_CLIENT_DATA = generateMockClients();
-
 const MOCK_INVITATIONS: Invitation[] = [
-  { id: '1', email: 'david.fisher@example.com', phone: '+358 40 123 4567', firstName: 'David', lastName: 'Fisher', status: 'INVITE SENT', lastUpdated: 'Today 10:42', paymentLink: 'kletta.com/p/xh82' },
-  { id: '2', email: 'sarah.smith@consult.co', phone: '+44 7700 900077', firstName: 'Sarah', lastName: 'Smith', status: 'ACCEPTED', lastUpdated: 'Yesterday', paymentLink: 'PAID' },
-  { id: '3', email: 'mike.ross@pearson.com', phone: '+1 555 0199', firstName: 'Mike', lastName: 'Ross', status: 'EXPIRED', lastUpdated: '2 days ago', paymentLink: 'kletta.com/p/aa91' },
-  { id: '4', email: 'jessica.p@pearson.com', phone: '+1 555 0123', firstName: 'Jessica', lastName: 'Pearson', status: 'DRAFT', lastUpdated: '1 week ago', paymentLink: 'Generate link' },
-  { id: '5', email: 'louis.litt@pearson.com', phone: '+1 555 0144', firstName: 'Louis', lastName: 'Litt', status: 'INVITE SENT', lastUpdated: 'Today 09:15', paymentLink: 'kletta.com/p/bb22' },
-  { id: '6', email: 'harvey.specter@pearson.com', phone: '+1 555 0100', firstName: 'Harvey', lastName: 'Specter', status: 'ACCEPTED', lastUpdated: '3 days ago', paymentLink: 'PAID' },
-  { id: '7', email: 'rachel.zane@pearson.com', phone: '+1 555 0111', firstName: 'Rachel', lastName: 'Zane', status: 'PENDING', lastUpdated: 'Yesterday', paymentLink: 'kletta.com/p/cc33' }
+  { id: '1', email: 'invitee@test.com', phone: '+358 50 1234567', firstName: 'Test', lastName: 'Invitee', status: 'INVITE SENT', lastUpdated: '1 hour ago', paymentLink: 'https://kletta.com/pay/1' },
+  { id: '2', email: 'client@new.com', phone: '+44 7700 900000', firstName: 'Client', lastName: 'Two', status: 'ACCEPTED', lastUpdated: 'Yesterday', paymentLink: 'https://kletta.com/pay/2' },
 ];
 
 const MOCK_MILEAGES: MileageTrip[] = [
-  {
-    id: '1',
-    startAddress: 'Mannerheimintie 1',
-    endAddress: 'Aleksanterinkatu 52',
-    startCityCountry: 'Helsinki, Finland',
-    endCityCountry: 'Helsinki, Finland',
-    duration: '00:15:00',
-    distanceKm: 5.2,
-    claimAmount: 2.76,
-    vehicle: 'KIA (ABC-123)',
-    drivePurpose: 'Client work',
-    country: 'Finland',
-    date: '20.11.2025 09:00'
-  },
-  {
-    id: '2',
-    startAddress: 'Helsinki Airport',
-    endAddress: 'Tampere Central Station',
-    startCityCountry: 'Vantaa, Finland',
-    endCityCountry: 'Tampere, Finland',
-    duration: '01:50:00',
-    distanceKm: 170.5,
-    claimAmount: 90.36,
-    vehicle: 'Tesla Model 3',
-    drivePurpose: 'Meeting',
-    country: 'Finland',
-    date: '18.11.2025 14:30'
-  },
-  {
-    id: '3',
-    startAddress: 'Turku Castle',
-    endAddress: 'Logomo',
-    startCityCountry: 'Turku, Finland',
-    endCityCountry: 'Turku, Finland',
-    duration: '00:12:00',
-    distanceKm: 3.5,
-    claimAmount: 1.85,
-    vehicle: 'VW Golf',
-    drivePurpose: 'Client work',
-    country: 'Finland',
-    date: '15.11.2025 10:15'
-  },
-  {
-    id: '4',
-    startAddress: 'Tampere Central Station',
-    endAddress: 'Helsinki Airport',
-    startCityCountry: 'Tampere, Finland',
-    endCityCountry: 'Vantaa, Finland',
-    duration: '01:55:00',
-    distanceKm: 170.5,
-    claimAmount: 90.36,
-    vehicle: 'Tesla Model 3',
-    drivePurpose: 'Between offices',
-    country: 'Finland',
-    date: '18.11.2025 18:00'
-  },
-  {
-    id: '5',
-    startAddress: 'Espoo Metro',
-    endAddress: 'Kauniainen Center',
-    startCityCountry: 'Espoo, Finland',
-    endCityCountry: 'Kauniainen, Finland',
-    duration: '00:20:00',
-    distanceKm: 8.4,
-    claimAmount: 4.45,
-    vehicle: 'KIA (ABC-123)',
-    drivePurpose: 'Personal',
-    country: 'Finland',
-    date: '10.11.2025 17:30'
-  },
-  {
-    id: '6',
-    startAddress: 'Oulu Technology Park',
-    endAddress: 'Oulu Airport',
-    startCityCountry: 'Oulu, Finland',
-    endCityCountry: 'Oulu, Finland',
-    duration: '00:25:00',
-    distanceKm: 15.0,
-    claimAmount: 7.95,
-    vehicle: 'Audi A4',
-    drivePurpose: 'Airport/Travel',
-    country: 'Finland',
-    date: '05.11.2025 07:00'
-  }
+  { id: '1', startAddress: 'Mannerheimintie 1', endAddress: 'Fredrikinkatu 42', startCityCountry: 'Helsinki, Finland', endCityCountry: 'Helsinki, Finland', duration: '15 min', distanceKm: 2.5, claimAmount: 1.13, vehicle: 'Toyota Yaris', drivePurpose: 'Client Meeting', country: 'Finland', date: '20.11.2025' },
+  { id: '2', startAddress: 'Fredrikinkatu 42', endAddress: 'Mannerheimintie 1', startCityCountry: 'Helsinki, Finland', endCityCountry: 'Helsinki, Finland', duration: '18 min', distanceKm: 2.6, claimAmount: 1.17, vehicle: 'Toyota Yaris', drivePurpose: 'Return trip', country: 'Finland', date: '20.11.2025' },
+];
+
+const MOCK_CLIENT_DATA: Client[] = [
+  { id: 1, email: 'sami@kletta.com', countryCode: 'FI', plan: 'Kletta Solo', utr: '12345', isUtrVerified: true, isPrepaymentRegistered: true, companyName: 'Sami Tmi', firstName: 'Sami', lastName: 'Kletta', phone: '0401234567', salesPerson: 'Sami', cardAddedDate: '2024-01-01', bankName: 'Nordea', profession: 'Dev', city: 'Helsinki' },
+  { id: 2, email: 'client@uk.com', countryCode: 'UK', plan: 'Kletta Care', utr: '54321', isUtrVerified: false, isPrepaymentRegistered: false, companyName: 'UK Ltd', firstName: 'James', lastName: 'Bond', phone: '07700900123', salesPerson: 'James', cardAddedDate: '2024-02-01', bankName: 'Barclays', profession: 'Agent', city: 'London' },
 ];
 
 const App: React.FC = () => {
@@ -960,6 +796,12 @@ const App: React.FC = () => {
 
   // Invoices State
   const [invoiceStatusFilter, setInvoiceStatusFilter] = useState<'All' | 'Open' | 'Paid' | 'Due'>('All');
+
+  // Modal State
+  const [isCreateExpenseModalOpen, setIsCreateExpenseModalOpen] = useState(false);
+  const [isCreateIncomeModalOpen, setIsCreateIncomeModalOpen] = useState(false);
+  const [isChooseExpensesModalOpen, setIsChooseExpensesModalOpen] = useState(false);
+  const [selectedTransactionForReconciliation, setSelectedTransactionForReconciliation] = useState<BankTransaction | null>(null);
 
   const filteredTransactions = useMemo(() => {
     if (!filterCategory) return MOCK_INCOME_DATA;
@@ -1016,6 +858,7 @@ const App: React.FC = () => {
     const reconciled = all.filter(t => t.reconciled);
     const unreconciled = all.filter(t => !t.reconciled);
     
+    // Sum logic: Sum of bank transaction amounts
     return {
       all: { count: all.length, amount: all.reduce((sum, t) => sum + t.amount, 0) },
       reconciled: { count: reconciled.length, amount: reconciled.reduce((sum, t) => sum + t.amount, 0) },
@@ -1023,12 +866,25 @@ const App: React.FC = () => {
     };
   }, []);
 
+  const handleOpenReconcile = (tx: BankTransaction) => {
+    setSelectedTransactionForReconciliation(tx);
+    setIsChooseExpensesModalOpen(true);
+  };
+
+  const handleReconcileConfirm = (expenseId: string) => {
+    // In a real app, this would link the expense to the transaction.
+    // For this UI demo, we'll just close the modal.
+    console.log(`Reconciling transaction ${selectedTransactionForReconciliation?.id} with expense ${expenseId}`);
+    setIsChooseExpensesModalOpen(false);
+  };
+
   if (!isAuthenticated) {
     return <Login onLogin={() => setIsAuthenticated(true)} />;
   }
 
   // --- RENDER CONTENT BASED ON ACTIVE ITEM ---
   const renderContent = () => {
+    // ... other render blocks remain unchanged ...
     if (activeItem === NavItemType.WELCOME) {
       return (
         <main className="flex-1 overflow-hidden flex flex-col">
@@ -1081,17 +937,17 @@ const App: React.FC = () => {
       return (
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            <div className="mb-6 flex items-center justify-between">
-             <h1 className="text-2xl font-bold text-[#002b31]">VAT Returns</h1>
+             <h1 className="text-2xl font-bold text-[#0F2F33]">VAT Returns</h1>
              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                  <MagnifyingGlass size={14} />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                  <MagnifyingGlass size={16} />
                 </div>
                 <input 
                   type="text" 
                   value={vatSearch}
                   onChange={(e) => setVatSearch(e.target.value)}
                   placeholder="Search..."
-                  className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[240px] shadow-sm focus:outline-none"
+                  className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-medium"
                 />
              </div>
            </div>
@@ -1105,26 +961,26 @@ const App: React.FC = () => {
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            <div className="mb-6 flex items-center justify-between">
              <div className="flex flex-col gap-4">
-               <h1 className="text-2xl font-bold text-[#002b31]">Tax return</h1>
+               <h1 className="text-2xl font-bold text-[#0F2F33]">Tax return</h1>
                
                {/* Segmented Toggle */}
-               <div className="inline-flex bg-gray-100 p-1 rounded-lg self-start">
+               <div className="inline-flex bg-[#F3F4F6] p-1 rounded-xl self-start">
                  <button 
                    onClick={() => setTaxReturnTab('SENT')}
-                   className={`px-4 py-1.5 text-[13px] font-medium rounded-md transition-all ${
+                   className={`px-5 py-2 text-[14px] font-medium rounded-lg transition-all ${
                      taxReturnTab === 'SENT' 
-                       ? 'bg-white text-[#002b31] shadow-sm' 
-                       : 'text-gray-500 hover:text-gray-700'
+                       ? 'bg-white text-[#0F2F33] shadow-sm' 
+                       : 'text-[#6B7280] hover:text-[#0F2F33]'
                    }`}
                  >
                    Sent
                  </button>
                  <button 
                    onClick={() => setTaxReturnTab('NOT SENT')}
-                   className={`px-4 py-1.5 text-[13px] font-medium rounded-md transition-all ${
+                   className={`px-5 py-2 text-[14px] font-medium rounded-lg transition-all ${
                      taxReturnTab === 'NOT SENT' 
-                       ? 'bg-white text-[#002b31] shadow-sm' 
-                       : 'text-gray-500 hover:text-gray-700'
+                       ? 'bg-white text-[#0F2F33] shadow-sm' 
+                       : 'text-[#6B7280] hover:text-[#0F2F33]'
                    }`}
                  >
                    Not sent
@@ -1136,33 +992,33 @@ const App: React.FC = () => {
              <div className="flex items-center gap-4 self-start mt-1">
                 {/* Year Dropdown */}
                 <div className="flex items-center gap-2">
-                   <span className="text-[13px] text-gray-500 font-medium">Tax return year</span>
+                   <span className="text-[14px] text-[#6B7280] font-medium">Tax return year</span>
                    <div className="relative">
                       <select 
                         value={taxReturnYear}
                         onChange={(e) => setTaxReturnYear(e.target.value)}
-                        className="h-[32px] pl-3 pr-8 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors appearance-none cursor-pointer shadow-sm"
+                        className="h-[42px] pl-4 pr-10 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors appearance-none cursor-pointer"
                       >
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                       </select>
-                      <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-gray-400">
-                        <CaretDown size={12} weight="bold" />
+                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                        <CaretDown size={14} weight="bold" />
                       </div>
                    </div>
                 </div>
 
                 {/* Search */}
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                    <MagnifyingGlass size={14} />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                    <MagnifyingGlass size={16} />
                   </div>
                   <input 
                     type="text" 
                     value={taxReturnSearch}
                     onChange={(e) => setTaxReturnSearch(e.target.value)}
                     placeholder="Search..."
-                    className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[240px] shadow-sm focus:outline-none"
+                    className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-medium"
                   />
                 </div>
              </div>
@@ -1178,30 +1034,30 @@ const App: React.FC = () => {
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            {/* Page Title */}
            <div className="mb-6 flex items-center justify-between">
-             <h1 className="text-2xl font-bold text-[#002b31]">Invitations</h1>
+             <h1 className="text-2xl font-bold text-[#0F2F33]">Invitations</h1>
            </div>
 
            {/* Toolbar (Search & Filter) */}
-           <div className="mb-2 flex items-center justify-between">
+           <div className="mb-4 flex items-center justify-between">
              <div className="flex items-center gap-2">
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                    All statuses
-                   <CaretDown size={12} className="text-gray-400" />
+                   <CaretDown size={14} className="text-[#9CA3AF]" />
                 </button>
              </div>
-             <div className="flex items-center gap-2">
+             <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                    <MagnifyingGlass size={14} />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                    <MagnifyingGlass size={16} />
                   </div>
                   <input 
                     type="text" 
                     placeholder="Search invitations..."
-                    className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[220px] shadow-sm focus:outline-none"
+                    className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-medium"
                   />
                 </div>
-                <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
-                   <Plus size={14} weight="bold" />
+                <button className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[14px] font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm">
+                   <Plus size={16} weight="bold" />
                    Create Invitation
                 </button>
              </div>
@@ -1217,24 +1073,46 @@ const App: React.FC = () => {
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            {/* Page Title */}
            <div className="mb-6 flex items-center justify-between">
-             <h1 className="text-2xl font-bold text-[#002b31]">Mileages</h1>
+             <h1 className="text-2xl font-bold text-[#0F2F33]">Mileage</h1>
            </div>
 
            {/* Toolbar (Filter & Actions) */}
            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                  <div className="bg-gray-100 p-1 rounded-lg flex">
-                      <button className="px-4 py-1.5 bg-white shadow-sm rounded-md text-[13px] font-medium text-[#002b31]">Recorded trips</button>
-                      <button className="px-4 py-1.5 text-[13px] font-medium text-gray-600 hover:text-gray-900 transition-colors">Imported mileage</button>
+              <div className="flex items-center gap-3">
+                  <div className="relative">
+                     <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                       Last 30 days
+                       <CaretDown size={14} className="text-[#9CA3AF]" />
+                     </button>
+                  </div>
+                  <div className="relative">
+                     <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                       <Car size={16} className="text-[#9CA3AF]" />
+                       All Vehicles
+                       <CaretDown size={14} className="text-[#9CA3AF]" />
+                     </button>
+                  </div>
+                  <div className="relative">
+                     <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                       <SteeringWheel size={16} className="text-[#9CA3AF]" />
+                       All Purposes
+                       <CaretDown size={14} className="text-[#9CA3AF]" />
+                     </button>
                   </div>
               </div>
-               <div className="flex items-center gap-2">
-                    <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                       Last 30 days
-                       <CaretDown size={12} className="text-gray-400" />
-                    </button>
-                    <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
-                       <Plus size={14} weight="bold" />
+               <div className="flex items-center gap-3">
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                          <MagnifyingGlass size={16} />
+                        </div>
+                        <input 
+                          type="text" 
+                          placeholder="Search..."
+                          className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[220px] focus:outline-none font-medium"
+                        />
+                    </div>
+                    <button className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[14px] font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap">
+                       <Plus size={16} weight="bold" />
                        Add Trip
                     </button>
                </div>
@@ -1253,21 +1131,21 @@ const App: React.FC = () => {
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            {/* Page Title */}
            <div className="mb-6 flex items-center justify-between">
-             <h1 className="text-2xl font-bold text-[#002b31]">Invoices</h1>
+             <h1 className="text-2xl font-bold text-[#0F2F33]">Invoices</h1>
            </div>
 
            {/* Toolbar (Tabs) */}
            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                  <div className="bg-gray-100 p-1 rounded-lg flex">
+                  <div className="bg-[#F3F4F6] p-1 rounded-xl flex">
                       {(['All', 'Open', 'Paid', 'Due'] as const).map((status) => (
                         <button
                           key={status}
                           onClick={() => setInvoiceStatusFilter(status)}
-                          className={`px-4 py-1.5 text-[13px] font-medium rounded-md transition-all ${
+                          className={`px-5 py-2 text-[14px] font-medium rounded-lg transition-all ${
                             invoiceStatusFilter === status 
-                              ? 'bg-white text-[#002b31] shadow-sm' 
-                              : 'text-gray-500 hover:text-gray-700'
+                              ? 'bg-white text-[#0F2F33] shadow-sm' 
+                              : 'text-[#6B7280] hover:text-[#0F2F33]'
                           }`}
                         >
                           {status}
@@ -1275,13 +1153,13 @@ const App: React.FC = () => {
                       ))}
                   </div>
               </div>
-               <div className="flex items-center gap-2">
-                    <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+               <div className="flex items-center gap-3">
+                    <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                        Last 30 days
-                       <CaretDown size={12} className="text-gray-400" />
+                       <CaretDown size={14} className="text-[#9CA3AF]" />
                     </button>
-                    <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
-                       <Plus size={14} weight="bold" />
+                    <button className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[14px] font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm">
+                       <Plus size={16} weight="bold" />
                        Create Invoice
                     </button>
                </div>
@@ -1298,107 +1176,100 @@ const App: React.FC = () => {
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            {/* Page Title */}
            <div className="mb-4">
-             <h1 className="text-2xl font-bold text-[#002b31]">Transactions</h1>
+             <h1 className="text-2xl font-bold text-[#0F2F33]">Transactions</h1>
            </div>
 
            {/* Wallet and Date Selectors */}
-           <div className="flex items-center gap-4 mb-6">
-              <div className="relative">
-                 <select className="h-[36px] pl-3 pr-8 bg-white border border-gray-200 hover:border-gray-300 rounded-md text-[13px] text-gray-700 font-medium focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors appearance-none cursor-pointer shadow-sm min-w-[200px]">
-                    <option>Main Wallet</option>
-                    <option>Savings</option>
-                 </select>
-                 <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-gray-400">
-                    <CaretDown size={12} weight="bold" />
+           <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                  <div className="relative">
+                     <select className="h-[42px] pl-4 pr-10 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors appearance-none cursor-pointer min-w-[280px]">
+                        <option>£100.00 Plaid Standard Current Account</option>
+                        <option>Savings</option>
+                     </select>
+                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                        <CaretDown size={14} weight="bold" />
+                     </div>
+                  </div>
+                  <div className="flex items-center gap-2 h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl transition-colors cursor-pointer hover:border-[#D1D5DB]">
+                     <span className="text-[#6B7280] text-[13px] font-normal mr-1">First fetch date</span>
+                     <span className="text-[13px] text-[#0F2F33] font-medium">6 April 2025</span>
+                     <CalendarBlank size={16} className="text-[#9CA3AF] ml-2" />
+                  </div>
+              </div>
+           </div>
+
+           {/* Filter Cards - MATCHING SCREENSHOT EXACTLY */}
+           <div className="flex gap-4 mb-6">
+              <div 
+                onClick={() => setTransactionsFilter('All')}
+                className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-[#F9FAFB] border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'All' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+              >
+                 <div className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center flex-shrink-0">
+                    <FileText size={20} className="text-[#0F2F33]" />
+                 </div>
+                 <div className="flex flex-col">
+                    <span className="text-[14px] font-bold text-[#0F2F33]">All {bankTransactionsSummary.all.count}</span>
+                    <span className="text-[12px] text-[#6B7280] font-medium">-£45,169.00</span>
                  </div>
               </div>
-              <div className="flex items-center gap-2 h-[36px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded-md shadow-sm transition-colors cursor-pointer">
-                 <CalendarBlank size={16} className="text-gray-500" />
-                 <span className="text-[13px] text-gray-700 font-medium">First fetch date: 01.01.2025</span>
+
+              <div 
+                onClick={() => setTransactionsFilter('Reconciled')}
+                className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'Reconciled' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+              >
+                 <div className="w-10 h-10 rounded-full bg-[#F0FDF4] border border-[#DCFCE7] flex items-center justify-center flex-shrink-0">
+                    <Check size={20} weight="bold" className="text-[#166534]" />
+                 </div>
+                 <div className="flex flex-col">
+                    <span className="text-[14px] font-bold text-[#0F2F33]">Reconciled {bankTransactionsSummary.reconciled.count}</span>
+                    <span className="text-[12px] text-[#6B7280] font-medium">-£4,492.58</span>
+                 </div>
+              </div>
+
+              <div 
+                onClick={() => setTransactionsFilter('Unreconciled')}
+                className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'Unreconciled' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+              >
+                 <div className="w-10 h-10 rounded-full bg-[#FEF2F2] border border-[#FEE2E2] flex items-center justify-center flex-shrink-0">
+                    <XCircle size={20} className="text-[#991B1B]" />
+                 </div>
+                 <div className="flex flex-col">
+                    <span className="text-[14px] font-bold text-[#0F2F33]">Unreconciled {bankTransactionsSummary.unreconciled.count}</span>
+                    <span className="text-[12px] text-[#6B7280] font-medium">-£40,676.42</span>
+                 </div>
+              </div>
+              
+              <div className="ml-auto mt-auto">
+                 <input 
+                   type="text" 
+                   placeholder="Search by amount or description"
+                   className="h-[42px] px-4 w-[280px] bg-white border border-[#E5E7EB] rounded-xl text-[13px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors focus:outline-none font-medium"
+                 />
               </div>
            </div>
 
-           {/* Filter Cards */}
-           <div className="flex gap-4 mb-6">
-              {[
-                { id: 'All', label: 'All', data: bankTransactionsSummary.all, icon: Tray },
-                { id: 'Reconciled', label: 'Reconciled', data: bankTransactionsSummary.reconciled, icon: CheckCircle },
-                { id: 'Unreconciled', label: 'Unreconciled', data: bankTransactionsSummary.unreconciled, icon: WarningCircle },
-              ].map((filter) => {
-                 const isActive = transactionsFilter === filter.id;
-                 return (
-                    <div 
-                      key={filter.id}
-                      onClick={() => setTransactionsFilter(filter.id as any)}
-                      className={`relative overflow-hidden rounded-lg pl-4 pr-10 py-3.5 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
-                        isActive 
-                          ? 'bg-[#fffdf5] border-[#fcd34d] ring-1 ring-[#fcd34d]/50' 
-                          : 'bg-white border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                       <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                         isActive ? 'bg-white border border-[#e6dac0] text-[#002b31]' : 'bg-gray-50 border border-gray-200 text-gray-500'
-                       }`}>
-                          <filter.icon size={20} weight="fill" className={isActive ? "opacity-80" : "opacity-60"} />
-                       </div>
-                       <div className="flex flex-col z-10">
-                          <span className={`text-[12px] font-regular tracking-wide transition-colors ${isActive ? 'text-black opacity-90' : 'text-gray-600'}`}>
-                              {filter.label} ({filter.data.count})
-                          </span>
-                          <span className="text-[16px] text-[#002b31] font-bold leading-none mt-1">
-                              €{filter.data.amount.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
-                       </div>
-                       {isActive && (
-                         <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#fcd34d] opacity-50"></div>
-                       )}
-                    </div>
-                 );
-              })}
-           </div>
-
-           {/* Logs-style Toolbar (Reused) */}
-           <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                Last 30 days
-                <CaretDown size={12} className="text-gray-400" />
-              </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <Funnel size={14} className="text-gray-500" />
-                Filters
-                <CaretDown size={12} className="text-gray-400" />
-              </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                  <MagnifyingGlass size={14} />
-                </div>
-                <input 
-                  type="text" 
-                  placeholder="Search"
-                  className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[220px] shadow-sm focus:outline-none"
-                />
-              </div>
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <DownloadSimple size={14} className="text-gray-500" />
-                Export
-              </button>
-            </div>
-          </div>
-
-           <BankTransactionsTable data={filteredBankTransactions} />
+           <BankTransactionsTable 
+             data={filteredBankTransactions} 
+             onReconcile={handleOpenReconcile}
+           />
+           <ChooseExpensesModal 
+             isOpen={isChooseExpensesModalOpen}
+             onClose={() => setIsChooseExpensesModalOpen(false)}
+             onConfirm={handleReconcileConfirm}
+             transaction={selectedTransactionForReconciliation}
+           />
         </main>
       );
     }
 
     if (activeItem === NavItemType.EXPENSES) {
+      // ... (keep existing Expenses block) ...
       return (
             <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
                {/* Page Title */}
                <div className="mb-6 flex items-center justify-between">
-                 <h1 className="text-2xl font-bold text-[#002b31]">Expenses</h1>
+                 <h1 className="text-2xl font-bold text-[#0F2F33]">Expenses</h1>
                </div>
 
                {/* Summary Cards - Scrollable */}
@@ -1409,133 +1280,139 @@ const App: React.FC = () => {
                         <div 
                         key={card.id}
                         onClick={() => setExpenseFilterCategory(card.id)}
-                        className={`relative overflow-hidden rounded-lg pl-4 pr-10 py-3.5 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer flex-shrink-0 ${
+                        className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer flex-shrink-0 ${
                             isActive 
-                            ? 'bg-[#fffdf5] border-[#fcd34d] ring-1 ring-[#fcd34d]/50' 
-                            : 'bg-white border-gray-200 hover:border-gray-300'
+                            ? 'bg-[#FFF7D6] border-[#F7D84A] ring-1 ring-[#F7D84A]/50' 
+                            : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
                         }`}
                         >
                         {/* ... card content ... */}
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                            isActive ? 'bg-white border border-[#e6dac0] text-[#002b31]' : 'bg-gray-50 border border-gray-200 text-gray-500'
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
+                            isActive ? 'bg-white border border-[#e6dac0] text-[#0F3A3E]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
                         }`}>
-                            <card.icon size={20} weight="fill" className={isActive ? "opacity-80" : "opacity-60"} />
+                            <card.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
                         </div>
                         <div className="flex flex-col z-10">
-                            <span className={`text-[12px] font-regular tracking-wide transition-colors truncate max-w-[180px] ${isActive ? 'text-black opacity-90' : 'text-gray-600'}`}>
+                            <span className={`text-[13px] font-medium tracking-wide transition-colors truncate max-w-[180px] ${isActive ? 'text-[#0F2F33] opacity-90' : 'text-[#6B7280]'}`}>
                                 {card.label}
                             </span>
-                            <span className="text-[16px] text-[#002b31] font-bold leading-none mt-1 ">
+                            <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1 ">
                                 €{card.value.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                         </div>
-                        {isActive && (
-                            <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#fcd34d] opacity-50"></div>
-                        )}
                         </div>
                     );
                  })}
                </div>
 
                {/* Logs-style Toolbar (Reused) */}
-               <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+               <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                 Last 30 days
-                <CaretDown size={12} className="text-gray-400" />
+                <CaretDown size={14} className="text-[#9CA3AF]" />
               </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <Funnel size={14} className="text-gray-500" />
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                <Funnel size={16} className="text-[#9CA3AF]" />
                 Filters
-                <CaretDown size={12} className="text-gray-400" />
+                <CaretDown size={14} className="text-[#9CA3AF]" />
               </button>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                  <MagnifyingGlass size={14} />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                  <MagnifyingGlass size={16} />
                 </div>
                 <input 
                   type="text" 
                   placeholder="Search"
-                  className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[220px] shadow-sm focus:outline-none"
+                  className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-medium"
                 />
               </div>
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <DownloadSimple size={14} className="text-gray-500" />
+              <button 
+                onClick={() => setIsCreateExpenseModalOpen(true)}
+                className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[14px] font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
+              >
+                <Plus size={16} weight="bold" />
+                Create expense
+              </button>
+              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                <DownloadSimple size={16} className="text-[#9CA3AF]" />
                 Export
               </button>
             </div>
           </div>
                <ExpensesTable transactions={filteredExpenses} />
+               <CreateExpenseModal isOpen={isCreateExpenseModalOpen} onClose={() => setIsCreateExpenseModalOpen(false)} />
             </main>
         );
     }
 
     if (activeItem === NavItemType.ALL_CLIENTS) {
+      // ... (keep existing All Clients block) ...
       return (
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4 ">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-[#002b31]">Clients</h1>
+            <h1 className="text-2xl font-bold text-[#0F2F33]">Clients</h1>
           </div>
           {/* ... widgets ... */}
           <div className="flex gap-4 mb-6">
-             <div className="relative overflow-hidden rounded-lg pl-4 pr-10 py-3.5 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-gray-200">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-gray-50 border border-gray-200 text-gray-500">
-                   <CheckCircle size={20} weight="fill" className="opacity-80" />
+             <div className="relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-[#E5E7EB]">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]">
+                   <CheckCircle size={22} weight="fill" className="opacity-80" />
                 </div>
                 <div className="flex flex-col z-10">
-                   <span className="text-[12px] font-regular tracking-wide text-gray-600">Paying customers</span>
-                   <span className="text-[16px] text-[#002b31] font-bold leading-none mt-1">19</span>
+                   <span className="text-[13px] font-medium tracking-wide text-[#6B7280]">Paying customers</span>
+                   <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">19</span>
                 </div>
              </div>
-             <div className="relative overflow-hidden rounded-lg pl-4 pr-10 py-3.5 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-gray-200">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-gray-50 border border-gray-200 text-gray-500">
-                   <Clock size={20} weight="fill" className="opacity-80" />
+             <div className="relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-[#E5E7EB]">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]">
+                   <Clock size={22} weight="fill" className="opacity-80" />
                 </div>
                  <div className="flex flex-col z-10">
-                   <span className="text-[12px] font-regular tracking-wide text-gray-600">MRR</span>
-                   <span className="text-[16px] text-[#002b31] font-bold leading-none mt-1">€991.00</span>
+                   <span className="text-[13px] font-medium tracking-wide text-[#6B7280]">MRR</span>
+                   <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">€991.00</span>
                 </div>
              </div>
           </div>
           {/* ... filter bar ... */}
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
              <div className="flex items-center gap-2">
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                    All statuses
-                   <CaretDown size={12} className="text-gray-400" />
+                   <CaretDown size={14} className="text-[#9CA3AF]" />
                 </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                    All countries
-                   <CaretDown size={12} className="text-gray-400" />
+                   <CaretDown size={14} className="text-[#9CA3AF]" />
                 </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                    All plans
-                   <CaretDown size={12} className="text-gray-400" />
+                   <CaretDown size={14} className="text-[#9CA3AF]" />
                 </button>
              </div>
-             <div className="flex items-center gap-2">
+             <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                    <MagnifyingGlass size={14} />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                    <MagnifyingGlass size={16} />
                   </div>
                   <input 
                     type="text" 
                     placeholder="Search clients..."
-                    className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[200px] shadow-sm focus:outline-none"
+                    className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[220px] focus:outline-none font-medium"
                   />
                 </div>
-                <div className="h-4 w-px bg-gray-200 mx-1"></div>
-                <button className="h-[32px] px-3 bg-[#fcd34d] hover:bg-[#fbbf24] border border-[#fbbf24] rounded text-[13px] text-[#002b31] font-bold flex items-center gap-2 shadow-sm transition-colors">
-                   <Plus size={14} weight="bold" />
+                <div className="h-6 w-px bg-[#E5E7EB] mx-1"></div>
+                <button className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[14px] font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm">
+                   <Plus size={16} weight="bold" />
                    Invite client
                 </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                   <Upload size={14} className="text-gray-500" />
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                   <Upload size={16} className="text-[#9CA3AF]" />
                    Import Clients
                 </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                    Invite with link
                 </button>
              </div>
@@ -1549,84 +1426,86 @@ const App: React.FC = () => {
     return (
       <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-[#002b31]">Income</h1>
+            <h1 className="text-2xl font-bold text-[#0F2F33]">Income</h1>
           </div>
           {/* ... widgets ... */}
           <div className="flex gap-4 mb-6">
             <div 
               onClick={() => setFilterCategory(null)}
-              className={`relative overflow-hidden rounded-lg pl-4 pr-10 py-3.5 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
+              className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
                 filterCategory === null 
-                  ? 'bg-[#fffdf5] border-[#fcd34d] ring-1 ring-[#fcd34d]/50' 
-                  : 'bg-white border-gray-200 hover:border-gray-300'
+                  ? 'bg-[#FFF7D6] border-[#F7D84A] ring-1 ring-[#F7D84A]/50' 
+                  : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
               }`}
             >
-               <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                 filterCategory === null ? 'bg-white border border-[#e6dac0] text-[#002b31]' : 'bg-gray-50 border border-gray-200 text-gray-500'
+               <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
+                 filterCategory === null ? 'bg-white border border-[#e6dac0] text-[#0F3A3E]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
                }`}>
-                  <Tray size={20} weight="fill" className={filterCategory === null ? "opacity-80" : "opacity-60"} />
+                  <Tray size={22} weight="fill" className={filterCategory === null ? "opacity-100" : "opacity-60"} />
                </div>
                <div className="flex flex-col z-10">
-                  <span className={`text-[12px] font-regular tracking-wide transition-colors ${filterCategory === null ? 'text-black opacity-90' : 'text-gray-600'}`}>All income</span>
-                  <span className="text-[16px] text-[#002b31] font-bold leading-none mt-1">€29,626.26</span>
+                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === null ? 'text-[#0F2F33] opacity-90' : 'text-[#6B7280]'}`}>All income</span>
+                  <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">€29,626.26</span>
                </div>
-               {filterCategory === null && (
-                 <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#fcd34d] opacity-50"></div>
-               )}
             </div>
              <div 
                onClick={() => setFilterCategory('Business Income')}
-               className={`relative overflow-hidden rounded-lg pl-4 pr-10 py-3.5 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
+               className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
                  filterCategory === 'Business Income' 
-                   ? 'bg-[#fffdf5] border-[#fcd34d] ring-1 ring-[#fcd34d]/50' 
-                   : 'bg-white border-gray-200 hover:border-gray-300'
+                   ? 'bg-[#FFF7D6] border-[#F7D84A] ring-1 ring-[#F7D84A]/50' 
+                   : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
                }`}
              >
-               <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                 filterCategory === 'Business Income' ? 'bg-white border border-[#e6dac0] text-[#002b31]' : 'bg-gray-50 border border-gray-200 text-gray-500'
+               <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
+                 filterCategory === 'Business Income' ? 'bg-white border border-[#e6dac0] text-[#0F3A3E]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
                }`}>
-                  <TrendUp size={20} weight="fill" className={filterCategory === 'Business Income' ? "opacity-80" : "opacity-60"} />
+                  <TrendUp size={22} weight="fill" className={filterCategory === 'Business Income' ? "opacity-100" : "opacity-60"} />
                </div>
                <div className="flex flex-col z-10">
-                  <span className={`text-[12px] font-regular tracking-wide transition-colors ${filterCategory === 'Business Income' ? 'text-black opacity-90' : 'text-gray-600'}`}>Business income</span>
-                  <span className="text-[16px] text-[#002b31] font-bold leading-none mt-1 ">€{totalBusinessIncome.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === 'Business Income' ? 'text-[#0F2F33] opacity-90' : 'text-[#6B7280]'}`}>Business income</span>
+                  <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1 ">€{totalBusinessIncome.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                </div>
-               {filterCategory === 'Business Income' && (
-                 <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#fcd34d] opacity-50"></div>
-               )}
             </div>
           </div>
           {/* ... toolbar ... */}
-          <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
                 Last 30 days
-                <CaretDown size={12} className="text-gray-400" />
+                <CaretDown size={14} className="text-[#9CA3AF]" />
               </button>
-                <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <Funnel size={14} className="text-gray-500" />
+                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                <Funnel size={16} className="text-[#9CA3AF]" />
                 Filters
-                <CaretDown size={12} className="text-gray-400" />
+                <CaretDown size={14} className="text-[#9CA3AF]" />
               </button>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-400">
-                  <MagnifyingGlass size={14} />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                  <MagnifyingGlass size={16} />
                 </div>
                 <input 
                   type="text" 
                   placeholder="Search"
-                  className="h-[32px] pl-8 pr-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 placeholder-gray-400 focus:border-[#004d40] focus:ring-1 focus:ring-[#004d40] transition-colors w-[220px] shadow-sm focus:outline-none"
+                  className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-medium"
                 />
               </div>
-              <button className="h-[32px] px-3 bg-white border border-gray-200 hover:border-gray-300 rounded text-[13px] text-gray-700 font-medium flex items-center gap-2 shadow-sm transition-colors">
-                <DownloadSimple size={14} className="text-gray-500" />
+              <button 
+                onClick={() => setIsCreateIncomeModalOpen(true)}
+                className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[14px] font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
+              >
+                <Plus size={16} weight="bold" />
+                Create income
+              </button>
+              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
+                <DownloadSimple size={16} className="text-[#9CA3AF]" />
                 Export
               </button>
             </div>
           </div>
           <TransactionTable transactions={filteredTransactions} />
+          <CreateIncomeModal isOpen={isCreateIncomeModalOpen} onClose={() => setIsCreateIncomeModalOpen(false)} />
         </main>
     );
   };

@@ -25,140 +25,138 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
   const getPlanStyle = (plan: string) => {
     switch (plan) {
       case 'Kletta Solo':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-[#FEF3C7] text-[#92400E] border-[#FEF3C7]';
       case 'Kletta Care':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-[#DBEAFE] text-[#1E40AF] border-[#DBEAFE]';
       case 'PARTNER':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
+        return 'bg-[#F3E8FF] text-[#6B21A8] border-[#F3E8FF]';
       case 'COLLECT':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-[#DCFCE7] text-[#166534] border-[#DCFCE7]';
       default:
-        return 'bg-gray-100 text-gray-500 border-gray-200';
+        return 'bg-[#F3F4F6] text-[#4B5563] border-[#F3F4F6]';
     }
   };
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden mt-2 border border-gray-200 rounded-lg">
-      <div className="overflow-auto flex-1 custom-scrollbar pb-0 bg-white">
-        <table className="min-w-[1800px] text-[13px] text-left border-collapse table-fixed w-full">
-          {/* Header matches TransactionTable style exactly */}
-        <thead className="bg-gray-50 text-gray-500 sticky top-0 z-10 h-[40px] shadow-md">
+    <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
+      <div className="overflow-auto flex-1 custom-scrollbar pb-0">
+        <table className="min-w-[1800px] text-left border-collapse table-fixed w-full">
+          {/* Header */}
+          <thead className="bg-[#F9FAFB] text-[#4B5563] sticky top-0 z-10 h-[48px] border-b border-[#E5E7EB]">
             <tr>
-              <th className="px-4 font-medium text-[12px] w-[50px] text-center text-gray-500">#</th>
-              <th className="px-4 font-medium text-[12px] w-[220px] text-gray-500">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
-                  E-mail
-                </div>
-              </th>
-              <th className="px-4 font-medium text-[12px] w-[80px] text-center text-gray-500">Country</th>
-              <th className="px-4 font-medium text-[12px] w-[140px] text-gray-500">Plan</th>
-              <th className="px-4 font-medium text-[12px] w-[120px] text-gray-500">UTR</th>
-              <th className="px-4 font-medium text-[12px] w-[140px] text-center text-gray-500">Prepayment</th>
-              <th className="px-4 font-medium text-[12px] w-[180px] text-gray-500">Company Name</th>
-              <th className="px-4 font-medium text-[12px] w-[120px] text-gray-500">First Name</th>
-              <th className="px-4 font-medium text-[12px] w-[120px] text-gray-500">Last Name</th>
-              <th className="px-4 font-medium text-[12px] w-[130px] text-gray-500">Phone</th>
-              <th className="px-4 font-medium text-[12px] w-[150px] text-gray-500">Sales Person</th>
-              <th className="px-4 font-medium text-[12px] w-[280px] text-gray-500">Action</th>
+              <th className="px-4 font-semibold text-[13px] w-[60px] text-center">#</th>
+              <th className="px-4 font-semibold text-[13px] w-[240px]">E-mail</th>
+              <th className="px-4 font-semibold text-[13px] w-[80px] text-center">Country</th>
+              <th className="px-4 font-semibold text-[13px] w-[140px]">Plan</th>
+              <th className="px-4 font-semibold text-[13px] w-[140px]">UTR</th>
+              <th className="px-4 font-semibold text-[13px] w-[140px] text-center">Prepayment</th>
+              <th className="px-4 font-semibold text-[13px] w-[180px]">Company Name</th>
+              <th className="px-4 font-semibold text-[13px] w-[140px]">First Name</th>
+              <th className="px-4 font-semibold text-[13px] w-[140px]">Last Name</th>
+              <th className="px-4 font-semibold text-[13px] w-[150px]">Phone</th>
+              <th className="px-4 font-semibold text-[13px] w-[180px]">Sales Person</th>
+              <th className="px-4 font-semibold text-[13px] w-[280px]">Action</th>
             </tr>
           </thead>
           <tbody className="bg-white">
             {clients.map((c, index) => (
               <tr 
                 key={c.id} 
-                className={`group transition-colors border-b border-gray-50 h-[48px] ${
-                  index % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'
-                } hover:bg-gray-50`}
+                className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${
+                  hoveredRowId === c.id ? 'bg-[#F9FAFB]' : 'bg-white'
+                }`}
                 onMouseEnter={() => setHoveredRowId(c.id)}
                 onMouseLeave={() => setHoveredRowId(null)}
               >
                 <td className="p-0">
-                  <div className="h-full flex items-center justify-center px-4 text-gray-400 font-medium tabular-nums">
+                  <div className="h-full flex items-center justify-center px-4 text-[#9CA3AF] font-medium tabular-nums text-[13px]">
                     {index + 1}
                   </div>
                 </td>
                 <td className="p-0">
-                  <div className="h-full flex items-center px-4 text-gray-900 font-medium truncate hover:text-[#005c66] cursor-pointer transition-colors">
+                  <div className="h-full flex items-center px-4 text-[#0F2F33] font-bold truncate hover:text-[#1E6F73] cursor-pointer transition-colors text-[13px]">
                     {c.email}
                   </div>
                 </td>
                 <td className="p-0">
-                  <div className="h-full flex items-center justify-center px-4 text-[16px] grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all">
+                  <div className="h-full flex items-center justify-center px-4 text-[18px]">
                     {getFlag(c.countryCode)}
                   </div>
                 </td>
                 <td className="p-0">
                   <div className="h-full flex items-center px-4">
-                    <span className={`px-2 py-0.5 rounded text-[11px] font-medium border ${getPlanStyle(c.plan)} truncate`}>
+                    <span className={`px-3 py-1 rounded-lg text-[12px] font-bold border ${getPlanStyle(c.plan)} truncate`}>
                       {c.plan}
                     </span>
                   </div>
                 </td>
                 <td className="p-0">
-                  <div className="h-full flex items-center px-4 text-gray-600 tabular-nums">
-                     <div className="flex items-center gap-1.5">
+                  <div className="h-full flex items-center px-4 text-[#4B5563] tabular-nums text-[13px] font-medium">
+                     <div className="flex items-center gap-2">
                         <span>{c.utr}</span>
-                        {c.isUtrVerified && <SealCheck size={14} weight="fill" className="text-[#005c66]" />}
+                        {c.isUtrVerified && <SealCheck size={16} weight="fill" className="text-[#1E6F73]" />}
                      </div>
                   </div>
                 </td>
                 <td className="p-0">
                    <div className="h-full flex items-center justify-center px-4">
                       {c.isPrepaymentRegistered ? (
-                        <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center">
-                           <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <div className="w-5 h-5 rounded-full bg-[#DCFCE7] flex items-center justify-center">
+                           <div className="w-2.5 h-2.5 rounded-full bg-[#166534]"></div>
                         </div>
                       ) : (
-                        <span className="text-gray-300">-</span>
+                        <span className="text-[#E5E7EB]">-</span>
                       )}
                    </div>
                 </td>
                 <td className="p-0">
-                   <div className="h-full flex items-center px-4 text-gray-900 truncate">
-                      {c.companyName || <span className="text-gray-300">-</span>}
+                   <div className="h-full flex items-center px-4 text-[#0F2F33] font-medium truncate text-[13px]">
+                      {c.companyName || <span className="text-[#E5E7EB]">-</span>}
                    </div>
                 </td>
                 <td className="p-0">
-                   <div className="h-full flex items-center px-4 text-gray-600 truncate">
-                      {c.firstName || <span className="text-gray-300">-</span>}
+                   <div className="h-full flex items-center px-4 text-[#4B5563] truncate text-[13px] font-medium">
+                      {c.firstName || <span className="text-[#E5E7EB]">-</span>}
                    </div>
                 </td>
                 <td className="p-0">
-                   <div className="h-full flex items-center px-4 text-gray-600 truncate">
-                      {c.lastName || <span className="text-gray-300">-</span>}
+                   <div className="h-full flex items-center px-4 text-[#4B5563] truncate text-[13px] font-medium">
+                      {c.lastName || <span className="text-[#E5E7EB]">-</span>}
                    </div>
                 </td>
                 <td className="p-0">
-                   <div className="h-full flex items-center px-4 text-gray-600 tabular-nums">
-                      {c.phone || <span className="text-gray-300">-</span>}
+                   <div className="h-full flex items-center px-4 text-[#6B7280] tabular-nums text-[13px]">
+                      {c.phone || <span className="text-[#E5E7EB]">-</span>}
                    </div>
                 </td>
                 <td className="p-0">
                    <div className="h-full flex items-center px-2">
-                      <select 
-                        className="w-full h-[32px] bg-transparent border border-transparent hover:bg-white hover:border-gray-200 rounded px-2 text-[13px] text-gray-700 focus:outline-none focus:border-[#004d40] cursor-pointer transition-all appearance-none"
-                        defaultValue={c.salesPerson}
-                      >
-                         <option>Danny</option>
-                         <option>Sami</option>
-                         <option>James</option>
-                         <option>Not set</option>
-                      </select>
+                      <div className="relative w-full">
+                        <select 
+                            className="w-full h-[42px] bg-white border border-[#E5E7EB] rounded-xl px-3 text-[13px] text-[#0F2F33] font-medium focus:outline-none focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] cursor-pointer transition-all appearance-none"
+                            defaultValue={c.salesPerson}
+                        >
+                            <option>Danny</option>
+                            <option>Sami</option>
+                            <option>James</option>
+                            <option>Not set</option>
+                        </select>
+                        <CaretDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none" />
+                      </div>
                    </div>
                 </td>
                 <td className="p-0">
                    <div className={`h-full flex items-center gap-2 px-4 transition-opacity duration-200 ${hoveredRowId === c.id ? 'opacity-100' : 'opacity-0'}`}>
-                      <button className="h-[28px] bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] border border-[#fcd34d] hover:border-[#fbbf24] font-semibold px-3 rounded text-[11px] shadow-sm transition-colors whitespace-nowrap flex items-center gap-1.5">
-                        <SignIn size={14} />
+                      <button className="h-[36px] bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] border border-[#F7D84A] font-bold px-4 rounded-xl text-[12px] shadow-sm transition-colors whitespace-nowrap flex items-center gap-2">
+                        <SignIn size={16} />
                         Login
                       </button>
-                      <button className="h-[28px] bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium px-3 rounded text-[11px] shadow-sm transition-colors whitespace-nowrap flex items-center gap-1.5">
-                        <PencilSimple size={14} />
+                      <button className="h-[36px] bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] text-[#0F2F33] font-medium px-3 rounded-xl text-[12px] shadow-sm transition-colors whitespace-nowrap flex items-center gap-2">
+                        <PencilSimple size={16} />
                         Edit
                       </button>
-                       <button className="h-[28px] bg-white border border-gray-200 hover:bg-red-50 hover:text-red-600 text-gray-500 font-medium px-3 rounded text-[11px] shadow-sm transition-colors whitespace-nowrap flex items-center gap-1.5">
-                        <Prohibit size={14} />
-                        Deactivate
+                       <button className="h-[36px] bg-white border border-[#E5E7EB] hover:bg-red-50 hover:text-red-600 hover:border-red-100 text-[#6B7280] font-medium px-3 rounded-xl text-[12px] shadow-sm transition-colors whitespace-nowrap flex items-center gap-2">
+                        <Prohibit size={16} />
                       </button>
                    </div>
                 </td>
@@ -168,10 +166,10 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
         </table>
       </div>
       
-      {/* Footer Summary Matches TransactionTable */}
-      <div className="bg-white py-2 flex justify-between items-center text-[12px] text-gray-500 flex-shrink-0 px-4 border-t border-gray-100">
+      {/* Footer */}
+      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#4B5563] flex-shrink-0 px-6 border-t border-[#E5E7EB]">
          <div>
-            <span className="font-medium text-gray-700">{clients.length}</span> clients found
+            <span className="font-bold text-[#0F2F33]">{clients.length}</span> clients found
          </div>
       </div>
     </div>

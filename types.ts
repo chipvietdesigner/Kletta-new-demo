@@ -1,5 +1,4 @@
 
-
 export interface IncomeTransaction {
   id: string;
   date: string;
@@ -40,14 +39,26 @@ export interface ExpenseTransaction {
   aiVerified: boolean;
 }
 
+export interface ReconciledItem {
+  id: string;
+  type: 'Expense' | 'Income' | 'Invoice' | 'Receipt';
+  amount: number;
+  date: string;
+  label: string; // e.g., "Expenses 62925", "Receipt 202520007"
+  description: string; // e.g., "Last Orders Drink", "Harrods Limited"
+  categoryLabel?: string; // e.g. "Car, van and travel expenses"
+  pillColor?: 'gray' | 'yellow'; // To force visual style matching screenshot
+  iconType?: 'default' | 'receipt' | 'invoice'; // To show specific icons like the receipt image
+}
+
 export interface BankTransaction {
   id: string;
   date: string;
   description: string;
-  category: string;
-  reconciled: boolean;
   reference: string;
   amount: number;
+  reconciled: boolean;
+  reconciledItems?: ReconciledItem[];
 }
 
 export interface VatReturn {
@@ -172,10 +183,9 @@ export interface WelcomeSectionItem {
   cta: string;
   secondary_cta?: string;
   image_url?: string;
-  video_url?: string; // New: Optional video URL
-  gallery_images?: string[]; // New: Optional gallery images
-  items?: string[]; // For list cards
-  // New fields for detail modal
+  video_url?: string;
+  gallery_images?: string[];
+  items?: string[];
   modalSubtitle?: string;
   longDescription?: string;
 }

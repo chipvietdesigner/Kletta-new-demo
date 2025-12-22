@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { 
   HandWaving, 
@@ -273,7 +271,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
                     <div className="space-y-1.5">
                        <label className="text-[10px] uppercase tracking-wider font-bold text-gray-400 ml-1">Client E-mail</label>
                        <div className="group flex items-center justify-between bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg px-3 py-2.5 shadow-sm">
-                          <span className="text-[14px] font-semibold text-[#002b31] font-mono truncate mr-3 select-all">sami+client@kletta.com</span>
+                          <span className="text-[14px] font-semibold text-[#002b31] truncate mr-3 select-all">sami+client@kletta.com</span>
                           <button 
                             className="text-gray-400 hover:text-[#002b31] p-1.5 rounded-md transition-colors" 
                             title="Copy email"
@@ -288,7 +286,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
                        <label className="text-[10px] uppercase tracking-wider font-bold text-gray-400 ml-1">PIN Code</label>
                        <div className="flex gap-3">
                           {[5, 2, 9, 1].map((digit, i) => (
-                             <div key={i} className="flex-1 h-14 bg-white border border-gray-200 rounded-lg flex items-center justify-center text-2xl font-bold text-[#002b31] shadow-sm font-mono tracking-tight">
+                             <div key={i} className="flex-1 h-14 bg-white border border-gray-200 rounded-lg flex items-center justify-center text-2xl font-bold text-[#002b31] shadow-sm tracking-tight">
                                 {digit}
                              </div>
                           ))}

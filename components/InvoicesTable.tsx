@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Invoice } from '../types';
-import { Trash, FileText, CheckCircle } from '@phosphor-icons/react';
+import { Trash, FileText, PencilSimple, CheckCircle } from '@phosphor-icons/react';
 
 interface InvoicesTableProps {
   invoices: Invoice[];
@@ -25,92 +25,115 @@ const InvoicesTable: React.FC<InvoicesTableProps> = ({ invoices, statusFilter })
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'Paid':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-[#DCFCE7] text-[#166534] border-[#DCFCE7]';
       case 'Draft':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-[#FEF3C7] text-[#92400E] border-[#FEF3C7]';
       case 'Open':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-[#DBEAFE] text-[#1E40AF] border-[#DBEAFE]';
       case 'Due':
-        return 'bg-[#002b31] text-white border-[#002b31]';
+        return 'bg-[#FEE2E2] text-[#991B1B] border-[#FEE2E2]';
       default:
-        return 'bg-gray-100 text-gray-600 border-gray-200';
+        return 'bg-[#F3F4F6] text-[#4B5563] border-[#F3F4F6]';
     }
   };
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden mt-2 border border-gray-200 rounded-lg">
-      <div className="overflow-auto flex-1 custom-scrollbar pb-0 bg-white">
-        <table className="min-w-[1200px] text-[13px] text-left table-fixed w-full border-collapse">
-          <thead className="bg-gray-50 text-gray-500 sticky top-0 z-10 h-[40px] shadow-md">
+    <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
+      <div className="overflow-auto flex-1 custom-scrollbar pb-0">
+        <table className="min-w-[1200px] text-left table-fixed w-full border-collapse">
+          <thead className="bg-[#F9FAFB] text-[#4B5563] sticky top-0 z-10 h-[48px] border-b border-[#E5E7EB]">
             <tr>
-              <th className="px-4 font-medium text-[12px] w-[140px] text-gray-500 text-right">Total amount</th>
-              <th className="px-4 font-medium text-[12px] w-[120px] text-gray-500 text-center">Status</th>
-              <th className="px-4 font-medium text-[12px] w-[140px] text-gray-500">Invoice ID</th>
-              <th className="px-4 font-medium text-[12px] w-[200px] text-gray-500">Customer</th>
-              <th className="px-4 font-medium text-[12px] w-[80px] text-gray-500 text-center">Document</th>
-              <th className="px-4 font-medium text-[12px] w-[120px] text-gray-500">Due date</th>
-              <th className="px-4 font-medium text-[12px] w-[120px] text-gray-500">Date</th>
-              <th className="px-4 font-medium text-[12px] w-[180px] text-gray-500 text-right">Actions</th>
+              <th className="px-4 font-semibold text-[13px] w-[120px]">Invoice #</th>
+              <th className="px-4 font-semibold text-[13px] w-[100px]">Date</th>
+              <th className="px-4 font-semibold text-[13px] w-[240px]">Customer</th>
+              <th className="px-4 font-semibold text-[13px] w-[100px]">Due Date</th>
+              <th className="px-4 font-semibold text-[13px] w-[120px] text-center">Status</th>
+              <th className="px-4 font-semibold text-[13px] w-[80px] text-center">Doc</th>
+              <th className="px-4 font-semibold text-[13px] w-[140px] text-right">Total</th>
+              <th className="px-4 font-semibold text-[13px] w-[180px] text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white">
-            {filteredInvoices.map((inv, index) => (
+            {filteredInvoices.map((inv) => (
               <tr 
                 key={inv.id} 
-                className={`group transition-colors border-b border-gray-50 h-[48px] ${
-                  index % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'
-                } hover:bg-gray-50`}
+                className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${
+                   hoveredRowId === inv.id ? 'bg-[#F9FAFB]' : 'bg-white'
+                }`}
                 onMouseEnter={() => setHoveredRowId(inv.id)}
                 onMouseLeave={() => setHoveredRowId(null)}
               >
+                {/* Invoice ID */}
                 <td className="p-0">
-                  <div className={`h-full flex items-center justify-end px-4 font-medium tabular-nums ${inv.totalAmount < 0 ? 'text-red-600' : 'text-[#002b31]'}`}>
-                    {formatCurrency(inv.totalAmount)}
+                  <div className="h-full flex items-center px-4 text-[#0F2F33] font-bold text-[13px]">
+                    {inv.invoiceId}
                   </div>
                 </td>
+
+                {/* Date */}
+                <td className="p-0">
+                  <div className="h-full flex items-center px-4 tabular-nums text-[13px] text-[#4B5563] font-medium">
+                    {inv.date}
+                  </div>
+                </td>
+
+                {/* Customer */}
+                <td className="p-0">
+                  <div className="h-full flex items-center px-4 text-[#0F2F33] truncate text-[13px] font-bold hover:text-[#1E6F73] cursor-pointer transition-colors">
+                    {inv.customer}
+                  </div>
+                </td>
+
+                {/* Due Date */}
+                <td className="p-0">
+                  <div className={`h-full flex items-center px-4 tabular-nums text-[13px] ${inv.status === 'Due' ? 'text-[#991B1B] font-bold' : 'text-[#4B5563] font-medium'}`}>
+                    {inv.dueDate}
+                  </div>
+                </td>
+
+                {/* Status */}
                 <td className="p-0">
                   <div className="h-full flex items-center justify-center px-4">
-                    <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold border ${getStatusStyle(inv.status)} uppercase tracking-wide`}>
+                    <span className={`px-3 py-1 rounded-lg text-[12px] font-bold border ${getStatusStyle(inv.status)}`}>
                       {inv.status}
                     </span>
                   </div>
                 </td>
-                <td className="p-0">
-                  <div className="h-full flex items-center px-4 text-gray-900 font-medium">
-                    {inv.invoiceId}
-                  </div>
-                </td>
-                <td className="p-0">
-                  <div className="h-full flex items-center px-4 text-gray-700 truncate">
-                    {inv.customer}
-                  </div>
-                </td>
+
+                {/* Document Icon */}
                 <td className="p-0">
                   <div className="h-full flex items-center justify-center px-4">
-                    <button className="w-7 h-7 bg-gray-100 border border-gray-200 rounded flex items-center justify-center text-gray-400 hover:text-gray-600 hover:border-gray-300 transition-all">
-                      <FileText size={14} weight="fill" />
-                    </button>
+                    {hoveredRowId === inv.id ? (
+                        <button className="w-8 h-8 bg-white border border-[#E5E7EB] rounded-lg flex items-center justify-center text-[#6B7280] hover:text-[#0F2F33] hover:border-[#D1D5DB] transition-all shadow-sm">
+                           <FileText size={16} />
+                        </button>
+                    ) : (
+                        <FileText size={18} weight="fill" className="text-[#E5E7EB]" />
+                    )}
                   </div>
                 </td>
+
+                {/* Total Amount */}
                 <td className="p-0">
-                  <div className={`h-full flex items-center px-4 tabular-nums text-[12px] ${inv.status === 'Due' ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
-                    {inv.dueDate}
+                  <div className={`h-full flex items-center justify-end px-4 font-bold tabular-nums text-[13px] ${inv.totalAmount < 0 ? 'text-[#0F2F33]' : 'text-[#1E6F73]'}`}>
+                    {formatCurrency(inv.totalAmount)}
                   </div>
                 </td>
+
+                {/* Actions */}
                 <td className="p-0">
-                  <div className="h-full flex items-center px-4 tabular-nums text-[12px] text-gray-600">
-                    {inv.date}
-                  </div>
-                </td>
-                <td className="p-0">
-                  <div className="h-full flex items-center justify-end px-4 gap-2">
+                  <div className={`h-full flex items-center justify-end px-4 gap-2 transition-opacity duration-200 ${hoveredRowId === inv.id ? 'opacity-100' : 'opacity-0'}`}>
                     {(inv.status === 'Open' || inv.status === 'Due') && (
-                      <button className="bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] text-[11px] font-bold px-3 py-1.5 rounded shadow-sm transition-colors opacity-0 group-hover:opacity-100">
-                        Register as paid
+                      <button className="h-[36px] bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[12px] font-bold px-3 rounded-xl shadow-sm transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                        <CheckCircle size={14} weight="bold" />
+                        Mark paid
                       </button>
                     )}
-                    <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                      <Trash size={16} />
+                    <button className="h-[36px] w-[36px] flex items-center justify-center bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] text-[#0F2F33] rounded-xl transition-colors shadow-sm">
+                       <PencilSimple size={16} />
+                    </button>
+                    <button className="h-[36px] w-[36px] flex items-center justify-center text-[#9CA3AF] hover:text-[#991B1B] hover:bg-[#FEF2F2] rounded-xl transition-colors">
+                      <Trash size={18} />
                     </button>
                   </div>
                 </td>
@@ -121,9 +144,9 @@ const InvoicesTable: React.FC<InvoicesTableProps> = ({ invoices, statusFilter })
       </div>
       
       {/* Footer Summary */}
-      <div className="bg-white py-2 flex justify-between items-center text-[12px] text-gray-500 flex-shrink-0 px-4 border-t border-gray-100">
+      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#4B5563] flex-shrink-0 px-6 border-t border-[#E5E7EB]">
          <div>
-            <span className="font-medium text-gray-700">{filteredInvoices.length}</span> invoices
+            <span className="font-bold text-[#0F2F33]">{filteredInvoices.length}</span> invoices found
          </div>
       </div>
     </div>
