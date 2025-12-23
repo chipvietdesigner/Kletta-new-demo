@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { VatReturn } from '../types';
 import { SealCheck } from '@phosphor-icons/react';
 
@@ -7,8 +7,6 @@ interface VatReturnsTableProps {
 }
 
 const VatReturnsTable: React.FC<VatReturnsTableProps> = ({ data }) => {
-  const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
-
   return (
     <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
       <div className="overflow-auto flex-1 custom-scrollbar pb-0">
@@ -27,22 +25,22 @@ const VatReturnsTable: React.FC<VatReturnsTableProps> = ({ data }) => {
           </thead>
           <tbody className="bg-white">
             {data.map((row, index) => (
-              <tr key={row.id} className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${hoveredRowId === row.id ? 'bg-[#F9FAFB]' : 'bg-white'}`} onMouseEnter={() => setHoveredRowId(row.id)} onMouseLeave={() => setHoveredRowId(null)}>
-                <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[#616A6B] font-normal text-[13px]">{index + 1}</div></td>
+              <tr key={row.id} className="group transition-colors border-b border-[#E5E7EB] h-[64px] hover:bg-[#F9FAFB]">
+                <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[#000000] font-normal text-[13px]">{index + 1}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.email}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-normal truncate text-[13px]">{row.companyName}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{row.firstName}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{row.lastName}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] text-[13px] font-normal"><span className="mr-2">{row.utr}</span>{row.isUtrVerified && <SealCheck size={16} weight="fill" className="text-[#1E6F73]" />}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] text-[13px] font-normal">{row.taxPeriod}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] text-[13px] font-normal">{row.edited}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.companyName}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-normal">{row.firstName}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-normal">{row.lastName}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal"><span>{row.utr}</span>{row.isUtrVerified && <SealCheck size={16} weight="fill" className="text-[#1E6F73] ml-2" />}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal">{row.taxPeriod}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal">{row.edited}</div></td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#616A6B] flex-shrink-0 px-6 border-t border-[#E5E7EB]">
-         <div><span className="font-medium text-[#000000]">{data.length}</span> results</div>
+      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#616A6B] px-6 border-t border-[#E5E7EB]">
+         <div><span className="font-medium text-[#000000]">{data.length}</span> results found</div>
       </div>
     </div>
   );

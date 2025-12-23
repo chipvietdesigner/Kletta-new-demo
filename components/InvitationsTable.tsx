@@ -8,6 +8,7 @@ interface InvitationsTableProps {
 
 const InvitationsTable: React.FC<InvitationsTableProps> = ({ invitations }) => {
   const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
+
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'ACCEPTED': return 'bg-[#DCFCE7] text-[#166534] border-[#DCFCE7]';
@@ -35,7 +36,7 @@ const InvitationsTable: React.FC<InvitationsTableProps> = ({ invitations }) => {
           <tbody className="bg-white">
             {invitations.map((inv) => (
               <tr key={inv.id} className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${hoveredRowId === inv.id ? 'bg-[#F9FAFB]' : 'bg-white'}`} onMouseEnter={() => setHoveredRowId(inv.id)} onMouseLeave={() => setHoveredRowId(null)}>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate hover:text-[#1E6F73] cursor-pointer transition-colors text-[13px]">{inv.email}</div></td>
+                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{inv.email}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{inv.phone}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{inv.firstName}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{inv.lastName}</div></td>
@@ -47,8 +48,8 @@ const InvitationsTable: React.FC<InvitationsTableProps> = ({ invitations }) => {
           </tbody>
         </table>
       </div>
-      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#616A6B] flex-shrink-0 px-6 border-t border-[#E5E7EB]">
-         <div><span className="font-medium text-[#000000]">{invitations.length}</span> invitations</div>
+      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#616A6B] px-6 border-t border-[#E5E7EB]">
+         <div><span className="font-medium text-[#000000]">{invitations.length}</span> results found</div>
       </div>
     </div>
   );

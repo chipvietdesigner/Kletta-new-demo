@@ -90,13 +90,13 @@ const Account: React.FC = () => {
         
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-[#0F2F33]">Account Settings</h1>
+          <h1 className="text-2xl font-bold text-[#000000]">Account Settings</h1>
         </div>
 
         {/* Personal Details Card */}
         <div className="bg-white border border-[#E5E7EB] rounded-xl shadow-sm p-8">
           <div className="flex items-start justify-between mb-8">
-             <h2 className="text-[15px] font-bold text-[#0F2F33]">Personal details</h2>
+             <h2 className="text-[15px] font-semibold text-[#000000]">Personal details</h2>
              
              {isPersonalDetailsEditing ? (
                <div className="flex gap-2">
@@ -223,7 +223,7 @@ const Account: React.FC = () => {
         <div className="bg-white border border-[#E5E7EB] rounded-xl shadow-sm overflow-hidden">
           {/* Header */}
           <div className="p-8 border-b border-[#E5E7EB] pb-6">
-             <h2 className="text-[15px] font-bold text-[#0F2F33] mb-2">Auto-messages</h2>
+             <h2 className="text-[15px] font-semibold text-[#000000] mb-2">Auto-messages</h2>
              <p className="text-[13px] text-[#6B7280] max-w-2xl leading-relaxed mb-6">
                Kletta will help on boarding sole traders with automatic default messages that can me amended.
              </p>

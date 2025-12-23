@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DownloadSimple } from '@phosphor-icons/react';
 
-const MOCK_MESSAGES = ` Hei, olen Kletta...`;
+const MOCK_MESSAGES = `Hei, olen Kletta, tekoälykirjanpitäjäsi...`;
 
 const AISupport: React.FC = () => {
   const [messages, setMessages] = useState(MOCK_MESSAGES);
