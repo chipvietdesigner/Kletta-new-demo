@@ -25,10 +25,10 @@ const MileagesList: React.FC<MileagesListProps> = ({ mileages }) => {
     <>
       <div className="flex flex-col gap-4 pb-6">
         {mileages.map((trip) => (
-          <div key={trip.id} className="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col gap-5 group">
+          <div key={trip.id} className=" border border-[#E5E7EB] rounded-xl  shadow-sm hover:shadow-md transition-all flex flex-col gap-5 group">
              
              {/* Header Row: Route & Main Info */}
-             <div className="flex justify-between items-start">
+             <div className="flex justify-between items-start px-6 pb-3 pt-6">
                 <div className="flex flex-col gap-1.5 min-w-0 pr-6">
                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-[16px] font-bold text-[#0F2F33] leading-snug">{trip.startAddress}</span>
@@ -54,10 +54,8 @@ const MileagesList: React.FC<MileagesListProps> = ({ mileages }) => {
                 </div>
              </div>
 
-             <div className="h-px bg-[#F9FAFB] w-full"></div>
-
              {/* Footer Row: Metadata & Actions */}
-             <div className="flex justify-between items-center">
+             <div className="flex justify-between items-center px-6 pt-4 pb-4  bg-[#F9FAFB] ">
                 
                 {/* Metadata */}
                 <div className="flex items-center gap-6">
@@ -76,7 +74,7 @@ const MileagesList: React.FC<MileagesListProps> = ({ mileages }) => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-2 ">
                    <button 
                      onClick={() => handleOpenMap(trip)}
                      className="h-[36px] px-3 bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] rounded-xl text-[12px] font-bold text-[#0F2F33] flex items-center gap-1.5 transition-colors shadow-sm"
