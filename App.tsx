@@ -1349,17 +1349,16 @@ const App: React.FC = () => {
     }
 
     if (activeItem === NavItemType.ALL_CLIENTS) {
-      // ... (keep existing All Clients block) ...
       return (
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4 ">
           <div className="mb-6 flex items-center justify-between">
             <h1 className="text-2xl font-bold text-[#0F2F33]">Clients</h1>
           </div>
-          {/* ... widgets ... */}
+          
           <div className="flex gap-4 mb-6">
              <div className="relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-[#E5E7EB]">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]">
-                   <CheckCircle size={22} weight="fill" className="opacity-80" />
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#DCFCE7] border border-[#DCFCE7] text-[#166534]">
+                   <CheckCircle size={22} weight="fill" className="opacity-100" />
                 </div>
                 <div className="flex flex-col z-10">
                    <span className="text-[13px] font-medium tracking-wide text-[#6B7280]">Paying customers</span>
@@ -1367,8 +1366,8 @@ const App: React.FC = () => {
                 </div>
              </div>
              <div className="relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-[#E5E7EB]">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]">
-                   <Clock size={22} weight="fill" className="opacity-80" />
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#DBEAFE] border border-[#DBEAFE] text-[#1E40AF]">
+                   <Clock size={22} weight="fill" className="opacity-100" />
                 </div>
                  <div className="flex flex-col z-10">
                    <span className="text-[13px] font-medium tracking-wide text-[#6B7280]">MRR</span>
@@ -1376,7 +1375,7 @@ const App: React.FC = () => {
                 </div>
              </div>
           </div>
-          {/* ... filter bar ... */}
+
           <div className="mb-4 flex items-center justify-between">
              <div className="flex items-center gap-2">
                 <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">

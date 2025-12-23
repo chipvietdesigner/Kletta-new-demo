@@ -17,7 +17,7 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
             <tr>
               <th className="px-4 font-normal text-[13px] w-[60px] text-center">#</th>
               <th className="px-4 font-normal text-[13px] w-[240px]">E-mail</th>
-              <th className="px-4 font-normal text-[13px] w-[80px] text-center">Country</th>
+              <th className="px-4 font-normal text-[13px] w-[180px]">Country</th>
               <th className="px-4 font-normal text-[13px] w-[140px]">Plan</th>
               <th className="px-4 font-normal text-[13px] w-[140px]">UTR</th>
               <th className="px-4 font-normal text-[13px] w-[140px] text-center">Prepayment</th>
@@ -34,10 +34,42 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
               <tr key={c.id} className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${hoveredRowId === c.id ? 'bg-[#F9FAFB]' : 'bg-white'}`} onMouseEnter={() => setHoveredRowId(c.id)} onMouseLeave={() => setHoveredRowId(null)}>
                 <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[#616A6B] font-normal text-[13px]">{index + 1}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{c.email}</div></td>
-                <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[18px]">{c.countryCode === 'FI' ? '🇫🇮' : '🇬🇧'}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4"><span className="px-3 py-1 rounded-lg text-[12px] font-medium border bg-[#F3F4F6] text-[#616A6B]">{c.plan}</span></div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] text-[13px] font-normal"><div className="flex items-center gap-2"><span>{c.utr}</span>{c.isUtrVerified && <SealCheck size={16} weight="fill" className="text-[#1E6F73]" />}</div></div></td>
-                <td className="p-0"><div className="h-full flex items-center justify-center px-4">{c.isPrepaymentRegistered ? '✓' : '-'}</div></td>
+                <td className="p-0">
+                  <div className="h-full flex items-center gap-2 px-4 text-[13px]">
+                    <span className="text-[18px]">{c.countryCode === 'FI' ? '🇫🇮' : '🇬🇧'}</span>
+                    <span className="text-[#616A6B] font-normal">{c.countryCode === 'FI' ? 'Finland' : 'United Kingdom'}</span>
+                  </div>
+                </td>
+                <td className="p-0">
+                  <div className="h-full flex items-center px-4">
+                    <span className="px-3 py-1 rounded-lg text-[12px] font-medium border bg-[#DBEAFE] text-[#1E40AF] border-[#DBEAFE]">
+                      {c.plan}
+                    </span>
+                  </div>
+                </td>
+                <td className="p-0">
+                  <div className="h-full flex items-center px-4 text-[#616A6B] text-[13px] font-normal">
+                    <div className="flex items-center gap-2">
+                      <span>{c.utr}</span>
+                      {c.isUtrVerified ? (
+                        <SealCheck size={16} weight="fill" className="text-[#166534]" />
+                      ) : (
+                        <SealCheck size={16} weight="regular" className="text-[#E5E7EB]" />
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td className="p-0">
+                  <div className="h-full flex items-center justify-center px-4">
+                    {c.isPrepaymentRegistered ? (
+                      <div className="w-5 h-5 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#166534]">
+                        <span className="text-[12px] font-bold">✓</span>
+                      </div>
+                    ) : (
+                      <span className="text-[#E5E7EB]">—</span>
+                    )}
+                  </div>
+                </td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-normal truncate text-[13px]">{c.companyName}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{c.firstName}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{c.lastName}</div></td>
