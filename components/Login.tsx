@@ -73,7 +73,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
           <p className="text-[16px] text-white/70 font-medium leading-relaxed mb-8">
             Our fresh new look is inspired by you — the people who take on the business world with confidence.
           </p>
-          <a href="#" className="text-[14px] font-bold text-white underline underline-offset-8 hover:text-kletta-yellow transition-colors">
+          <a 
+            href="https://kletta.com/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-[14px] font-bold text-white underline underline-offset-8 hover:text-kletta-yellow transition-colors"
+          >
             Why Kletta? Get the full story
           </a>
         </div>
