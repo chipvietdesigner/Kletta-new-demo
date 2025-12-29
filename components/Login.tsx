@@ -71,7 +71,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
             CLEARER<br />ACCOUNTING,<br />LESS EFFORT.
           </h2>
           <p className="text-[16px] text-white/70 font-medium leading-relaxed mb-8">
-            Our fresh new look is inspired by you — the people who take on the business world with confidence.
+            Kletta is the smart accounting partner built for you — the ambitious sole traders who take on the business world with confidence and clarity.
           </p>
           <a 
             href="https://kletta.com/" 
