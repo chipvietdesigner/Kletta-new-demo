@@ -66,11 +66,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
         </div>
 
         {/* Headline & Copy */}
-        <div className="relative z-10 max-w-sm">
-          <h2 className="text-[48px] font-bold text-white leading-[1.1] mb-6 tracking-tight uppercase">
-            CLEARER<br />ACCOUNTING,<br />LESS EFFORT.
+        <div className="relative z-10 max-w">
+          <h2 className="text-[48px] font-bold text-white leading-[1.1] mb-6 tracking-tight">
+            Accounting app for<br />sole traders
           </h2>
-          <p className="text-[16px] text-white/70 font-medium leading-relaxed mb-8">
+          <p className="text-[16px] text-white/90 font-normal leading-relaxed mb-8">
             Kletta is the smart accounting partner built for you — the ambitious sole traders who take on the business world with confidence and clarity.
           </p>
           <a 
@@ -90,31 +90,31 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
         <div className="flex-1 flex flex-col justify-center items-center px-8 sm:px-12 py-16">
           <div className="w-full max-w-[400px] flex flex-col">
             <div className="text-left mb-10">
-              <h1 className="text-[32px] font-bold text-black tracking-tight mb-2">Welcome back.</h1>
-              <p className="text-[14px] text-gray-600 font-medium">
+              <h1 className="text-[28px] font-bold text-black tracking-tight mb-2">Welcome back.</h1>
+              <p className="text-[14px] text-gray-700 font-normal">
                 New to Kletta? <button className="text-[#1E6F73] font-bold hover:underline">Sign up</button>
               </p>
             </div>
 
             <form onSubmit={(e) => { e.preventDefault(); onLogin(); }} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[13px] font-bold text-gray-700 ml-1">Your email address</label>
+                <label className="text-[13px] font-normal text-gray-700 ml-1">Email</label>
                 <input 
                   type="email" 
                   required
                   placeholder="name@company.com" 
-                  className="w-full h-[52px] px-4 rounded-xl border border-gray-300 text-[15px] font-medium text-black focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] outline-none transition-all" 
+                  className="w-full h-[52px] px-4 rounded-xl border border-gray-300 text-[14px] font-normal text-black focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] outline-none transition-all" 
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[13px] font-bold text-gray-700 ml-1">Your password</label>
+                <label className="text-[13px] font-normal text-gray-700 ml-1">Your password</label>
                 <div className="relative">
                   <input 
                     type={showPassword ? "text" : "password"} 
                     required
                     placeholder="Enter your password" 
-                    className="w-full h-[52px] px-4 pr-12 rounded-xl border border-gray-300 text-[15px] font-medium text-black focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] outline-none transition-all" 
+                    className="w-full h-[52px] px-4 pr-12 rounded-xl border border-gray-300 text-[14px] font-normal text-black focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] outline-none transition-all" 
                   />
                   <button 
                     type="button" 
@@ -141,10 +141,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   >
                     {rememberMe && <CheckCircle size={14} weight="bold" className="text-white" />}
                   </div>
-                  <span className="text-[14px] font-medium text-gray-700 select-none">Remember me</span>
+                  <span className="text-[13px] font-normal text-gray-700 select-none">Remember me</span>
                   <Info size={16} className="text-gray-400 ml-[-4px]" />
                 </label>
-                <button type="button" className="text-[14px] font-bold text-gray-900 hover:text-[#1E6F73] transition-colors">
+                <button type="button" className="text-[13px] font-normal text-gray-700 hover:text-[#1E6F73] transition-colors">
                   Forgot password?
                 </button>
               </div>

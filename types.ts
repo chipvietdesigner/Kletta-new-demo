@@ -204,11 +204,11 @@ export interface WelcomeData {
 export enum NavItemType {
   WELCOME = 'Welcome',
   CHAT = 'Chat',
-  ALL_CLIENTS = 'All clients',
+  ALL_CLIENTS = 'All Clients',
   INVITATIONS = 'Invitations',
   ACCOUNT = 'Account',
   AI_SUPPORT = 'AI Support',
-  TAX_RETURN = 'Tax return',
+  TAX_RETURN = 'Tax Return',
   DASHBOARD = 'Dashboard',
   TRANSACTIONS = 'Transactions',
   INCOME = 'Income',

@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { ArrowRight, DownloadSimple, CheckCircle, Play } from '@phosphor-icons/react';
 import { WelcomeData, WelcomeSectionItem } from '../types';
@@ -117,13 +116,13 @@ const MOCK_WELCOME_DATA: WelcomeData = {
         description: "Book meetings with Kevin, join weekly Meet & Greet webinars, or contact support@kletta.com.",
         cta: "Schedule meeting",
         secondary_cta: "Join Webinar",
-        image_url: "https://images.unsplash.com/photo-1515168816537-bf4980658842?auto=format&fit=crop&q=80&w=400"
+        image_url: "https://images.unsplash.com/photo-1515168816537-bf4980658842?auto=format&fit=crop&q=80&w=800"
       },
       {
         title: "Partner Success Resources",
         description: "Access enablement packs, guides, templates, and support materials for partner success.",
         cta: "Open resources",
-        image_url: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400"
+        image_url: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800"
       }
     ],
     community: [
@@ -170,6 +169,7 @@ const Welcome: React.FC = () => {
                      <img 
                        src={item.image_url} 
                        alt={item.title} 
+                       loading="lazy"
                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                      />
                      {item.video_url && (
@@ -204,6 +204,7 @@ const Welcome: React.FC = () => {
                      <img 
                        src={item.image_url} 
                        alt={item.title} 
+                       loading="lazy"
                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                      />
                   </div>
@@ -253,7 +254,7 @@ const Welcome: React.FC = () => {
                 <div key={idx} className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
                   <div className="w-full md:w-1/3 flex-shrink-0">
                      <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                        <img src={item.image_url} alt="" className="w-full h-full object-cover" />
+                        <img src={item.image_url} alt="" loading="lazy" className="w-full h-full object-cover" />
                      </div>
                   </div>
                   <div className="flex-1 flex flex-col">
@@ -288,7 +289,7 @@ const Welcome: React.FC = () => {
                     </button>
                  </div>
                  <div className="w-full md:w-1/3 flex-shrink-0 hidden md:flex items-center justify-center bg-white/5 rounded-lg border border-white/10 overflow-hidden">
-                    <img src={item.image_url} alt="" className="w-full h-full object-cover opacity-80" />
+                    <img src={item.image_url} alt="" loading="lazy" className="w-full h-full object-cover opacity-80" />
                  </div>
               </div>
             ))}
@@ -304,7 +305,7 @@ const Welcome: React.FC = () => {
                     </button>
                  </div>
                  <div className="w-full md:w-1/3 flex-shrink-0 hidden md:flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-                    <img src={item.image_url} alt="" className="w-full h-full object-cover" />
+                    <img src={item.image_url} alt="" loading="lazy" className="w-full h-full object-cover" />
                  </div>
               </div>
             ))}

@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import TopHeader from './components/TopHeader';
@@ -46,7 +47,8 @@ import {
   CalendarBlank,
   SteeringWheel,
   MapPin,
-  FileText
+  FileText,
+  Users
 } from '@phosphor-icons/react';
 
 // Mock Data based on the Income screenshot + Additional data
@@ -786,6 +788,9 @@ const App: React.FC = () => {
   // Transactions Filter State
   const [transactionsFilter, setTransactionsFilter] = useState<'All' | 'Reconciled' | 'Unreconciled'>('All');
 
+  // Clients Filter State
+  const [clientsFilter, setClientsFilter] = useState<'All' | 'Paying'>('All');
+
   // VAT Returns Search
   const [vatSearch, setVatSearch] = useState('');
 
@@ -884,7 +889,6 @@ const App: React.FC = () => {
 
   // --- RENDER CONTENT BASED ON ACTIVE ITEM ---
   const renderContent = () => {
-    // ... other render blocks remain unchanged ...
     if (activeItem === NavItemType.WELCOME) {
       return (
         <main className="flex-1 overflow-hidden flex flex-col">
@@ -937,7 +941,7 @@ const App: React.FC = () => {
       return (
         <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
            <div className="mb-6 flex items-center justify-between">
-             <h1 className="text-2xl font-bold text-[#0F2F33]">VAT Returns</h1>
+             <h1 className="text-2xl font-bold text-[#0F2F33]">VAT returns</h1>
              <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
                   <MagnifyingGlass size={16} />
@@ -1264,7 +1268,6 @@ const App: React.FC = () => {
     }
 
     if (activeItem === NavItemType.EXPENSES) {
-      // ... (keep existing Expenses block) ...
       return (
             <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
                {/* Page Title */}
@@ -1282,18 +1285,17 @@ const App: React.FC = () => {
                         onClick={() => setExpenseFilterCategory(card.id)}
                         className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer flex-shrink-0 ${
                             isActive 
-                            ? 'bg-[#FFF7D6] border-[#F7D84A] ring-1 ring-[#F7D84A]/50' 
+                            ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
                             : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
                         }`}
                         >
-                        {/* ... card content ... */}
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                            isActive ? 'bg-white border border-[#e6dac0] text-[#000000]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
+                            isActive ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
                         }`}>
                             <card.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
                         </div>
                         <div className="flex flex-col z-10">
-                            <span className={`text-[13px] font-medium tracking-wide transition-colors truncate max-w-[180px] ${isActive ? 'text-[#0F2F33] opacity-90' : 'text-[#6B7280]'}`}>
+                            <span className={`text-[13px] font-medium tracking-wide transition-colors truncate max-w-[180px] ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
                                 {card.label}
                             </span>
                             <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1 ">
@@ -1305,7 +1307,7 @@ const App: React.FC = () => {
                  })}
                </div>
 
-               {/* Logs-style Toolbar (Reused) */}
+               {/* Logs-style Toolbar */}
                <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
@@ -1356,22 +1358,29 @@ const App: React.FC = () => {
           </div>
           
           <div className="flex gap-4 mb-6">
-             <div className="relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-[#E5E7EB]">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#DCFCE7] border border-[#DCFCE7] text-[#166534]">
-                   <CheckCircle size={22} weight="fill" className="opacity-100" />
+             <div 
+               onClick={() => setClientsFilter('All')}
+               className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${clientsFilter === 'All' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+             >
+                <div className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center flex-shrink-0">
+                   <Users size={20} className="text-[#0F2F33]" />
                 </div>
-                <div className="flex flex-col z-10">
-                   <span className="text-[13px] font-medium tracking-wide text-[#6B7280]">Paying customers</span>
-                   <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">19</span>
+                <div className="flex flex-col">
+                   <span className="text-[14px] font-bold text-[#0F2F33]">Paying customers</span>
+                   <span className="text-[12px] text-[#6B7280] font-medium">19</span>
                 </div>
              </div>
-             <div className="relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm bg-white border-[#E5E7EB]">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors bg-[#DBEAFE] border border-[#DBEAFE] text-[#1E40AF]">
-                   <Clock size={22} weight="fill" className="opacity-100" />
+
+             <div 
+               onClick={() => setClientsFilter('Paying')}
+               className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${clientsFilter === 'Paying' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+             >
+                <div className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center flex-shrink-0">
+                   <Clock size={20} className="text-[#0F2F33]" />
                 </div>
-                 <div className="flex flex-col z-10">
-                   <span className="text-[13px] font-medium tracking-wide text-[#6B7280]">MRR</span>
-                   <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">€991.00</span>
+                <div className="flex flex-col">
+                   <span className="text-[14px] font-bold text-[#0F2F33]">MRR</span>
+                   <span className="text-[12px] text-[#6B7280] font-medium">€991.00</span>
                 </div>
              </div>
           </div>
@@ -1421,29 +1430,27 @@ const App: React.FC = () => {
       );
     }
 
-    // Default Income View code repeated...
     return (
       <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
           <div className="mb-6 flex items-center justify-between">
             <h1 className="text-2xl font-bold text-[#0F2F33]">Income</h1>
           </div>
-          {/* ... widgets ... */}
           <div className="flex gap-4 mb-6">
             <div 
               onClick={() => setFilterCategory(null)}
               className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
                 filterCategory === null 
-                  ? 'bg-[#FFF7D6] border-[#F7D84A] ring-1 ring-[#F7D84A]/50' 
+                  ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
                   : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
               }`}
             >
                <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                 filterCategory === null ? 'bg-white border border-[#e6dac0] text-[#000000]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
+                 filterCategory === null ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
                }`}>
                   <Tray size={22} weight="fill" className={filterCategory === null ? "opacity-100" : "opacity-60"} />
                </div>
                <div className="flex flex-col z-10">
-                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === null ? 'text-[#0F2F33] opacity-90' : 'text-[#6B7280]'}`}>All income</span>
+                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === null ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>All income</span>
                   <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">€29,626.26</span>
                </div>
             </div>
@@ -1451,22 +1458,21 @@ const App: React.FC = () => {
                onClick={() => setFilterCategory('Business Income')}
                className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
                  filterCategory === 'Business Income' 
-                   ? 'bg-[#FFF7D6] border-[#F7D84A] ring-1 ring-[#F7D84A]/50' 
+                   ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
                    : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
                }`}
              >
                <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                 filterCategory === 'Business Income' ? 'bg-white border border-[#e6dac0] text-[#0000000]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
+                 filterCategory === 'Business Income' ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
                }`}>
                   <TrendUp size={22} weight="fill" className={filterCategory === 'Business Income' ? "opacity-100" : "opacity-60"} />
                </div>
                <div className="flex flex-col z-10">
-                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === 'Business Income' ? 'text-[#0F2F33] opacity-90' : 'text-[#6B7280]'}`}>Business income</span>
+                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === 'Business Income' ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>Business income</span>
                   <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1 ">€{totalBusinessIncome.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                </div>
             </div>
           </div>
-          {/* ... toolbar ... */}
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
