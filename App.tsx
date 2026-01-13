@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import TopHeader from './components/TopHeader';
@@ -48,7 +47,11 @@ import {
   SteeringWheel,
   MapPin,
   FileText,
-  Users
+  Users,
+  ArrowsLeftRight,
+  HandCoins,
+  Percent,
+  HouseLine
 } from '@phosphor-icons/react';
 
 // Mock Data based on the Income screenshot + Additional data
@@ -1430,49 +1433,53 @@ const App: React.FC = () => {
       );
     }
 
+    const incomeWidgets = [
+      { id: null, label: 'All income', value: 29626.26, icon: Tray },
+      { id: 'Business Income', label: 'Business income', value: totalBusinessIncome, icon: TrendUp },
+      { id: 'Deposit & transfer', label: 'Deposit & transfer', value: 12500.00, icon: ArrowsLeftRight },
+      { id: 'Reimbursement', label: 'Reimbursement', value: 3420.50, icon: HandCoins },
+      { id: 'Interest income', label: 'Interest income', value: 120.75, icon: Percent },
+      { id: 'Rental income', label: 'Rental income', value: 5800.00, icon: HouseLine },
+    ];
+
     return (
       <main className="flex-1 overflow-hidden flex flex-col px-6 py-4">
           <div className="mb-6 flex items-center justify-between">
             <h1 className="text-2xl font-bold text-[#0F2F33]">Income</h1>
           </div>
-          <div className="flex gap-4 mb-6">
-            <div 
-              onClick={() => setFilterCategory(null)}
-              className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
-                filterCategory === null 
-                  ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
-                  : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
-              }`}
-            >
-               <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                 filterCategory === null ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
-               }`}>
-                  <Tray size={22} weight="fill" className={filterCategory === null ? "opacity-100" : "opacity-60"} />
-               </div>
-               <div className="flex flex-col z-10">
-                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === null ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>All income</span>
-                  <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">€29,626.26</span>
-               </div>
-            </div>
-             <div 
-               onClick={() => setFilterCategory('Business Income')}
-               className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer ${
-                 filterCategory === 'Business Income' 
-                   ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
-                   : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
-               }`}
-             >
-               <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                 filterCategory === 'Business Income' ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
-               }`}>
-                  <TrendUp size={22} weight="fill" className={filterCategory === 'Business Income' ? "opacity-100" : "opacity-60"} />
-               </div>
-               <div className="flex flex-col z-10">
-                  <span className={`text-[13px] font-medium tracking-wide transition-colors ${filterCategory === 'Business Income' ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>Business income</span>
-                  <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1 ">€{totalBusinessIncome.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-               </div>
-            </div>
+          
+          {/* Income Summary Widgets - Scrollable */}
+          <div className="flex gap-4 mb-6 overflow-x-auto custom-scrollbar pb-2">
+            {incomeWidgets.map((widget) => {
+              const isActive = filterCategory === widget.id;
+              return (
+                <div 
+                  key={widget.label}
+                  onClick={() => setFilterCategory(widget.id as string | null)}
+                  className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer flex-shrink-0 ${
+                    isActive 
+                      ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
+                      : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
+                  }`}
+                >
+                   <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
+                     isActive ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
+                   }`}>
+                      <widget.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
+                   </div>
+                   <div className="flex flex-col z-10">
+                      <span className={`text-[13px] font-medium tracking-wide transition-colors ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
+                        {widget.label}
+                      </span>
+                      <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">
+                        €{widget.value.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                   </div>
+                </div>
+              );
+            })}
           </div>
+
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
