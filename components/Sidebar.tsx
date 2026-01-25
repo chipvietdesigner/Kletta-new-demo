@@ -90,7 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, onLogout }
             <img src="https://i.ibb.co/Z6DzgDcm/Color-White.png" alt="Kletta Logo" className="h-6 w-auto" />
           )}
           
-          {/* Toggle Button - Adjusted position and parent padding to add spacing below */}
+          {/* Toggle Button - Repositioned to top-8 */}
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}
             className={`p-1.5 rounded-md hover:bg-white/10 transition-all text-white/60 hover:text-white z-50 absolute ${isCollapsed ? 'top-8 left-1/2 -translate-x-1/2' : 'top-8 right-4'}`}

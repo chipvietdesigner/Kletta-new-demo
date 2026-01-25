@@ -22,7 +22,13 @@ import {
   Bank,
   Taxi,
   X,
-  Check
+  Check,
+  TrendUp,
+  Globe,
+  Desktop,
+  PlusCircle,
+  Sparkle,
+  Briefcase
 } from '@phosphor-icons/react';
 
 interface TransactionTableProps {
@@ -37,19 +43,19 @@ interface CategoryOption {
 }
 
 const CATEGORY_OPTIONS: CategoryOption[] = [
-  { id: 'ext', label: 'External services', description: 'Purchased external services', icon: Handshake },
-  { id: 'int', label: 'Interest expenses', description: 'Loan interest payments', icon: Percent },
-  { id: 'non', label: 'Non-allowable expenses', description: 'Not tax-deductible', icon: XSquare },
-  { id: 'oth_ded', label: 'Other deductible expenses', description: 'Misc. tax-deductible costs', icon: Checks },
-  { id: 'oth_fin', label: 'Other financial cost', description: 'Other financial expenses not included in interest', icon: CurrencyCircleDollar },
-  { id: 'pers', label: 'Personnel cost', description: 'Employee salaries, wages and social costs', icon: Users },
-  { id: 'purch', label: 'Purchases & inventory changes', description: 'Purchase of goods and changes in stock', icon: Package },
-  { id: 'rents', label: 'Rents', description: 'Rental of space or equipment', icon: Buildings },
-  { id: 'repr', label: 'Representation expenses', description: 'Client meetings & representation', icon: Coffee },
-  { id: 'adv', label: 'Advance tax', description: 'Prepaid taxes', icon: ChatCenteredText },
-  { id: 'veh', label: 'Vehicle cost', description: 'Fuel, maintenance, leasing', icon: GasPump },
-  { id: 'cash', label: 'Cash withdrawal', description: 'Cash taken from company account for business use', icon: Bank },
-  { id: 'taxi', label: 'Taxi and van costs', description: 'Taxi or van transportation costs', icon: Taxi },
+  // Income specific
+  { id: 'bus_inc', label: 'Business Income', description: 'Core business revenue', icon: TrendUp },
+  { id: 'cons_fees', label: 'Consulting Fees', description: 'Professional consulting services', icon: Handshake },
+  { id: 'srv_inc', label: 'Service Income', description: 'General service revenue', icon: Sparkle },
+  { id: 'onl_sales', label: 'Online Sales', description: 'E-commerce and web sales', icon: Globe },
+  { id: 'merch', label: 'Merchandise', description: 'Product and merch sales', icon: Package },
+  { id: 'soft_sales', label: 'Software Sales', description: 'SaaS and license sales', icon: Desktop },
+  { id: 'grants', label: 'Grants', description: 'Government and private grants', icon: Bank },
+  { id: 'oth_inc', label: 'Other Income', description: 'Miscellaneous revenue sources', icon: PlusCircle },
+  // Generic/Expense
+  { id: 'ext', label: 'External services', description: 'Purchased external services', icon: Briefcase },
+  { id: 'int', label: 'Interest income', description: 'Loan interest or bank interest', icon: Percent },
+  { id: 'rents', label: 'Rental income', description: 'Rental of space or equipment', icon: Buildings },
 ];
 
 const VAT_OPTIONS = [
@@ -73,14 +79,12 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
   const [dropdownCoords, setDropdownCoords] = useState<{ top: number, left: number } | null>(null);
   const [selectedDocTransaction, setSelectedDocTransaction] = useState<IncomeTransaction | null>(null);
   
-  // Track which cells have been modified to show the save button
   const [modifiedCells, setModifiedCells] = useState<Set<string>>(new Set());
   
   const dropdownRef = useRef<HTMLDivElement>(null);
   const vatDropdownRef = useRef<HTMLDivElement>(null);
   const triggerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   
-  // CRITICAL: Update internal state when props change (e.g. from filtering)
   useEffect(() => {
     setTransactions(initialTransactions);
     setModifiedCells(new Set());
@@ -101,7 +105,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
   const handleUpdateTransaction = (id: string, updates: Partial<IncomeTransaction>) => {
     setTransactions(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t));
     
-    // Mark as modified if an update occurs
     const keys = Object.keys(updates);
     if (keys.length > 0) {
       setModifiedCells(prev => {
@@ -118,10 +121,9 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
     setHoveredColKey(null);
     setOpenDropdownId(null);
     setTaxRateDropdownId(null);
-    setModifiedCells(new Set()); // Clear modification state
+    setModifiedCells(new Set());
   };
 
-  // Handle outside clicks
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -135,7 +137,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Handle scroll/resize for the fixed portal dropdown
   useLayoutEffect(() => {
     if (taxRateDropdownId && triggerRefs.current[taxRateDropdownId]) {
       const updatePosition = () => {
@@ -166,10 +167,14 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
         handleUpdateTransaction(taxRateDropdownId, { taxRate: selectedVat });
     }
     setTaxRateDropdownId(null);
-    handleSaveAll(); // Auto save after selecting VAT
+    handleSaveAll();
   };
 
-  // Small contextual save button component positioned inside inputs - Outlined (Stroke) style
+  const getCategoryIcon = (category: string) => {
+    const opt = CATEGORY_OPTIONS.find(o => o.label === category);
+    return opt ? opt.icon : Briefcase;
+  };
+
   const InlineSaveButton = ({ visible }: { visible: boolean }) => {
     if (!visible) return null;
     return (
@@ -182,7 +187,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
     );
   };
 
-  // Helper to render Reconciliation Pill matching screenshot
   const renderReconciliationPill = (index: number) => {
     const statuses = [
       { label: 'Paid by Cash', color: 'yellow' },
@@ -232,7 +236,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
               
               <th className="px-4 py-3 font-normal text-[13px] w-[60px] text-center align-middle">Doc</th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[220px] align-middle">
+              <th className="px-4 py-3 font-normal text-[13px] w-[260px] align-middle">
                 <div className="flex items-center gap-1">
                   <span>Category</span>
                   <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
@@ -282,6 +286,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
               const isRowHovered = hoveredRowId === t.id;
               const isDropdownOpen = openDropdownId === t.id;
               const isTaxRateOpen = taxRateDropdownId === t.id;
+              const CategoryIcon = getCategoryIcon(t.category);
 
               const isCellEditable = (colKey: string) => isRowHovered && hoveredColKey === colKey;
 
@@ -334,8 +339,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                         setOpenDropdownId(isDropdownOpen ? null : t.id);
                       }}
                     >
-                      <div className={`flex items-center justify-between w-full h-[36px] px-3 rounded-lg border transition-all ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white ring-1 ring-[#1E6F73]' : 'border-transparent'}`}>
-                        <span className="text-[#000000] text-[13px] font-medium truncate">{t.category}</span>
+                      {/* Simplified Category Design */}
+                      <div className={`flex items-center gap-2 w-full h-[40px] px-2 rounded-lg transition-all border ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white shadow-sm' : 'border-transparent bg-transparent'}`}>
+                        <CategoryIcon size={18} weight="fill" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#6B7280]"} />
+                        <span className="text-[#000000] text-[13px] font-medium truncate flex-1">{t.category}</span>
                         <CaretDown size={14} className={`text-[#9CA3AF] transition-all ${isDropdownOpen ? 'rotate-180 opacity-100' : isRowHovered ? 'opacity-100' : 'opacity-0'}`} />
                       </div>
 
@@ -345,6 +352,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                           className="absolute top-[calc(100%-8px)] left-4 w-[420px] max-h-[480px] bg-white border border-[#E5E7EB] rounded-xl shadow-2xl z-[100] overflow-hidden flex flex-col animate-in fade-in slide-in-from-top-2 duration-200"
                           onClick={(e) => e.stopPropagation()}
                         >
+                          <div className="px-4 py-2 border-b border-[#F3F4F6] bg-gray-50/50 flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Choose Category</span>
+                            <button onClick={() => setOpenDropdownId(null)} className="text-[#9CA3AF] hover:text-[#000000]"><X size={16} weight="bold" /></button>
+                          </div>
                           <div className="overflow-y-auto custom-scrollbar flex-1 py-1">
                             {CATEGORY_OPTIONS.map((opt) => (
                               <button
@@ -356,11 +367,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                                   handleSaveAll();
                                 }}
                               >
-                                <div className="mt-0.5 text-[#616A6B]">
-                                  <opt.icon size={20} />
+                                <div className={`mt-0.5 p-1.5 rounded-lg ${t.category === opt.label ? 'bg-[#1E6F73] text-white' : 'bg-[#F3F4F6] text-[#616A6B]'}`}>
+                                  <opt.icon size={18} weight="fill" />
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                  <span className="text-[12px] font-normal text-[#000000] leading-[16px]">{opt.label}</span>
+                                  <span className="text-[13px] font-bold text-[#000000] leading-[18px]">{opt.label}</span>
                                   <span className="text-[12px] font-normal text-[#616A6B] leading-[16px]">{opt.description}</span>
                                 </div>
                               </button>
@@ -395,13 +406,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                     <div className="h-full flex flex-col justify-center px-4 overflow-hidden relative">
                       {isCellEditable('customer') ? (
                         <div className="space-y-1 py-2 animate-in fade-in duration-150 relative pr-6">
-                           <input 
-                             type="text"
-                             value={t.customer}
-                             placeholder="Customer name"
-                             onChange={(e) => handleUpdateTransaction(t.id, { customer: e.target.value })}
-                             className="w-full h-[28px] px-2 bg-white border border-[#1E6F73] rounded text-[13px] font-medium text-[#000000] focus:outline-none"
-                           />
+                           {/* Customer name is now static, matching request to only edit description */}
+                           <div className="text-[#000000] font-medium truncate text-[13px] px-2 h-[28px] flex items-center">
+                             {t.customer}
+                           </div>
                            <input 
                              type="text"
                              value={t.description || ''}
@@ -409,7 +417,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                              onChange={(e) => handleUpdateTransaction(t.id, { description: e.target.value })}
                              className="w-full h-[24px] px-2 bg-white border border-[#1E6F73]/50 rounded text-[11px] font-normal text-[#616A6B] focus:outline-none"
                            />
-                           <InlineSaveButton visible={modifiedCells.has(`${t.id}-customer`) || modifiedCells.has(`${t.id}-description`)} />
+                           <InlineSaveButton visible={modifiedCells.has(`${t.id}-description`)} />
                         </div>
                       ) : (
                         <>
@@ -508,7 +516,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
 
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('vat')}>
                     <div className="h-full flex items-center justify-end px-4 relative">
-                      {/* VAT column is now read-only as per screenshot instructions */}
                       <span className="text-[#616A6B] font-medium text-[13px]">{formatCurrency(t.vat)}</span>
                     </div>
                   </td>
@@ -568,7 +575,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
         </table>
       </div>
       
-      {/* Sale Document Modal */}
       <SaleDocumentModal 
         isOpen={!!selectedDocTransaction} 
         onClose={() => setSelectedDocTransaction(null)} 

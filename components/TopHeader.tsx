@@ -9,7 +9,11 @@ import {
   User
 } from '@phosphor-icons/react';
 
-const TopHeader: React.FC = () => {
+interface TopHeaderProps {
+  centerContent?: React.ReactNode;
+}
+
+const TopHeader: React.FC<TopHeaderProps> = ({ centerContent }) => {
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0 z-10">
       <div className="flex items-center gap-6">
@@ -33,6 +37,12 @@ const TopHeader: React.FC = () => {
            <button className="bg-[#fcd34d] hover:bg-[#fbbf24] text-[#002b31] text-xs font-medium px-4 py-1.5 rounded transition-colors">Edit</button>
         </div>
       </div>
+
+      {/* Center content slot for Search/Actions */}
+      <div className="flex-1 flex justify-center px-4">
+        {centerContent}
+      </div>
+
       <div className="flex items-center gap-4">
         <button className="flex items-center gap-2 border border-gray-300 rounded px-3 py-1.5 hover:bg-gray-50 bg-white transition-colors">
            <CalendarBlank size={16} className="text-[#616A6B]" />

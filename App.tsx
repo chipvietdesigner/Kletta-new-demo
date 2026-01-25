@@ -874,6 +874,33 @@ const App: React.FC = () => {
     };
   }, []);
 
+  const headerCenterContent = useMemo(() => {
+    if (activeItem === NavItemType.INCOME || activeItem === NavItemType.EXPENSES) {
+      return (
+        <div className="flex items-center gap-3 animate-in fade-in duration-300">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+              <MagnifyingGlass size={16} />
+            </div>
+            <input 
+              type="text" 
+              placeholder="Search"
+              className="h-[36px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[13px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[280px] focus:outline-none font-normal"
+            />
+          </div>
+          <button 
+            onClick={() => activeItem === NavItemType.INCOME ? setIsCreateIncomeModalOpen(true) : setIsCreateExpenseModalOpen(true)}
+            className="h-[36px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#000000] text-[13px] font-medium rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
+          >
+            <Plus size={16} weight="bold" />
+            {activeItem === NavItemType.INCOME ? "Create income" : "Create expense"}
+          </button>
+        </div>
+      );
+    }
+    return null;
+  }, [activeItem]);
+
   const handleOpenReconcile = (tx: BankTransaction) => {
     setSelectedTransactionForReconciliation(tx);
     setIsChooseExpensesModalOpen(true);
@@ -1206,44 +1233,44 @@ const App: React.FC = () => {
               </div>
            </div>
 
-           {/* Filter Cards - MATCHING SCREENSHOT EXACTLY */}
-           <div className="flex gap-4 mb-6">
+           {/* Filter Cards - Compact & Background-free icons */}
+           <div className="flex gap-2 mb-6">
               <div 
                 onClick={() => setTransactionsFilter('All')}
-                className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-[#F9FAFB] border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'All' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl border cursor-pointer min-w-[180px] transition-all bg-[#F9FAFB] border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'All' ? 'border-[#1E6F73]' : ''}`}
               >
-                 <div className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center flex-shrink-0">
+                 <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0">
                     <FileText size={20} className="text-[#0F2F33]" />
                  </div>
                  <div className="flex flex-col">
-                    <span className="text-[14px] font-bold text-[#0F2F33]">All {bankTransactionsSummary.all.count}</span>
-                    <span className="text-[12px] text-[#6B7280] font-medium">-£45,169.00</span>
+                    <span className="text-[13px] font-bold text-[#0F2F33]">All {bankTransactionsSummary.all.count}</span>
+                    <span className="text-[11px] text-[#6B7280] font-medium">-£45,169.00</span>
                  </div>
               </div>
 
               <div 
                 onClick={() => setTransactionsFilter('Reconciled')}
-                className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'Reconciled' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl border cursor-pointer min-w-[180px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'Reconciled' ? 'border-[#1E6F73]' : ''}`}
               >
-                 <div className="w-10 h-10 rounded-full bg-[#F0FDF4] border border-[#DCFCE7] flex items-center justify-center flex-shrink-0">
+                 <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0">
                     <Check size={20} weight="bold" className="text-[#166534]" />
                  </div>
                  <div className="flex flex-col">
-                    <span className="text-[14px] font-bold text-[#0F2F33]">Reconciled {bankTransactionsSummary.reconciled.count}</span>
-                    <span className="text-[12px] text-[#6B7280] font-medium">-£4,492.58</span>
+                    <span className="text-[13px] font-bold text-[#0F2F33]">Reconciled {bankTransactionsSummary.reconciled.count}</span>
+                    <span className="text-[11px] text-[#6B7280] font-medium">-£4,492.58</span>
                  </div>
               </div>
 
               <div 
                 onClick={() => setTransactionsFilter('Unreconciled')}
-                className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'Unreconciled' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl border cursor-pointer min-w-[180px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${transactionsFilter === 'Unreconciled' ? 'border-[#1E6F73]' : ''}`}
               >
-                 <div className="w-10 h-10 rounded-full bg-[#FEF2F2] border border-[#FEE2E2] flex items-center justify-center flex-shrink-0">
+                 <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0">
                     <XCircle size={20} className="text-[#991B1B]" />
                  </div>
                  <div className="flex flex-col">
-                    <span className="text-[14px] font-bold text-[#0F2F33]">Unreconciled {bankTransactionsSummary.unreconciled.count}</span>
-                    <span className="text-[12px] text-[#6B7280] font-medium">-£40,676.42</span>
+                    <span className="text-[13px] font-bold text-[#0F2F33]">Unreconciled {bankTransactionsSummary.unreconciled.count}</span>
+                    <span className="text-[11px] text-[#6B7280] font-medium">-£40,676.42</span>
                  </div>
               </div>
               
@@ -1278,30 +1305,30 @@ const App: React.FC = () => {
                  <h1 className="text-2xl font-bold text-[#0F2F33]">Expenses</h1>
                </div>
 
-               {/* Summary Cards - Scrollable */}
-               <div className="flex gap-4 mb-6 overflow-x-auto custom-scrollbar pb-2">
+               {/* Summary Cards - Compact & No backgrounds/shadows */}
+               <div className="flex gap-4 mb-2 overflow-x-auto custom-scrollbar pb-2">
                  {EXPENSE_SUMMARY.map((card) => {
                     const isActive = expenseFilterCategory === card.id;
                     return (
                         <div 
                         key={card.id}
                         onClick={() => setExpenseFilterCategory(card.id)}
-                        className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer flex-shrink-0 ${
+                        className={`relative overflow-hidden rounded-xl px-4 py-3 border flex items-center gap-2 min-w-[220px] transition-all group cursor-pointer flex-shrink-0 ${
                             isActive 
-                            ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
+                            ? 'bg-[#F9FAFB] border-[#1E6F73]' 
                             : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
                         }`}
                         >
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                            isActive ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                            isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'
                         }`}>
                             <card.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
                         </div>
                         <div className="flex flex-col z-10">
-                            <span className={`text-[13px] font-medium tracking-wide transition-colors truncate max-w-[180px] ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
+                            <span className={`text-[12px] font-medium tracking-wide transition-colors truncate max-w-[160px] ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
                                 {card.label}
                             </span>
-                            <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1 ">
+                            <span className="text-[16px] text-[#0F2F33] font-bold leading-none mt-0.5 ">
                                 €{card.value.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                         </div>
@@ -1310,43 +1337,7 @@ const App: React.FC = () => {
                  })}
                </div>
 
-               {/* Logs-style Toolbar */}
-               <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
-                Last 30 days
-                <CaretDown size={14} className="text-[#9CA3AF]" />
-              </button>
-                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
-                <Funnel size={16} className="text-[#9CA3AF]" />
-                Filters
-                <CaretDown size={14} className="text-[#9CA3AF]" />
-              </button>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
-                  <MagnifyingGlass size={16} />
-                </div>
-                <input 
-                  type="text" 
-                  placeholder="Search"
-                  className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#BCC2C2] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-normal"
-                />
-              </div>
-              <button 
-                onClick={() => setIsCreateExpenseModalOpen(true)}
-                className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#000000] text-[14px] font-medium rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
-              >
-                <Plus size={16} weight="bold" />
-                Create expense
-              </button>
-              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
-                <DownloadSimple size={16} className="text-[#9CA3AF]" />
-                Export
-              </button>
-            </div>
-          </div>
+               {/* Logs-style Toolbar - Removed Spacer */}
                <ExpensesTable transactions={filteredExpenses} />
                <CreateExpenseModal isOpen={isCreateExpenseModalOpen} onClose={() => setIsCreateExpenseModalOpen(false)} />
             </main>
@@ -1360,30 +1351,30 @@ const App: React.FC = () => {
             <h1 className="text-2xl font-bold text-[#0F2F33]">Clients</h1>
           </div>
           
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-2 mb-6">
              <div 
                onClick={() => setClientsFilter('All')}
-               className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${clientsFilter === 'All' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+               className={`flex items-center gap-2 px-4 py-3 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${clientsFilter === 'All' ? 'border-[#1E6F73]' : ''}`}
              >
-                <div className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center flex-shrink-0">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0">
                    <Users size={20} className="text-[#0F2F33]" />
                 </div>
                 <div className="flex flex-col">
-                   <span className="text-[14px] font-bold text-[#0F2F33]">Paying customers</span>
-                   <span className="text-[12px] text-[#6B7280] font-medium">19</span>
+                   <span className="text-[13px] font-bold text-[#0F2F33]">Paying customers</span>
+                   <span className="text-[11px] text-[#6B7280] font-medium">19</span>
                 </div>
              </div>
 
              <div 
                onClick={() => setClientsFilter('Paying')}
-               className={`flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${clientsFilter === 'Paying' ? 'ring-2 ring-[#1E6F73]/20 border-[#1E6F73]' : ''}`}
+               className={`flex items-center gap-2 px-4 py-3 rounded-xl border cursor-pointer min-w-[200px] transition-all bg-white border-[#E5E7EB] hover:border-[#D1D5DB] ${clientsFilter === 'Paying' ? 'border-[#1E6F73]' : ''}`}
              >
-                <div className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center flex-shrink-0">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0">
                    <Clock size={20} className="text-[#0F2F33]" />
                 </div>
                 <div className="flex flex-col">
-                   <span className="text-[14px] font-bold text-[#0F2F33]">MRR</span>
-                   <span className="text-[12px] text-[#6B7280] font-medium">€991.00</span>
+                   <span className="text-[13px] font-bold text-[#0F2F33]">MRR</span>
+                   <span className="text-[11px] text-[#6B7280] font-medium">€991.00</span>
                 </div>
              </div>
           </div>
@@ -1448,30 +1439,30 @@ const App: React.FC = () => {
             <h1 className="text-2xl font-bold text-[#0F2F33]">Income</h1>
           </div>
           
-          {/* Income Summary Widgets - Scrollable */}
-          <div className="flex gap-4 mb-6 overflow-x-auto custom-scrollbar pb-2">
+          {/* Income Summary Widgets - Compact & Background-free icons */}
+          <div className="flex gap-4 mb-2 overflow-x-auto custom-scrollbar pb-2">
             {incomeWidgets.map((widget) => {
               const isActive = filterCategory === widget.id;
               return (
                 <div 
                   key={widget.label}
                   onClick={() => setFilterCategory(widget.id as string | null)}
-                  className={`relative overflow-hidden rounded-xl pl-5 pr-10 py-4 border flex items-center gap-4 min-w-[240px] shadow-sm hover:shadow-md transition-all group cursor-pointer flex-shrink-0 ${
+                  className={`relative overflow-hidden rounded-xl px-4 py-3 border flex items-center gap-2 min-w-[220px] transition-all group cursor-pointer flex-shrink-0 ${
                     isActive 
-                      ? 'bg-[#F9FAFB] border-[#1E6F73] ring-2 ring-[#1E6F73]/20' 
-                      : 'bg-white border-[#E5E7EB] hover:border-[#D1D5DB]'
+                      ? 'bg-white border-[#1E6F73]' 
+                      : 'bg-white border-[#E5E7EB]'
                   }`}
                 >
-                   <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-colors ${
-                     isActive ? 'bg-white border border-[#1E6F73]/10 text-[#1E6F73]' : 'bg-[#F9FAFB] border border-[#E5E7EB] text-[#6B7280]'
+                   <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                     isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'
                    }`}>
                       <widget.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
                    </div>
                    <div className="flex flex-col z-10">
-                      <span className={`text-[13px] font-medium tracking-wide transition-colors ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
+                      <span className={`text-[12px] font-medium tracking-wide transition-colors ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
                         {widget.label}
                       </span>
-                      <span className="text-[18px] text-[#0F2F33] font-bold leading-none mt-1">
+                      <span className="text-[16px] text-[#0F2F33] font-bold leading-none mt-0.5">
                         €{widget.value.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                    </div>
@@ -1480,42 +1471,7 @@ const App: React.FC = () => {
             })}
           </div>
 
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
-                Last 30 days
-                <CaretDown size={14} className="text-[#9CA3AF]" />
-              </button>
-                <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
-                <Funnel size={16} className="text-[#9CA3AF]" />
-                Filters
-                <CaretDown size={14} className="text-[#9CA3AF]" />
-              </button>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
-                  <MagnifyingGlass size={16} />
-                </div>
-                <input 
-                  type="text" 
-                  placeholder="Search"
-                  className="h-[42px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#BCC2C2] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[260px] focus:outline-none font-normal"
-                />
-              </div>
-              <button 
-                onClick={() => setIsCreateIncomeModalOpen(true)}
-                className="h-[42px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#000000] text-[14px] font-medium rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
-              >
-                <Plus size={16} weight="bold" />
-                Create income
-              </button>
-              <button className="h-[42px] px-4 bg-white border border-[#E5E7EB] rounded-xl text-[14px] text-[#0F2F33] font-medium flex items-center gap-2 transition-colors hover:border-[#D1D5DB]">
-                <DownloadSimple size={16} className="text-[#9CA3AF]" />
-                Export
-              </button>
-            </div>
-          </div>
+          {/* Logs-style Toolbar - Removed Spacer */}
           <TransactionTable transactions={filteredTransactions} />
           <CreateIncomeModal isOpen={isCreateIncomeModalOpen} onClose={() => setIsCreateIncomeModalOpen(false)} />
         </main>
@@ -1531,7 +1487,7 @@ const App: React.FC = () => {
       />
       
       <div className="flex-1 flex flex-col min-w-0 bg-white">
-        <TopHeader />
+        <TopHeader centerContent={headerCenterContent} />
         {renderContent()}
       </div>
     </div>

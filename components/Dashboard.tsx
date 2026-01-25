@@ -13,18 +13,18 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   return (
     <div className="flex-1 overflow-y-auto custom-scrollbar px-6 py-6 flex flex-col gap-6">
       <div><h1 className="text-2xl font-medium text-[#000000]">Dashboard</h1></div>
-      <div className="grid grid-cols-3 gap-6">
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm flex items-center gap-4">
-           <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600 border border-green-100 flex-shrink-0"><TrendUp size={24} weight="fill" /></div>
-           <div><div className="text-[13px] text-[#616A6B] font-medium">Total Income</div><div className="text-2xl font-medium text-[#000000] mt-1">{formatCurrency(data.kpi.income)}</div><div className="text-[11px] text-[#616A6B] mt-1 font-medium">This tax year</div></div>
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+           <div className="w-10 h-10 rounded-full flex items-center justify-center text-green-600 flex-shrink-0"><TrendUp size={24} weight="fill" /></div>
+           <div><div className="text-[12px] text-[#616A6B] font-medium">Total Income</div><div className="text-xl font-bold text-[#000000] mt-0.5">{formatCurrency(data.kpi.income)}</div><div className="text-[10px] text-[#616A6B] mt-0.5 font-medium">This tax year</div></div>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm flex items-center gap-4">
-           <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-red-600 border border-red-100 flex-shrink-0"><ArrowDown size={24} weight="fill" /></div>
-           <div><div className="text-[13px] text-[#616A6B] font-medium">Total Expenses</div><div className="text-2xl font-medium text-[#000000] mt-1">{formatCurrency(data.kpi.expenses)}</div><div className="text-[11px] text-[#616A6B] mt-1 font-medium">This tax year</div></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+           <div className="w-10 h-10 rounded-full flex items-center justify-center text-red-600 flex-shrink-0"><ArrowDown size={24} weight="fill" /></div>
+           <div><div className="text-[12px] text-[#616A6B] font-medium">Total Expenses</div><div className="text-xl font-bold text-[#000000] mt-0.5">{formatCurrency(data.kpi.expenses)}</div><div className="text-[10px] text-[#616A6B] mt-0.5 font-medium">This tax year</div></div>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm flex items-center gap-4">
-           <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 flex-shrink-0"><CurrencyDollar size={24} weight="fill" /></div>
-           <div><div className="text-[13px] text-[#616A6B] font-medium">Net Profit</div><div className={`text-2xl font-medium mt-1 ${data.kpi.profit >= 0 ? 'text-[#000000]' : 'text-red-600'}`}>{formatCurrency(data.kpi.profit)}</div><div className="text-[11px] text-[#616A6B] mt-1 font-medium">This tax year</div></div>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+           <div className="w-10 h-10 rounded-full flex items-center justify-center text-blue-600 flex-shrink-0"><CurrencyDollar size={24} weight="fill" /></div>
+           <div><div className="text-[12px] text-[#616A6B] font-medium">Net Profit</div><div className={`text-xl font-bold mt-0.5 ${data.kpi.profit >= 0 ? 'text-[#000000]' : 'text-red-600'}`}>{formatCurrency(data.kpi.profit)}</div><div className="text-[10px] text-[#616A6B] mt-0.5 font-medium">This tax year</div></div>
         </div>
       </div>
       <div className="flex items-center justify-between">
