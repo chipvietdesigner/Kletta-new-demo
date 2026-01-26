@@ -131,7 +131,6 @@ const CreateExpenseModal: React.FC<CreateExpenseModalProps> = ({ isOpen, onClose
         </div>
 
         {/* Content */}
-        {/* IMPORTANT: min-h-0 để phần content được co lại và cho phép scroll */}
         <div className="flex-1 min-h-0 grid grid-cols-12 divide-x divide-[#E5E7EB] overflow-hidden bg-white">
           {/* LEFT: Attachment */}
           <div className="col-span-4 p-8 flex flex-col min-h-0 overflow-y-auto custom-scrollbar">
@@ -239,7 +238,6 @@ const CreateExpenseModal: React.FC<CreateExpenseModalProps> = ({ isOpen, onClose
           </div>
 
           {/* RIGHT: Categories */}
-          {/* IMPORTANT: min-h-0 + overflow-hidden cho outer, overflow-y-auto cho inner */}
           <div className="col-span-4 py-8 px-4 flex flex-col min-h-0 bg-[#FDFDFD] overflow-hidden">
             <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-6 pb-6">
               {CATEGORY_GROUPS.map((group) => (
@@ -266,7 +264,7 @@ const CreateExpenseModal: React.FC<CreateExpenseModalProps> = ({ isOpen, onClose
                           <cat.icon size={18} weight="fill" />
                         </div>
                         <span
-                          className={`text-[13px] font-medium leading-snug ${
+                          className={`text-[14px] font-normal leading-snug ${
                             selectedCategory === cat.id ? 'text-[#0F2F33]' : 'text-[#4B5563]'
                           }`}
                         >

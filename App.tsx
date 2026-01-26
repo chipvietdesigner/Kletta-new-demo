@@ -874,28 +874,16 @@ const App: React.FC = () => {
     };
   }, []);
 
-  const headerCenterContent = useMemo(() => {
+  const headerRightAction = useMemo(() => {
     if (activeItem === NavItemType.INCOME || activeItem === NavItemType.EXPENSES) {
       return (
-        <div className="flex items-center gap-3 animate-in fade-in duration-300">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
-              <MagnifyingGlass size={16} />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Search"
-              className="h-[36px] pl-10 pr-4 bg-white border border-[#E5E7EB] rounded-xl text-[13px] text-[#0F2F33] placeholder-[#9CA3AF] focus:border-[#1E6F73] focus:ring-1 focus:ring-[#1E6F73] transition-colors w-[280px] focus:outline-none font-normal"
-            />
-          </div>
-          <button 
-            onClick={() => activeItem === NavItemType.INCOME ? setIsCreateIncomeModalOpen(true) : setIsCreateExpenseModalOpen(true)}
-            className="h-[36px] px-5 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#000000] text-[13px] font-medium rounded-xl flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
-          >
-            <Plus size={16} weight="bold" />
-            {activeItem === NavItemType.INCOME ? "Create income" : "Create expense"}
-          </button>
-        </div>
+        <button 
+          onClick={() => activeItem === NavItemType.INCOME ? setIsCreateIncomeModalOpen(true) : setIsCreateExpenseModalOpen(true)}
+          className="h-[32px] px-3 bg-[#F7D84A] hover:bg-[#FCD34D] text-[#000000] text-[12px] font-medium rounded-lg flex items-center gap-2 transition-colors shadow-sm whitespace-nowrap"
+        >
+          <Plus size={16} weight="bold" />
+          {activeItem === NavItemType.INCOME ? "Create income" : "Create expense"}
+        </button>
       );
     }
     return null;
@@ -1487,7 +1475,7 @@ const App: React.FC = () => {
       />
       
       <div className="flex-1 flex flex-col min-w-0 bg-white">
-        <TopHeader centerContent={headerCenterContent} />
+        <TopHeader rightAction={headerRightAction} />
         {renderContent()}
       </div>
     </div>

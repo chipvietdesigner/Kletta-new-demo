@@ -11,9 +11,10 @@ import {
 
 interface TopHeaderProps {
   centerContent?: React.ReactNode;
+  rightAction?: React.ReactNode;
 }
 
-const TopHeader: React.FC<TopHeaderProps> = ({ centerContent }) => {
+const TopHeader: React.FC<TopHeaderProps> = ({ centerContent, rightAction }) => {
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0 z-10">
       <div className="flex items-center gap-6">
@@ -38,15 +39,16 @@ const TopHeader: React.FC<TopHeaderProps> = ({ centerContent }) => {
         </div>
       </div>
 
-      {/* Center content slot for Search/Actions */}
+      {/* Center content slot */}
       <div className="flex-1 flex justify-center px-4">
         {centerContent}
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="flex items-center gap-2 border border-gray-300 rounded px-3 py-1.5 hover:bg-gray-50 bg-white transition-colors">
+        {rightAction}
+        <button className="h-[32px] px-3 flex items-center gap-2 border border-gray-200 rounded-lg hover:bg-gray-50 bg-white transition-colors shadow-sm">
            <CalendarBlank size={16} className="text-[#616A6B]" />
-           <span className="text-xs font-medium text-[#616A6B]">This tax year (01.01 → 31.12.2025)</span>
+           <span className="text-[12px] font-medium text-[#616A6B]">This tax year (01.01 → 31.12.2025)</span>
         </button>
         <div className="h-6 w-px bg-gray-300 mx-1"></div>
         <div className="flex items-center gap-3 text-[#616A6B]">

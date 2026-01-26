@@ -305,7 +305,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
               return (
                 <tr 
                   key={t.id} 
-                  className={`group transition-all border-b border-[#E5E7EB] h-[64px] ${isRowHovered ? 'bg-[#EFF6F7]' : 'bg-white'}`} 
+                  className={`group transition-all border-b border-[#E5E7EB] h-[64px] ${isRowHovered ? 'bg-[#F9FAFB]' : 'bg-white'}`} 
                   onMouseEnter={() => setHoveredRowId(t.id)} 
                   onMouseLeave={() => { setHoveredRowId(null); setHoveredColKey(null); }}
                 >
@@ -339,7 +339,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                       }}
                     >
                       <div className={`flex items-center gap-2 w-full h-[40px] px-2 rounded-lg transition-all border ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white shadow-sm' : 'border-transparent bg-transparent'}`}>
-                        <CategoryIcon size={18} weight="regular" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#6B7280]"} />
+                        <CategoryIcon size={18} weight="regular" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#0F3A3E]"} />
                         <span className="text-[#000000] text-[13px] font-normal truncate flex-1">{t.category}</span>
                         <CaretDown size={14} className={`text-[#9CA3AF] transition-all ${isDropdownOpen ? 'rotate-180 opacity-100' : isRowHovered ? 'opacity-100' : 'opacity-0'}`} />
                       </div>
@@ -351,7 +351,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                           onClick={(e) => e.stopPropagation()}
                         >
                           <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(0,0,0,0.05)] sticky top-0 bg-white z-10">
-                            <span className="text-[12px] font-bold text-[#000000] uppercase tracking-wider">CHOOSE CATEGORY</span>
+                            <span className="text-[14px] font-normal text-[#000000] tracking-tight">Choose category</span>
                             <button 
                               onClick={() => setOpenDropdownId(null)}
                               className="p-1.5 text-[#616A6B] hover:text-[#000000] hover:bg-[#f5f5f5] rounded-full transition-colors"
@@ -372,7 +372,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                                     handleSaveAll();
                                   }}
                                   className={`w-full rounded-[8px] p-[8px] flex items-center gap-[12px] transition-colors text-left ${
-                                    isActive ? 'bg-[#EFF6F7]' : 'hover:bg-[#f5f5f5]'
+                                    isActive ? 'bg-[#F9FAFB]' : 'hover:bg-[#f5f5f5]'
                                   }`}
                                 >
                                   <div className="size-[24px] shrink-0 flex items-center justify-center">
@@ -382,11 +382,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                                       className={isActive ? "text-[#0F3A3E]" : "text-[#616A6B]"} 
                                     />
                                   </div>
-                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[12px] leading-[16px] flex-1 min-w-0">
-                                    <p className={`font-bold ${isActive ? 'text-[#0F3A3E]' : 'text-black'}`}>
+                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[14px] leading-[20px] flex-1 min-w-0">
+                                    <p className={`font-normal ${isActive ? 'text-[#0F3A3E]' : 'text-black'}`}>
                                       {option.label}
                                     </p>
-                                    <p className="text-[#616a6b] truncate">
+                                    <p className="text-[#616a6b] text-[11px] truncate">
                                       {option.description}
                                     </p>
                                   </div>
@@ -533,7 +533,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                             {VAT_OPTIONS.map((opt) => (
                               <button
                                 key={opt}
-                                className={`w-full px-4 py-2.5 text-left text-[12px] text-[#000000] font-normal hover:bg-[#F9FAFB] transition-colors ${selectedVat === opt ? 'bg-[#EFF6F7] font-medium' : ''}`}
+                                className={`w-full px-4 py-2.5 text-left text-[12px] text-[#000000] font-normal hover:bg-[#F9FAFB] transition-colors ${selectedVat === opt ? 'bg-[#F9FAFB] font-medium' : ''}`}
                                 onClick={() => {
                                     setSelectedVat(opt);
                                 }}
