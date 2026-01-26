@@ -17,7 +17,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   return (
     <div className="flex min-h-screen w-full font-sans bg-[#F7F6EE] overflow-hidden items-center justify-center p-6">
       {/* Centered Login Card */}
-      <div className="w-full max-w-[480px] bg-white p-12 rounded-[32px] shadow-sm flex flex-col border border-black/5">
+      <div className="w-full max-w-[480px] bg-white p-12 rounded-2xl shadow-sm flex flex-col border border-black/5">
         <div className="text-left mb-10">
           <h1 className="text-[28px] font-bold text-black tracking-tight mb-2">Welcome to Kletta</h1>
           <p className="text-[14px] text-gray-700 font-normal">

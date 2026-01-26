@@ -17,7 +17,6 @@ import {
   Package,
   Buildings,
   Coffee,
-  ChatCenteredText,
   GasPump,
   Bank,
   Taxi,
@@ -28,7 +27,9 @@ import {
   Desktop,
   PlusCircle,
   Sparkle,
-  Briefcase
+  Briefcase,
+  Article,
+  Money
 } from '@phosphor-icons/react';
 
 interface TransactionTableProps {
@@ -43,7 +44,7 @@ interface CategoryOption {
 }
 
 const CATEGORY_OPTIONS: CategoryOption[] = [
-  // Income specific
+  // Income specific from screenshot
   { id: 'bus_inc', label: 'Business Income', description: 'Core business revenue', icon: TrendUp },
   { id: 'cons_fees', label: 'Consulting Fees', description: 'Professional consulting services', icon: Handshake },
   { id: 'srv_inc', label: 'Service Income', description: 'General service revenue', icon: Sparkle },
@@ -52,10 +53,21 @@ const CATEGORY_OPTIONS: CategoryOption[] = [
   { id: 'soft_sales', label: 'Software Sales', description: 'SaaS and license sales', icon: Desktop },
   { id: 'grants', label: 'Grants', description: 'Government and private grants', icon: Bank },
   { id: 'oth_inc', label: 'Other Income', description: 'Miscellaneous revenue sources', icon: PlusCircle },
-  // Generic/Expense
-  { id: 'ext', label: 'External services', description: 'Purchased external services', icon: Briefcase },
-  { id: 'int', label: 'Interest income', description: 'Loan interest or bank interest', icon: Percent },
-  { id: 'rents', label: 'Rental income', description: 'Rental of space or equipment', icon: Buildings },
+  
+  // Expense specific from screenshot
+  { id: 'ext_srv', label: 'External services', description: 'Purchased external services', icon: Handshake },
+  { id: 'int_exp', label: 'Interest expenses', description: 'Loan interest payments', icon: Percent },
+  { id: 'non_all', label: 'Non-allowable expenses', description: 'Not tax-deductible', icon: XSquare },
+  { id: 'oth_ded', label: 'Other deductible expenses', description: 'Misc. tax-deductible costs', icon: Checks },
+  { id: 'oth_fin', label: 'Other financial cost', description: 'Other financial expenses not included in interest', icon: CurrencyCircleDollar },
+  { id: 'pers_cost', label: 'Personnel cost', description: 'Employee salaries, wages and social costs', icon: Users },
+  { id: 'pur_inv', label: 'Purchases & inventory changes', description: 'Purchase of goods and changes in stock', icon: Package },
+  { id: 'rents_cat', label: 'Rents', description: 'Rental of space or equipment', icon: Buildings },
+  { id: 'rep_exp', label: 'Representation expenses', description: 'Client meetings & representation', icon: Coffee },
+  { id: 'adv_tax', label: 'Advance tax', description: 'Prepaid taxes', icon: Article },
+  { id: 'veh_cost', label: 'Vehicle cost', description: 'Fuel, maintenance, leasing', icon: GasPump },
+  { id: 'cash_wd', label: 'Cash withdrawal', description: 'Cash taken from company account for business use', icon: Money },
+  { id: 'taxi_van', label: 'Taxi and van costs', description: 'Taxi or van transportation costs', icon: Taxi },
 ];
 
 const VAT_OPTIONS = [
@@ -234,9 +246,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                 <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.total)}</div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[60px] text-center align-middle">Doc</th>
-              
-              <th className="px-4 py-3 font-normal text-[13px] w-[260px] align-middle">
+              <th className="px-4 py-3 font-normal text-[13px] w-[200px] align-middle">
                 <div className="flex items-center gap-1">
                   <span>Category</span>
                   <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
@@ -256,6 +266,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                   <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
                 </div>
               </th>
+
+              <th className="px-4 py-3 font-normal text-[13px] w-[60px] text-center align-middle">Doc</th>
               
               <th className="px-4 py-3 font-normal text-[13px] w-[140px] align-middle">Type ID</th>
               
@@ -277,7 +289,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
               </th>
               
               <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle">Verified</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle">AI Verified</th>
+              <th className="px-4 font-normal text-[13px] w-[80px] text-center align-middle">AI Verified</th>
               <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle"></th>
             </tr>
           </thead>
@@ -297,6 +309,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                   onMouseEnter={() => setHoveredRowId(t.id)} 
                   onMouseLeave={() => { setHoveredRowId(null); setHoveredColKey(null); }}
                 >
+                  {/* Total Amount */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('totalAmount')}>
                     <div className="h-full flex items-center justify-start px-4 relative">
                       {isCellEditable('totalAmount') ? (
@@ -306,31 +319,17 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                              type="number"
                              value={t.totalAmount}
                              onChange={(e) => handleUpdateTransaction(t.id, { totalAmount: parseFloat(e.target.value) || 0 })}
-                             className="w-full h-[36px] pl-6 pr-8 bg-white border border-[#1E6F73] rounded-lg text-[14px] font-bold text-[#000000] focus:outline-none focus:ring-1 focus:ring-[#1E6F73]"
+                             className="w-full h-[36px] pl-6 pr-8 bg-white border border-[#1E6F73] rounded-lg text-[14px] font-medium text-[#000000] focus:outline-none focus:ring-1 focus:ring-[#1E6F73]"
                            />
                            <InlineSaveButton visible={modifiedCells.has(`${t.id}-totalAmount`)} />
                         </div>
                       ) : (
-                        <span className="font-bold text-[#000000] text-[14px]">{formatCurrency(t.totalAmount)}</span>
+                        <span className="font-medium text-[#000000] text-[14px]">{formatCurrency(t.totalAmount)}</span>
                       )}
                     </div>
                   </td>
 
-                  <td className="p-0 text-center" onMouseEnter={() => setHoveredColKey('doc')}>
-                    <div className="h-full flex items-center justify-center px-4">
-                      {t.hasDocument ? (
-                        <button 
-                          onClick={() => setSelectedDocTransaction(t)}
-                          className={`transition-colors p-1.5 rounded-lg ${isRowHovered ? 'bg-white border border-[#E5E7EB] text-[#1E6F73] shadow-sm' : 'text-[#616A6B] hover:text-[#000000]'}`}
-                        >
-                          <FileText size={20} />
-                        </button>
-                      ) : (
-                        <span className="text-[#E5E7EB]">-</span>
-                      )}
-                    </div>
-                  </td>
-
+                  {/* Category */}
                   <td className="p-0 relative" onMouseEnter={() => setHoveredColKey('category')}>
                     <div 
                       className="h-full flex items-center px-4 cursor-pointer relative"
@@ -339,49 +338,76 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                         setOpenDropdownId(isDropdownOpen ? null : t.id);
                       }}
                     >
-                      {/* Simplified Category Design */}
                       <div className={`flex items-center gap-2 w-full h-[40px] px-2 rounded-lg transition-all border ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white shadow-sm' : 'border-transparent bg-transparent'}`}>
-                        <CategoryIcon size={18} weight="fill" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#6B7280]"} />
-                        <span className="text-[#000000] text-[13px] font-medium truncate flex-1">{t.category}</span>
+                        <CategoryIcon size={18} weight="regular" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#6B7280]"} />
+                        <span className="text-[#000000] text-[13px] font-normal truncate flex-1">{t.category}</span>
                         <CaretDown size={14} className={`text-[#9CA3AF] transition-all ${isDropdownOpen ? 'rotate-180 opacity-100' : isRowHovered ? 'opacity-100' : 'opacity-0'}`} />
                       </div>
 
                       {isDropdownOpen && (
                         <div 
                           ref={dropdownRef}
-                          className="absolute top-[calc(100%-8px)] left-4 w-[420px] max-h-[480px] bg-white border border-[#E5E7EB] rounded-xl shadow-2xl z-[100] overflow-hidden flex flex-col animate-in fade-in slide-in-from-top-2 duration-200"
+                          className="absolute top-[calc(100%+8px)] left-0 w-[420px] bg-white rounded-[16px] shadow-[0px_12px_30px_0px_rgba(0,0,0,0.16)] border-[0.5px] border-[rgba(0,0,0,0.1)] max-h-[500px] overflow-y-auto z-50 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <div className="px-4 py-2 border-b border-[#F3F4F6] bg-gray-50/50 flex items-center justify-between">
-                            <span className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Choose Category</span>
-                            <button onClick={() => setOpenDropdownId(null)} className="text-[#9CA3AF] hover:text-[#000000]"><X size={16} weight="bold" /></button>
+                          <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(0,0,0,0.05)] sticky top-0 bg-white z-10">
+                            <span className="text-[12px] font-bold text-[#000000] uppercase tracking-wider">CHOOSE CATEGORY</span>
+                            <button 
+                              onClick={() => setOpenDropdownId(null)}
+                              className="p-1.5 text-[#616A6B] hover:text-[#000000] hover:bg-[#f5f5f5] rounded-full transition-colors"
+                            >
+                              <X size={18} weight="bold" />
+                            </button>
                           </div>
-                          <div className="overflow-y-auto custom-scrollbar flex-1 py-1">
-                            {CATEGORY_OPTIONS.map((opt) => (
-                              <button
-                                key={opt.id}
-                                className={`w-full flex items-start gap-4 px-4 py-3 hover:bg-[#EFF6F7] transition-colors text-left ${t.category === opt.label ? 'bg-[#EFF6F7]' : ''}`}
-                                onClick={() => {
-                                  handleUpdateTransaction(t.id, { category: opt.label });
-                                  setOpenDropdownId(null);
-                                  handleSaveAll();
-                                }}
-                              >
-                                <div className={`mt-0.5 p-1.5 rounded-lg ${t.category === opt.label ? 'bg-[#1E6F73] text-white' : 'bg-[#F3F4F6] text-[#616A6B]'}`}>
-                                  <opt.icon size={18} weight="fill" />
-                                </div>
-                                <div className="flex flex-col gap-0.5">
-                                  <span className="text-[13px] font-bold text-[#000000] leading-[18px]">{opt.label}</span>
-                                  <span className="text-[12px] font-normal text-[#616A6B] leading-[16px]">{opt.description}</span>
-                                </div>
-                              </button>
-                            ))}
+                          
+                          <div className="flex flex-col gap-[4px] p-[14px]">
+                            {CATEGORY_OPTIONS.map((option) => {
+                              const isActive = t.category === option.label;
+                              return (
+                                <button
+                                  key={option.id}
+                                  onClick={() => {
+                                    handleUpdateTransaction(t.id, { category: option.label });
+                                    setOpenDropdownId(null);
+                                    handleSaveAll();
+                                  }}
+                                  className={`w-full rounded-[8px] p-[8px] flex items-center gap-[12px] transition-colors text-left ${
+                                    isActive ? 'bg-[#EFF6F7]' : 'hover:bg-[#f5f5f5]'
+                                  }`}
+                                >
+                                  <div className="size-[24px] shrink-0 flex items-center justify-center">
+                                    <option.icon 
+                                      size={20} 
+                                      weight="regular" 
+                                      className={isActive ? "text-[#0F3A3E]" : "text-[#616A6B]"} 
+                                    />
+                                  </div>
+                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[12px] leading-[16px] flex-1 min-w-0">
+                                    <p className={`font-bold ${isActive ? 'text-[#0F3A3E]' : 'text-black'}`}>
+                                      {option.label}
+                                    </p>
+                                    <p className="text-[#616a6b] truncate">
+                                      {option.description}
+                                    </p>
+                                  </div>
+                                  {isActive && (
+                                    <div className="ml-2 flex items-center justify-center shrink-0">
+                                      <div className="size-5 rounded-full bg-[#1E6F73] flex items-center justify-center shadow-sm">
+                                        <Check size={12} weight="bold" className="text-white" />
+                                      </div>
+                                    </div>
+                                  )}
+                                </button>
+                              );
+                            })}
                           </div>
+                          <div className="absolute right-[14px] top-[246px] w-[12px] h-[171px] bg-[#dcdfdf] rounded-[10px] pointer-events-none opacity-0" />
                         </div>
                       )}
                     </div>
                   </td>
 
+                  {/* Date */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('date')}>
                     <div className="h-full flex items-center px-4 relative">
                       {isCellEditable('date') ? (
@@ -397,17 +423,17 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                           />
                         </div>
                       ) : (
-                        <span className="text-[#616A6B] text-[13px] font-normal">{t.date}</span>
+                        <span className="text-[#000000] text-[13px] font-normal">{t.date}</span>
                       )}
                     </div>
                   </td>
 
+                  {/* Customer */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('customer')}>
                     <div className="h-full flex flex-col justify-center px-4 overflow-hidden relative">
                       {isCellEditable('customer') ? (
                         <div className="space-y-1 py-2 animate-in fade-in duration-150 relative pr-6">
-                           {/* Customer name is now static, matching request to only edit description */}
-                           <div className="text-[#000000] font-medium truncate text-[13px] px-2 h-[28px] flex items-center">
+                           <div className="text-[#000000] font-normal truncate text-[13px] px-2 h-[28px] flex items-center">
                              {t.customer}
                            </div>
                            <input 
@@ -421,7 +447,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                         </div>
                       ) : (
                         <>
-                          <div className="text-[#000000] font-medium truncate text-[13px]">{t.customer}</div>
+                          <div className="text-[#000000] font-normal truncate text-[13px]">{t.customer}</div>
                           {t.description && (
                             <div className="text-[#616A6B] text-[11px] truncate mt-0.5 font-normal">{t.description}</div>
                           )}
@@ -430,6 +456,23 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                     </div>
                   </td>
 
+                  {/* Doc */}
+                  <td className="p-0 text-center" onMouseEnter={() => setHoveredColKey('doc')}>
+                    <div className="h-full flex items-center justify-center px-4">
+                      {t.hasDocument ? (
+                        <button 
+                          onClick={() => setSelectedDocTransaction(t)}
+                          className={`transition-colors p-1.5 rounded-lg ${isRowHovered ? 'bg-white border border-[#E5E7EB] text-[#1E6F73] shadow-sm' : 'text-[#616A6B] hover:text-[#000000]'}`}
+                        >
+                          <FileText size={20} />
+                        </button>
+                      ) : (
+                        <span className="text-[#E5E7EB]">-</span>
+                      )}
+                    </div>
+                  </td>
+
+                  {/* Type ID */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('typeId')}>
                     <div className="h-full flex items-center px-4 relative">
                       {isCellEditable('typeId') ? (
@@ -443,7 +486,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                           <InlineSaveButton visible={modifiedCells.has(`${t.id}-typeId`)} />
                         </div>
                       ) : (
-                        <span className="text-[#616A6B] text-[13px] font-normal truncate">{t.typeId}</span>
+                        <span className="text-[#000000] text-[13px] font-normal truncate">{t.typeId}</span>
                       )}
                     </div>
                   </td>
@@ -457,7 +500,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                   <td className="p-0 relative" onMouseEnter={() => setHoveredColKey('taxRate')}>
                     <div className="h-full flex items-center justify-start px-4 gap-2 relative">
                       <div 
-                        ref={el => triggerRefs.current[t.id] = el}
+                        ref={el => { triggerRefs.current[t.id] = el; }}
                         onClick={(e) => {
                           e.stopPropagation();
                           setTaxRateDropdownId(isTaxRateOpen ? null : t.id);
@@ -529,12 +572,12 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                              type="number"
                              value={t.subtotal}
                              onChange={(e) => handleUpdateTransaction(t.id, { subtotal: parseFloat(e.target.value) || 0 })}
-                             className="w-full h-[36px] pl-6 pr-8 bg-white border border-[#1E6F73] rounded-lg text-[13px] font-bold text-[#000000] text-left focus:outline-none focus:ring-1 focus:ring-[#1E6F73]"
+                             className="w-full h-[36px] pl-6 pr-8 bg-white border border-[#1E6F73] rounded-lg text-[13px] font-medium text-[#000000] text-left focus:outline-none focus:ring-1 focus:ring-[#1E6F73]"
                            />
                            <InlineSaveButton visible={modifiedCells.has(`${t.id}-subtotal`)} />
                         </div>
                       ) : (
-                        <span className="text-[#000000] font-bold text-[13px]">{formatCurrency(t.subtotal)}</span>
+                        <span className="text-[#000000] font-medium text-[13px]">{formatCurrency(t.subtotal)}</span>
                       )}
                     </div>
                   </td>

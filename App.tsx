@@ -1322,13 +1322,13 @@ const App: React.FC = () => {
                         <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                             isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'
                         }`}>
-                            <card.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
+                            <card.icon size={22} weight={isActive ? "fill" : "regular"} className={isActive ? "opacity-100" : "opacity-60"} />
                         </div>
                         <div className="flex flex-col z-10">
-                            <span className={`text-[12px] font-medium tracking-wide transition-colors truncate max-w-[160px] ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
+                            <span className={`text-[12px] font-normal tracking-wide transition-colors truncate max-w-[160px] ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
                                 {card.label}
                             </span>
-                            <span className="text-[16px] text-[#0F2F33] font-bold leading-none mt-0.5 ">
+                            <span className="text-[15px] text-[#0F2F33] font-medium leading-none mt-0.5 ">
                                 €{card.value.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                         </div>
@@ -1456,13 +1456,13 @@ const App: React.FC = () => {
                    <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                      isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'
                    }`}>
-                      <widget.icon size={22} weight="fill" className={isActive ? "opacity-100" : "opacity-60"} />
+                      <widget.icon size={22} weight={isActive ? "fill" : "regular"} className={isActive ? "opacity-100" : "opacity-60"} />
                    </div>
                    <div className="flex flex-col z-10">
-                      <span className={`text-[12px] font-medium tracking-wide transition-colors ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
+                      <span className={`text-[12px] font-normal tracking-wide transition-colors ${isActive ? 'text-[#1E6F73]' : 'text-[#6B7280]'}`}>
                         {widget.label}
                       </span>
-                      <span className="text-[16px] text-[#0F2F33] font-bold leading-none mt-0.5">
+                      <span className="text-[15px] text-[#0F2F33] font-medium leading-none mt-0.5">
                         €{widget.value.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                    </div>
