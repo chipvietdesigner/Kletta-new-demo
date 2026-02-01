@@ -25,7 +25,7 @@ const ReportRow: React.FC<ReportRowProps> = ({ label, amount, hasInput, isTotal 
 
 const Reports: React.FC = () => {
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#F9FAFB]/30">
+    <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#FCFCFC]">
       <div className="max-w-[880px] mx-auto px-6 py-10 pb-20">
         <div className="mb-12 text-center flex flex-col items-center">
            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-[#E5E7EB] rounded-full shadow-sm mb-4">

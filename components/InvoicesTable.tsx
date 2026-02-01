@@ -38,37 +38,52 @@ const InvoicesTable: React.FC<InvoicesTableProps> = ({ invoices, statusFilter })
     <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
       <div className="overflow-auto flex-1 custom-scrollbar pb-0">
         <table className="min-w-[1200px] text-left table-fixed w-full border-collapse">
-          <thead className="bg-[#F9FAFB] text-[#616A6B] sticky top-0 z-10 h-[48px] border-b border-[#E5E7EB]">
+          <thead className="bg-white text-[#000000] sticky top-0 z-10 h-[48px]">
             <tr>
-              <th className="px-4 font-normal text-[13px] w-[120px]">Invoice #</th>
-              <th className="px-4 font-normal text-[13px] w-[100px]">Date</th>
-              <th className="px-4 font-normal text-[13px] w-[240px]">Customer</th>
-              <th className="px-4 font-normal text-[13px] w-[100px]">Due Date</th>
-              <th className="px-4 font-normal text-[13px] w-[120px] text-center">Status</th>
-              <th className="px-4 font-normal text-[13px] w-[80px] text-center">Doc</th>
-              <th className="px-4 font-normal text-[13px] w-[140px] text-right">Total</th>
-              <th className="px-4 font-normal text-[13px] w-[180px] text-right">Actions</th>
+              <th className="px-4 font-medium text-[13px] w-[120px] shadow-[inset_0_-1px_0_#E5E7EB]">Invoice #</th>
+              <th className="px-4 font-medium text-[13px] w-[100px] shadow-[inset_0_-1px_0_#E5E7EB]">Date</th>
+              <th className="px-4 font-medium text-[13px] w-[240px] shadow-[inset_0_-1px_0_#E5E7EB]">Customer</th>
+              <th className="px-4 font-medium text-[13px] w-[100px] shadow-[inset_0_-1px_0_#E5E7EB]">Due Date</th>
+              <th className="px-4 font-medium text-[13px] w-[120px] text-center shadow-[inset_0_-1px_0_#E5E7EB]">Status</th>
+              <th className="px-4 font-medium text-[13px] w-[80px] text-center shadow-[inset_0_-1px_0_#E5E7EB]">Doc</th>
+              <th className="px-4 font-medium text-[13px] w-[140px] text-right shadow-[inset_0_-1px_0_#E5E7EB]">Total</th>
+              <th className="px-4 font-medium text-[13px] w-[180px] text-right shadow-[inset_0_-1px_0_#E5E7EB]">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white">
-            {filteredInvoices.map((inv) => (
-              <tr key={inv.id} className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${hoveredRowId === inv.id ? 'bg-[#F9FAFB]' : 'bg-white'}`} onMouseEnter={() => setHoveredRowId(inv.id)} onMouseLeave={() => setHoveredRowId(null)}>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium text-[13px]">{inv.invoiceId}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] font-normal text-[13px]">{inv.date}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-medium hover:text-[#1E6F73] cursor-pointer transition-colors">{inv.customer}</div></td>
-                <td className="p-0"><div className={`h-full flex items-center px-4 text-[13px] ${inv.status === 'Due' ? 'text-[#991B1B] font-medium' : 'text-[#616A6B] font-normal'}`}>{inv.dueDate}</div></td>
-                <td className="p-0">
-                  <div className="h-full flex items-center justify-center px-4">
-                    <span className={`px-3 py-1 rounded-lg text-[12px] font-medium border ${getStatusStyle(inv.status)}`}>
-                      {inv.status}
-                    </span>
-                  </div>
-                </td>
-                <td className="p-0"><div className="h-full flex items-center justify-center px-4">{hoveredRowId === inv.id ? (<button className="w-8 h-8 bg-white border border-[#E5E7EB] rounded-lg flex items-center justify-center text-[#616A6B] hover:text-[#000000] hover:border-[#D1D5DB] transition-all shadow-sm"><FileText size={16} /></button>) : (<FileText size={18} weight="fill" className="text-[#E5E7EB]" />)}</div></td>
-                <td className="p-0"><div className="h-full flex items-center justify-end px-4 font-medium text-[13px] text-[#000000]">{formatCurrency(inv.totalAmount)}</div></td>
-                <td className="p-0"><div className={`h-full flex items-center justify-end px-4 gap-2 transition-opacity duration-200 ${hoveredRowId === inv.id ? 'opacity-100' : 'opacity-0'}`}>{(inv.status === 'Open' || inv.status === 'Due') && (<button className="h-[36px] bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[12px] font-medium px-3 rounded-xl shadow-sm transition-colors flex items-center gap-1.5 whitespace-nowrap"><CheckCircle size={14} weight="bold" />Mark paid</button>)}<button className="h-[36px] w-[36px] flex items-center justify-center bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] text-[#000000] rounded-xl transition-colors shadow-sm"><PencilSimple size={16} /></button><button className="h-[36px] w-[36px] flex items-center justify-center text-[#616A6B] hover:text-[#991B1B] hover:bg-[#FEF2F2] rounded-xl transition-colors"><Trash size={18} /></button></div></td>
-              </tr>
-            ))}
+            {filteredInvoices.map((inv, index) => {
+              const isRowHovered = hoveredRowId === inv.id;
+              const bgClass = isRowHovered ? 'bg-[#F3F4F6]' : (index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white');
+              
+              return (
+                <tr key={inv.id} className={`group transition-colors h-[64px] ${bgClass}`} onMouseEnter={() => setHoveredRowId(inv.id)} onMouseLeave={() => setHoveredRowId(null)}>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium text-[13px]">{inv.invoiceId}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] font-normal text-[13px]">{inv.date}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-medium hover:text-[#1E6F73] cursor-pointer transition-colors">{inv.customer}</div></td>
+                  <td className="p-0"><div className={`h-full flex items-center px-4 text-[13px] ${inv.status === 'Due' ? 'text-[#991B1B] font-medium' : 'text-[#616A6B] font-normal'}`}>{inv.dueDate}</div></td>
+                  <td className="p-0">
+                    <div className="h-full flex items-center justify-center px-4">
+                      <span className={`px-3 py-1 rounded-lg text-[12px] font-medium border ${getStatusStyle(inv.status)}`}>
+                        {inv.status}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="p-0">
+                    <div className="h-full flex items-center justify-center px-4">
+                      <button className="w-[26px] h-[34px] rounded border border-[#E5E7EB] overflow-hidden shadow-sm hover:border-[#1E6F73] transition-all bg-[#f9fafb] flex-shrink-0">
+                        <img 
+                          src="https://images.unsplash.com/photo-1626262323430-39bc79bc052c?q=80&w=200&auto=format&fit=crop" 
+                          alt="Invoice thumbnail"
+                          className="w-full h-full object-cover block"
+                        />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="p-0"><div className="h-full flex items-center justify-end px-4 font-medium text-[13px] text-[#000000]">{formatCurrency(inv.totalAmount)}</div></td>
+                  <td className="p-0"><div className={`h-full flex items-center justify-end px-4 gap-2 transition-opacity duration-200 ${hoveredRowId === inv.id ? 'opacity-100' : 'opacity-0'}`}>{(inv.status === 'Open' || inv.status === 'Due') && (<button className="h-[36px] bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-[12px] font-medium px-3 rounded-xl shadow-sm transition-colors flex items-center gap-1.5 whitespace-nowrap"><CheckCircle size={14} weight="bold" />Mark paid</button>)}<button className="h-[36px] w-[36px] flex items-center justify-center bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] text-[#000000] rounded-xl transition-colors shadow-sm"><PencilSimple size={16} /></button><button className="h-[36px] w-[36px] flex items-center justify-center text-[#616A6B] hover:text-[#991B1B] hover:bg-[#FEF2F2] rounded-xl transition-colors"><Trash size={18} /></button></div></td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

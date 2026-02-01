@@ -11,31 +11,34 @@ const VatReturnsTable: React.FC<VatReturnsTableProps> = ({ data }) => {
     <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
       <div className="overflow-auto flex-1 custom-scrollbar pb-0">
         <table className="min-w-[1200px] text-left table-fixed w-full border-collapse">
-          <thead className="bg-[#F9FAFB] text-[#616A6B] sticky top-0 z-10 h-[48px] border-b border-[#E5E7EB]">
+          <thead className="bg-white text-[#000000] sticky top-0 z-10 h-[48px]">
             <tr>
-              <th className="px-4 font-normal text-[13px] w-[60px] text-center">#</th>
-              <th className="px-4 font-normal text-[13px] w-[220px]">E-mail</th>
-              <th className="px-4 font-normal text-[13px] w-[180px]">Company name</th>
-              <th className="px-4 font-normal text-[13px] w-[120px]">First name</th>
-              <th className="px-4 font-normal text-[13px] w-[120px]">Last name</th>
-              <th className="px-4 font-normal text-[13px] w-[140px]">UTR</th>
-              <th className="px-4 font-normal text-[13px] w-[180px]">Tax period</th>
-              <th className="px-4 font-normal text-[13px] w-[120px]">Edited</th>
+              <th className="px-4 font-medium text-[13px] w-[60px] text-center shadow-[inset_0_-1px_0_#E5E7EB]">#</th>
+              <th className="px-4 font-medium text-[13px] w-[220px] shadow-[inset_0_-1px_0_#E5E7EB]">E-mail</th>
+              <th className="px-4 font-medium text-[13px] w-[180px] shadow-[inset_0_-1px_0_#E5E7EB]">Company name</th>
+              <th className="px-4 font-medium text-[13px] w-[120px] shadow-[inset_0_-1px_0_#E5E7EB]">First name</th>
+              <th className="px-4 font-medium text-[13px] w-[120px] shadow-[inset_0_-1px_0_#E5E7EB]">Last name</th>
+              <th className="px-4 font-medium text-[13px] w-[140px] shadow-[inset_0_-1px_0_#E5E7EB]">UTR</th>
+              <th className="px-4 font-medium text-[13px] w-[180px] shadow-[inset_0_-1px_0_#E5E7EB]">Tax period</th>
+              <th className="px-4 font-medium text-[13px] w-[120px] shadow-[inset_0_-1px_0_#E5E7EB]">Edited</th>
             </tr>
           </thead>
           <tbody className="bg-white">
-            {data.map((row, index) => (
-              <tr key={row.id} className="group transition-colors border-b border-[#E5E7EB] h-[64px] hover:bg-[#F9FAFB]">
-                <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[#000000] font-normal text-[13px]">{index + 1}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.email}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.companyName}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-normal">{row.firstName}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-normal">{row.lastName}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal"><span>{row.utr}</span>{row.isUtrVerified && <SealCheck size={16} weight="fill" className="text-[#1E6F73] ml-2" />}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal">{row.taxPeriod}</div></td>
-                <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal">{row.edited}</div></td>
-              </tr>
-            ))}
+            {data.map((row, index) => {
+              const bgClass = index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white';
+              return (
+                <tr key={row.id} className={`group transition-colors h-[64px] hover:bg-[#F3F4F6] ${bgClass}`}>
+                  <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[#000000] font-normal text-[13px]">{index + 1}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.email}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.companyName}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-normal">{row.firstName}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] truncate text-[13px] font-normal">{row.lastName}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal"><span>{row.utr}</span>{row.isUtrVerified && <SealCheck size={16} weight="fill" className="text-[#1E6F73] ml-2" />}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal">{row.taxPeriod}</div></td>
+                  <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] text-[13px] font-normal">{row.edited}</div></td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

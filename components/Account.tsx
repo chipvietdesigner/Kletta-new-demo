@@ -85,7 +85,7 @@ const Account: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#F9FAFB]/50">
+    <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#FCFCFC]">
       <div className="max-w-[960px] mx-auto px-6 py-8 space-y-8">
         
         {/* Header */}

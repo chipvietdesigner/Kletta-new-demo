@@ -22,20 +22,20 @@ const InvitationsTable: React.FC<InvitationsTableProps> = ({ invitations }) => {
     <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
       <div className="overflow-auto flex-1 custom-scrollbar pb-0">
         <table className="min-w-[1000px] text-left table-fixed w-full border-collapse">
-          <thead className="bg-[#F9FAFB] text-[#616A6B] sticky top-0 z-10 h-[48px] border-b border-[#E5E7EB]">
+          <thead className="bg-[#F9FAFB] text-[#616A6B] sticky top-0 z-10 h-[48px]">
             <tr>
-              <th className="px-4 font-normal text-[13px] w-[220px]">E-mail</th>
-              <th className="px-4 font-normal text-[13px] w-[140px]">Phone</th>
-              <th className="px-4 font-normal text-[13px] w-[140px]">First Name</th>
-              <th className="px-4 font-normal text-[13px] w-[140px]">Last Name</th>
-              <th className="px-4 font-normal text-[13px] w-[140px] text-center">Status</th>
-              <th className="px-4 font-normal text-[13px] w-[140px]">Last Updated</th>
-              <th className="px-4 font-normal text-[13px] w-[200px]">Payment Link</th>
+              <th className="px-4 font-normal text-[13px] w-[220px] shadow-[inset_0_-1px_0_#E5E7EB]">E-mail</th>
+              <th className="px-4 font-normal text-[13px] w-[140px] shadow-[inset_0_-1px_0_#E5E7EB]">Phone</th>
+              <th className="px-4 font-normal text-[13px] w-[140px] shadow-[inset_0_-1px_0_#E5E7EB]">First Name</th>
+              <th className="px-4 font-normal text-[13px] w-[140px] shadow-[inset_0_-1px_0_#E5E7EB]">Last Name</th>
+              <th className="px-4 font-normal text-[13px] w-[140px] text-center shadow-[inset_0_-1px_0_#E5E7EB]">Status</th>
+              <th className="px-4 font-normal text-[13px] w-[140px] shadow-[inset_0_-1px_0_#E5E7EB]">Last Updated</th>
+              <th className="px-4 font-normal text-[13px] w-[200px] shadow-[inset_0_-1px_0_#E5E7EB]">Payment Link</th>
             </tr>
           </thead>
           <tbody className="bg-white">
             {invitations.map((inv) => (
-              <tr key={inv.id} className={`group transition-colors border-b border-[#E5E7EB] h-[64px] ${hoveredRowId === inv.id ? 'bg-[#F9FAFB]' : 'bg-white'}`} onMouseEnter={() => setHoveredRowId(inv.id)} onMouseLeave={() => setHoveredRowId(null)}>
+              <tr key={inv.id} className={`group transition-colors h-[64px] ${hoveredRowId === inv.id ? 'bg-[#F9FAFB]' : 'bg-white'}`} onMouseEnter={() => setHoveredRowId(inv.id)} onMouseLeave={() => setHoveredRowId(null)}>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{inv.email}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{inv.phone}</div></td>
                 <td className="p-0"><div className="h-full flex items-center px-4 text-[#616A6B] truncate text-[13px] font-normal">{inv.firstName}</div></td>

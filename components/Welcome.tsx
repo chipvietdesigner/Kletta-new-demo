@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowRight, DownloadSimple, CheckCircle, Play } from '@phosphor-icons/react';
 import { WelcomeData, WelcomeSectionItem } from '../types';
@@ -150,7 +149,7 @@ const Welcome: React.FC = () => {
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-gray-50/50 p-8">
+      <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#FCFCFC] p-8">
         <div className="max-w-[1200px] mx-auto space-y-12">
           
           {/* Header */}

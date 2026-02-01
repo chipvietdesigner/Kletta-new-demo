@@ -128,67 +128,68 @@ const ExpensesTable: React.FC<ExpensesTableProps> = ({ transactions: initialTran
     <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
       <div className="overflow-auto flex-1 custom-scrollbar">
         <table className="min-w-[1700px] text-left table-fixed w-full border-collapse">
-          <thead className="bg-[#F9FAFB] text-[#616A6B] sticky top-0 z-50 border-b border-[#E5E7EB]">
+          <thead className="bg-white text-[#000000] sticky top-0 z-50">
             <tr>
-              <th className="px-4 py-3 font-normal text-[13px] w-[140px] text-left align-top">
+              <th className="px-4 py-3 font-medium text-[13px] w-[140px] text-left align-top shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1 mb-1">
                   <span>Total amount</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
-                <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.total)}</div>
+                <div className="text-[12px] font-semibold text-[#000000]">{formatCurrency(totals.total)}</div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[200px] align-middle">
+              <th className="px-4 py-3 font-medium text-[13px] w-[200px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1">
                   <span>Category</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[130px] align-middle">
+              <th className="px-4 py-3 font-medium text-[13px] w-[130px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1">
                   <span>Date</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[240px] align-middle">
+              <th className="px-4 py-3 font-medium text-[13px] w-[240px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1">
                   <span>Customer</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
               </th>
 
-              <th className="px-4 py-3 font-normal text-[13px] w-[60px] text-center align-middle">Doc</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[140px] align-middle">Receipt ID</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[100px] text-left align-middle">Tax rate</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[120px] text-right align-top">
+              <th className="px-4 py-3 font-medium text-[13px] w-[60px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Doc</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[140px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Receipt ID</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[100px] text-left align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Tax rate</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[120px] text-right align-top shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="mb-1">VAT</div>
-                <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.vat)}</div>
+                <div className="text-[12px] font-semibold text-[#000000]">{formatCurrency(totals.vat)}</div>
               </th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[140px] text-right align-top">
+              <th className="px-4 py-3 font-medium text-[13px] w-[140px] text-right align-top shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center justify-end gap-1 mb-1">
                   <span>Subtotal</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
-                <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.subtotal)}</div>
+                <div className="text-[12px] font-semibold text-[#000000]">{formatCurrency(totals.subtotal)}</div>
               </th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle">Verified</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle">AI Ver.</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle"></th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[80px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Verified</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[80px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]">AI Ver..</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[80px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]"></th>
             </tr>
           </thead>
           <tbody className="bg-white">
-            {transactions.map((t) => {
+            {transactions.map((t, index) => {
               const isRowHovered = hoveredRowId === t.id;
               const isDropdownOpen = openDropdownId === t.id;
               const CategoryIcon = getCategoryIcon(t.category);
               const isCellEditable = (colKey: string) => isRowHovered && hoveredColKey === colKey;
+              const bgClass = isRowHovered ? 'bg-[#F3F4F6]' : (index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white');
 
               return (
                 <tr 
                   key={t.id} 
-                  className={`group transition-all border-b border-[#E5E7EB] h-[64px] ${isRowHovered ? 'bg-[#F9FAFB]' : 'bg-white'}`} 
+                  className={`group transition-all h-[64px] ${bgClass}`} 
                   onMouseEnter={() => setHoveredRowId(t.id)} 
                   onMouseLeave={() => { setHoveredRowId(null); setHoveredColKey(null); }}
                 >
@@ -215,16 +216,16 @@ const ExpensesTable: React.FC<ExpensesTableProps> = ({ transactions: initialTran
                   {/* Category */}
                   <td className="p-0 relative" onMouseEnter={() => setHoveredColKey('category')}>
                     <div 
-                      className="h-full flex items-center px-4 cursor-pointer relative"
+                      className="h-full flex items-center px-4 cursor-pointer relative overflow-hidden"
                       onClick={(e) => {
                         e.stopPropagation();
                         setOpenDropdownId(isDropdownOpen ? null : t.id);
                       }}
                     >
-                      <div className={`flex items-center gap-2 w-full h-[40px] px-2 rounded-lg transition-all border ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white shadow-sm' : 'border-transparent bg-transparent'}`}>
-                        <CategoryIcon size={18} weight="regular" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#0F3A3E]"} />
-                        <span className="text-[#000000] text-[13px] font-normal truncate flex-1">{t.category}</span>
-                        <CaretDown size={14} className={`text-[#9CA3AF] transition-all ${isDropdownOpen ? 'rotate-180 opacity-100' : isRowHovered ? 'opacity-100' : 'opacity-0'}`} />
+                      <div className={`flex items-center gap-2 px-3 h-[32px] rounded-lg transition-all border w-full max-w-full min-w-0 ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white' : 'border-[#E5E7EB] bg-white hover:border-[#D1D5DB]'}`}>
+                        <CategoryIcon size={16} weight="regular" className="text-[#000000] flex-shrink-0" />
+                        <span className="text-[#000000] text-[12px] font-medium truncate flex-1 min-w-0">{t.category}</span>
+                        <CaretDown size={14} className={`text-[#9CA3AF] transition-all flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                       </div>
 
                       {isDropdownOpen && (
@@ -265,7 +266,7 @@ const ExpensesTable: React.FC<ExpensesTableProps> = ({ transactions: initialTran
                                       className={isActive ? "text-[#0F3A3E]" : "text-[#616A6B]"} 
                                     />
                                   </div>
-                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[14px] leading-[20px] flex-1 min-w-0">
+                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[14px] font-medium leading-[20px] flex-1 min-w-0">
                                     <p className={`font-normal ${isActive ? 'text-[#0F3A3E]' : 'text-black'}`}>
                                       {option.label}
                                     </p>
@@ -300,10 +301,10 @@ const ExpensesTable: React.FC<ExpensesTableProps> = ({ transactions: initialTran
                             const val = e.target.value.split('-').reverse().join('.');
                             handleUpdateTransaction(t.id, { date: val });
                           }}
-                          className="w-full h-[36px] px-2 bg-white border border-[#1E6F73] rounded-lg text-[13px] font-medium text-[#000000] focus:outline-none"
+                          className="w-full h-[36px] px-2 bg-white border border-[#1E6F73] rounded-lg text-[12px] font-medium text-[#000000] focus:outline-none"
                         />
                       ) : (
-                        <span className="text-[#000000] text-[13px] font-normal">{t.date}</span>
+                        <span className="text-[#000000] text-[12px] font-normal">{t.date}</span>
                       )}
                     </div>
                   </td>
@@ -311,7 +312,7 @@ const ExpensesTable: React.FC<ExpensesTableProps> = ({ transactions: initialTran
                   {/* Customer */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('customer')}>
                     <div className="h-full flex flex-col justify-center px-4 overflow-hidden relative">
-                      <div className="text-[#000000] font-normal truncate text-[13px]">{t.customer}</div>
+                      <div className="text-[#000000] font-normal truncate text-[12px]">{t.customer}</div>
                       {isCellEditable('customer') ? (
                         <div className="mt-1 relative">
                           <input 
@@ -331,12 +332,22 @@ const ExpensesTable: React.FC<ExpensesTableProps> = ({ transactions: initialTran
                   {/* Doc */}
                   <td className="p-0 text-center">
                     <div className="h-full flex items-center justify-center px-4">
-                      {t.document ? <FileText size={20} className="text-[#1E6F73]" /> : <span className="text-[#E5E7EB]">-</span>}
+                      {t.document ? (
+                        <div className="w-[26px] h-[34px] rounded border border-[#E5E7EB] overflow-hidden transition-all bg-[#f9fafb] cursor-pointer">
+                          <img 
+                            src="https://images.unsplash.com/photo-1626262323430-39bc79bc052c?q=80&w=200&auto=format&fit=crop" 
+                            alt="Receipt preview"
+                            className="w-full h-full object-cover block"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-[#E5E7EB]">-</span>
+                      )}
                     </div>
                   </td>
 
                   {/* Receipt ID */}
-                  <td className="px-4 align-middle"><div className="text-[#000000] font-normal text-[13px]">{t.receipt}</div></td>
+                  <td className="px-4 align-middle"><div className="text-[#000000] font-normal text-[12px]">{t.receipt}</div></td>
 
                   {/* Tax Rate */}
                   <td className="px-4 align-middle"><div className="text-[#616A6B] font-normal text-[13px]">{t.taxRate}</div></td>

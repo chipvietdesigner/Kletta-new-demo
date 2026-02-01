@@ -90,6 +90,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
   const [selectedVat, setSelectedVat] = useState<string | null>(null);
   const [dropdownCoords, setDropdownCoords] = useState<{ top: number, left: number } | null>(null);
   const [selectedDocTransaction, setSelectedDocTransaction] = useState<IncomeTransaction | null>(null);
+  const [manuallyReconciledRows, setManuallyReconciledRows] = useState<Set<string>>(new Set());
   
   const [modifiedCells, setModifiedCells] = useState<Set<string>>(new Set());
   
@@ -199,35 +200,54 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
     );
   };
 
-  const renderReconciliationPill = (index: number) => {
-    const statuses = [
-      { label: 'Paid by Cash', color: 'yellow' },
-      { label: 'Paid by Cash', color: 'yellow' },
-      { label: 'Paid by Cash', color: 'yellow' },
-      { label: 'Paid by Cash', color: 'yellow' },
-      { label: 'Transaction 12733', color: 'grey' },
-      { label: 'Cash', color: 'grey' },
-      { label: 'Paid by Cash', color: 'yellow' },
-      { label: 'Paid by Cash', color: 'yellow' },
-      { label: 'Transaction 12503', color: 'grey' },
-      { label: 'Transaction 12502', color: 'grey' },
-      { label: 'Transaction 12491', color: 'grey' },
-      { label: 'Transaction 12503', color: 'grey' },
-      { label: 'Transaction 12606', color: 'grey' },
+  const handleManualReconcile = (id: string) => {
+    setManuallyReconciledRows(prev => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  };
+
+  const renderReconciliationPill = (t: IncomeTransaction, index: number) => {
+    const defaultStatuses = [
+      { label: 'Paid by Cash', type: 'action' },
+      { label: 'Paid by Cash', type: 'action' },
+      { label: 'Paid by Cash', type: 'action' },
+      { label: 'Paid by Cash', type: 'action' },
+      { label: 'Transaction 12733', type: 'data' },
+      { label: 'Cash', type: 'data' },
+      { label: 'Paid by Cash', type: 'action' },
+      { label: 'Paid by Cash', type: 'action' },
+      { label: 'Transaction 12503', type: 'data' },
+      { label: 'Transaction 12502', type: 'data' },
+      { label: 'Transaction 12491', type: 'data' },
+      { label: 'Transaction 12503', type: 'data' },
+      { label: 'Transaction 12606', type: 'data' },
     ];
     
-    const status = statuses[index % statuses.length];
-    
-    if (status.color === 'yellow') {
+    const statusInfo = defaultStatuses[index % defaultStatuses.length];
+    const isManuallyDone = manuallyReconciledRows.has(t.id);
+
+    // If it was an 'action' but clicked, it becomes 'data' with 'Cash' label
+    if (statusInfo.type === 'action' && !isManuallyDone) {
       return (
-        <div className="bg-[#FDE047] px-4 py-1.5 rounded-full border border-[#FDE047] shadow-sm inline-flex items-center">
-          <span className="text-[12px] font-medium text-[#000000] whitespace-nowrap">{status.label}</span>
-        </div>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            handleManualReconcile(t.id);
+          }}
+          className="bg-transparent px-4 py-1.5 rounded-full border-0 inline-flex items-center hover:bg-gray-100 transition-colors group active:scale-95"
+        >
+          <span className="text-[12px] font-medium text-[#4A72E5] whitespace-nowrap">Paid by Cash</span>
+        </button>
       );
     }
+
+    const labelToShow = isManuallyDone ? 'Cash' : statusInfo.label;
+
     return (
-      <div className="bg-[#F3F4F6] px-4 py-1.5 rounded-full border border-[#F3F4F6] shadow-sm inline-flex items-center">
-        <span className="text-[12px] font-medium text-[#000000] whitespace-nowrap">{status.label}</span>
+      <div className="bg-transparent px-4 py-1.5 inline-flex items-center">
+        <span className="text-[12px] font-medium text-[#000000] whitespace-nowrap">{labelToShow}</span>
       </div>
     );
   };
@@ -236,61 +256,61 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
     <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
       <div className="overflow-auto flex-1 custom-scrollbar">
         <table className="min-w-[1700px] text-left table-fixed w-full border-collapse">
-          <thead className="bg-[#F9FAFB] text-[#616A6B] sticky top-0 z-50 border-b border-[#E5E7EB]">
+          <thead className="bg-white text-[#000000] sticky top-0 z-50">
             <tr>
-              <th className="px-4 py-3 font-normal text-[13px] w-[140px] text-left align-top">
+              <th className="px-4 py-3 font-medium text-[13px] w-[140px] text-left align-top shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1 mb-1">
                   <span>Total amount</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
-                <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.total)}</div>
+                <div className="text-[12px] font-semibold text-[#000000]">{formatCurrency(totals.total)}</div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[200px] align-middle">
+              <th className="px-4 py-3 font-medium text-[13px] w-[200px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1">
                   <span>Category</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[130px] align-middle">
+              <th className="px-4 py-3 font-medium text-[13px] w-[130px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1">
                   <span>Date</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[240px] align-middle">
+              <th className="px-4 py-3 font-medium text-[13px] w-[240px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center gap-1">
                   <span>Customer</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
               </th>
 
-              <th className="px-4 py-3 font-normal text-[13px] w-[60px] text-center align-middle">Doc</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[60px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Doc</th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[140px] align-middle">Type ID</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[140px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Type ID</th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[180px] align-middle">Reconciled</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[180px] align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Reconciled</th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[100px] text-left align-middle">Tax rate</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[100px] text-left align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Tax rate</th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[120px] text-right align-top">
+              <th className="px-4 py-3 font-medium text-[13px] w-[120px] text-right align-top shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="mb-1">VAT</div>
-                <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.vat)}</div>
+                <div className="text-[12px] font-semibold text-[#000000]">{formatCurrency(totals.vat)}</div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[140px] text-right align-top">
+              <th className="px-4 py-3 font-medium text-[13px] w-[140px] text-right align-top shadow-[inset_0_-1px_0_#E5E7EB]">
                 <div className="flex items-center justify-end gap-1 mb-1">
                   <span>Subtotal</span>
-                  <ArrowsDownUp size={14} className="text-[#9CA3AF]" />
+                  <ArrowsDownUp size={14} className="text-[#6B7280]" />
                 </div>
-                <div className="text-[12px] font-medium text-[#616A6B]">{formatCurrency(totals.subtotal)}</div>
+                <div className="text-[12px] font-semibold text-[#000000]">{formatCurrency(totals.subtotal)}</div>
               </th>
               
-              <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle">Verified</th>
-              <th className="px-4 font-normal text-[13px] w-[80px] text-center align-middle">AI Verified</th>
-              <th className="px-4 py-3 font-normal text-[13px] w-[80px] text-center align-middle"></th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[80px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]">Verified</th>
+              <th className="px-4 font-medium text-[13px] w-[80px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]">AI Verified</th>
+              <th className="px-4 py-3 font-medium text-[13px] w-[80px] text-center align-middle shadow-[inset_0_-1px_0_#E5E7EB]"></th>
             </tr>
           </thead>
           <tbody className="bg-white">
@@ -301,11 +321,12 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
               const CategoryIcon = getCategoryIcon(t.category);
 
               const isCellEditable = (colKey: string) => isRowHovered && hoveredColKey === colKey;
+              const bgClass = isRowHovered ? 'bg-[#F3F4F6]' : (index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white');
 
               return (
                 <tr 
                   key={t.id} 
-                  className={`group transition-all border-b border-[#E5E7EB] h-[64px] ${isRowHovered ? 'bg-[#F9FAFB]' : 'bg-white'}`} 
+                  className={`group transition-all h-[64px] ${bgClass}`} 
                   onMouseEnter={() => setHoveredRowId(t.id)} 
                   onMouseLeave={() => { setHoveredRowId(null); setHoveredColKey(null); }}
                 >
@@ -338,10 +359,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                         setOpenDropdownId(isDropdownOpen ? null : t.id);
                       }}
                     >
-                      <div className={`flex items-center gap-2 w-full h-[40px] px-2 rounded-lg transition-all border ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white shadow-sm' : 'border-transparent bg-transparent'}`}>
-                        <CategoryIcon size={18} weight="regular" className={isDropdownOpen || isCellEditable('category') ? "text-[#1E6F73]" : "text-[#0F3A3E]"} />
-                        <span className="text-[#000000] text-[13px] font-normal truncate flex-1">{t.category}</span>
-                        <CaretDown size={14} className={`text-[#9CA3AF] transition-all ${isDropdownOpen ? 'rotate-180 opacity-100' : isRowHovered ? 'opacity-100' : 'opacity-0'}`} />
+                      <div className={`flex items-center gap-2 px-3 h-[32px] rounded-lg transition-all border w-full max-w-full min-w-0 ${isDropdownOpen || isCellEditable('category') ? 'border-[#1E6F73] bg-white' : 'border-[#E5E7EB] bg-white hover:border-[#D1D5DB]'}`}>
+                        <CategoryIcon size={16} weight="regular" className="text-[#000000] flex-shrink-0" />
+                        <span className="text-[#000000] text-[12px] font-medium truncate flex-1 min-w-0">{t.category}</span>
+                        <CaretDown size={14} className={`text-[#9CA3AF] transition-all flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                       </div>
 
                       {isDropdownOpen && (
@@ -382,7 +403,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                                       className={isActive ? "text-[#0F3A3E]" : "text-[#616A6B]"} 
                                     />
                                   </div>
-                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[14px] leading-[20px] flex-1 min-w-0">
+                                  <div className="flex flex-col font-['Aktifo-A',sans-serif] text-[14px] font-medium leading-[20px] flex-1 min-w-0">
                                     <p className={`font-normal ${isActive ? 'text-[#0F3A3E]' : 'text-black'}`}>
                                       {option.label}
                                     </p>
@@ -419,11 +440,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                               const val = e.target.value.split('-').reverse().join('.');
                               handleUpdateTransaction(t.id, { date: val });
                             }}
-                            className="w-full h-[36px] px-2 bg-white border border-[#1E6F73] rounded-lg text-[13px] font-medium text-[#000000] focus:outline-none"
+                            className="w-full h-[36px] px-2 bg-white border border-[#1E6F73] rounded-lg text-[12px] font-medium text-[#000000] focus:outline-none"
                           />
                         </div>
                       ) : (
-                        <span className="text-[#000000] text-[13px] font-normal">{t.date}</span>
+                        <span className="text-[#000000] text-[12px] font-normal">{t.date}</span>
                       )}
                     </div>
                   </td>
@@ -433,7 +454,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                     <div className="h-full flex flex-col justify-center px-4 overflow-hidden relative">
                       {isCellEditable('customer') ? (
                         <div className="space-y-1 py-2 animate-in fade-in duration-150 relative pr-6">
-                           <div className="text-[#000000] font-normal truncate text-[13px] px-2 h-[28px] flex items-center">
+                           <div className="text-[#000000] font-normal truncate text-[12px] px-2 h-[28px] flex items-center">
                              {t.customer}
                            </div>
                            <input 
@@ -447,7 +468,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                         </div>
                       ) : (
                         <>
-                          <div className="text-[#000000] font-normal truncate text-[13px]">{t.customer}</div>
+                          <div className="text-[#000000] font-normal truncate text-[12px]">{t.customer}</div>
                           {t.description && (
                             <div className="text-[#616A6B] text-[11px] truncate mt-0.5 font-normal">{t.description}</div>
                           )}
@@ -462,9 +483,13 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                       {t.hasDocument ? (
                         <button 
                           onClick={() => setSelectedDocTransaction(t)}
-                          className={`transition-colors p-1.5 rounded-lg ${isRowHovered ? 'bg-white border border-[#E5E7EB] text-[#1E6F73] shadow-sm' : 'text-[#616A6B] hover:text-[#000000]'}`}
+                          className="w-[26px] h-[34px] rounded border border-[#E5E7EB] overflow-hidden transition-all bg-[#f9fafb] flex-shrink-0"
                         >
-                          <FileText size={20} />
+                          <img 
+                            src="https://images.unsplash.com/photo-1626262323430-39bc79bc052c?q=80&w=200&auto=format&fit=crop" 
+                            alt="Receipt thumbnail"
+                            className="w-full h-full object-cover block"
+                          />
                         </button>
                       ) : (
                         <span className="text-[#E5E7EB]">-</span>
@@ -481,22 +506,23 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                             type="text"
                             value={t.typeId}
                             onChange={(e) => handleUpdateTransaction(t.id, { typeId: e.target.value })}
-                            className="w-full h-[36px] px-2 pr-8 bg-white border border-[#1E6F73] rounded-lg text-[13px] font-medium text-[#000000] focus:outline-none"
+                            className="w-full h-[36px] px-2 pr-8 bg-white border border-[#1E6F73] rounded-lg text-[12px] font-medium text-[#000000] focus:outline-none"
                           />
                           <InlineSaveButton visible={modifiedCells.has(`${t.id}-typeId`)} />
                         </div>
                       ) : (
-                        <span className="text-[#000000] text-[13px] font-normal truncate">{t.typeId}</span>
+                        <span className="text-[#000000] text-[12px] font-normal truncate">{t.typeId}</span>
                       )}
                     </div>
                   </td>
 
                   <td className="p-0">
                     <div className="h-full flex items-center px-4">
-                      {renderReconciliationPill(index)}
+                      {renderReconciliationPill(t, index)}
                     </div>
                   </td>
 
+                  {/* Tax Rate */}
                   <td className="p-0 relative" onMouseEnter={() => setHoveredColKey('taxRate')}>
                     <div className="h-full flex items-center justify-start px-4 gap-2 relative">
                       <div 
@@ -505,7 +531,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                           e.stopPropagation();
                           setTaxRateDropdownId(isTaxRateOpen ? null : t.id);
                         }}
-                        className={`flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-all w-full ${isCellEditable('taxRate') || isTaxRateOpen ? 'bg-white border-[#1E6F73] text-[#000000] shadow-sm' : 'border-transparent text-[#616A6B]'}`}
+                        className={`flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-all w-full ${isCellEditable('taxRate') || isTaxRateOpen ? 'bg-white border-[#1E6F73] text-[#000000]' : 'border-transparent text-[#616A6B]'}`}
                       >
                          <span className="font-medium text-[13px]">{t.taxRate.split(':')[0]}</span>
                          <CaretDown size={14} className={`text-[#9CA3AF] ${isTaxRateOpen ? 'rotate-180' : isRowHovered ? 'opacity-100' : 'opacity-0'}`} />
@@ -557,12 +583,14 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions: initi
                     </div>
                   </td>
 
+                  {/* VAT */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('vat')}>
                     <div className="h-full flex items-center justify-end px-4 relative">
                       <span className="text-[#616A6B] font-medium text-[13px]">{formatCurrency(t.vat)}</span>
                     </div>
                   </td>
 
+                  {/* Subtotal */}
                   <td className="p-0" onMouseEnter={() => setHoveredColKey('subtotal')}>
                     <div className="h-full flex items-center justify-end px-4 relative">
                       {isCellEditable('subtotal') ? (

@@ -7,7 +7,7 @@ const AISupport: React.FC = () => {
   const [messages, setMessages] = useState(MOCK_MESSAGES);
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-[#F9FAFB]/50 flex flex-col h-full">
+    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-[#FCFCFC] flex flex-col h-full">
       <div className="mb-6 flex items-center justify-between flex-shrink-0">
         <h1 className="text-2xl font-medium text-[#000000]">AI Support Intelligence</h1>
         <button className="bg-[#F7D84A] hover:bg-[#FCD34D] text-[#0F3A3E] text-xs font-medium px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-sm h-[36px]"><DownloadSimple size={16} weight="bold" />Download CSV</button>

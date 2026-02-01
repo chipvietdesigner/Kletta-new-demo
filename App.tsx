@@ -1069,7 +1069,7 @@ const App: React.FC = () => {
              </div>
              <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#9CA3AF]">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#616A6B]">
                     <MagnifyingGlass size={16} />
                   </div>
                   <input 
@@ -1474,7 +1474,7 @@ const App: React.FC = () => {
         onLogout={() => setIsAuthenticated(false)}
       />
       
-      <div className="flex-1 flex flex-col min-w-0 bg-white">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#FCFCFC]">
         <TopHeader rightAction={headerRightAction} />
         {renderContent()}
       </div>
