@@ -6,7 +6,8 @@ import {
   Plus, 
   Globe, 
   ChatCircle,
-  User
+  User,
+  SealCheck
 } from '@phosphor-icons/react';
 
 interface TopHeaderProps {
@@ -20,16 +21,19 @@ const TopHeader: React.FC<TopHeaderProps> = ({ centerContent, rightAction }) => 
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#616A6B]"><User size={20} weight="fill" /></div>
-          <div className="flex flex-col">
+          <div className="flex flex-col -space-y-0.5">
              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-[#000000]">sami+timma@kletta.com</span>
-                <span className="text-[10px] font-medium text-[#004d40] tracking-wide uppercase">UNSUBSCRIBED</span>
-                <Info size={12} className="text-[#616A6B]" />
+                <span className="text-[13px] font-bold text-[#000000]">Sam Smith</span>
+                <span className="text-[13px] font-bold text-[#0F3A3E] tracking-tight uppercase">PARTNER TRIAL</span>
+                <Info size={16} className="text-[#000000]" weight="bold" />
              </div>
-             <div className="flex items-center gap-1 text-[11px] text-[#004d40] font-medium">
-                <span>Timma (1234567-8)</span>
-                <div className="w-3 h-3 bg-gray-200 rounded-full flex items-center justify-center"><span className="text-[8px] text-[#616A6B]">✓</span></div>
-                <span className="ml-1">MONTHLY</span>
+             <div className="flex items-center gap-1 text-[11px] text-[#0F3A3E] font-medium">
+                <span>Sam's Barber (1234567890</span>
+                <div className="flex items-center justify-center">
+                  <SealCheck size={14} weight="fill" className="text-[#F7D84A]" />
+                </div>
+                <span>)</span>
+                <span className="ml-2 font-bold uppercase tracking-wider">Not set</span>
              </div>
           </div>
         </div>
