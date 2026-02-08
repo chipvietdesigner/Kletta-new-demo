@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MileageTrip } from '../types';
-import { Trash, MapTrifold, PencilSimple, Car, Suitcase } from '@phosphor-icons/react';
+import { Trash, MapTrifold, PencilSimple, Car, Suitcase, ArrowsDownUp } from '@phosphor-icons/react';
 import MileageMapModal from './MileageMapModal';
 
 interface MileagesListProps {
@@ -10,6 +10,7 @@ interface MileagesListProps {
 const MileagesList: React.FC<MileagesListProps> = ({ mileages }) => {
   const [selectedTrip, setSelectedTrip] = useState<MileageTrip | null>(null);
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [hoveredRowId, setHoveredRowId] = useState<string | number | null>(null);
 
   const handleOpenMap = (trip: MileageTrip) => {
     setSelectedTrip(trip);
@@ -21,82 +22,129 @@ const MileagesList: React.FC<MileagesListProps> = ({ mileages }) => {
     setTimeout(() => setSelectedTrip(null), 300);
   };
 
+  const formatCurrency = (amount: number) => 
+    new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(amount);
+
   return (
     <>
-      <div className="flex flex-col gap-4 pb-6">
-        {mileages.map((trip) => (
-          <div key={trip.id} className=" border border-[#E5E7EB] rounded-xl  shadow-sm hover:shadow-md transition-all flex flex-col gap-5 group">
-             
-             {/* Header Row: Route & Main Info */}
-             <div className="flex justify-between items-start px-6 pb-3 pt-6">
-                <div className="flex flex-col gap-1.5 min-w-0 pr-6">
-                   <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[16px] font-bold text-[#0F2F33] leading-snug">{trip.startAddress}</span>
-                      <span className="text-[#9CA3AF] text-[14px]">→</span>
-                      <span className="text-[16px] font-bold text-[#0F2F33] leading-snug">{trip.endAddress}</span>
-                   </div>
-                   <div className="flex items-center gap-2 text-[13px] text-[#6B7280] font-medium">
-                      <span>{trip.date}</span>
-                      <span className="w-1 h-1 rounded-full bg-[#D1D5DB]"></span>
-                      <span>{trip.country}</span>
-                   </div>
-                </div>
-
-                <div className="flex flex-col items-end flex-shrink-0">
-                   <span className="text-[20px] font-bold text-[#1E6F73] tabular-nums">
-                      €{trip.claimAmount.toFixed(2)}
-                   </span>
-                   <div className="flex items-center gap-2 text-[13px] text-[#6B7280] mt-0.5 font-medium tabular-nums">
-                      <span>{trip.distanceKm.toFixed(1)} km</span>
-                      <span className="w-1 h-1 rounded-full bg-[#D1D5DB]"></span>
-                      <span>{trip.duration}</span>
-                   </div>
-                </div>
-             </div>
-
-             {/* Footer Row: Metadata & Actions */}
-             <div className="flex justify-between items-center px-6 pt-4 pb-4  bg-[#F9FAFB] ">
+      <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
+        <div className="overflow-auto flex-1 custom-scrollbar">
+          <table className="min-w-[1200px] text-left table-fixed w-full border-collapse">
+            <thead className="bg-white text-[#000000] sticky top-0 z-10 h-[48px]">
+              <tr>
+                <th className="px-4 font-medium text-[13px] w-[120px] shadow-[inset_0_-1px_0_#E5E7EB]">
+                  <div className="flex items-center gap-1">
+                    <span>Date</span>
+                    <ArrowsDownUp size={14} className="text-[#6B7280]" />
+                  </div>
+                </th>
+                <th className="px-4 font-medium text-[13px] w-[200px] shadow-[inset_0_-1px_0_#E5E7EB]">
+                  <div className="flex items-center gap-1">
+                    <span>From</span>
+                    <ArrowsDownUp size={14} className="text-[#6B7280]" />
+                  </div>
+                </th>
+                <th className="px-4 font-medium text-[13px] w-[200px] shadow-[inset_0_-1px_0_#E5E7EB]">
+                  <div className="flex items-center gap-1">
+                    <span>To</span>
+                    <ArrowsDownUp size={14} className="text-[#6B7280]" />
+                  </div>
+                </th>
+                <th className="px-4 font-medium text-[13px] w-[110px] text-right shadow-[inset_0_-1px_0_#E5E7EB]">
+                  <div className="flex items-center justify-end gap-1">
+                    <span>Distance</span>
+                    <ArrowsDownUp size={14} className="text-[#6B7280]" />
+                  </div>
+                </th>
+                <th className="px-4 font-medium text-[13px] w-[100px] shadow-[inset_0_-1px_0_#E5E7EB]">Duration</th>
+                <th className="px-4 font-medium text-[13px] w-[160px] shadow-[inset_0_-1px_0_#E5E7EB]">Vehicle</th>
+                <th className="px-4 font-medium text-[13px] w-[180px] shadow-[inset_0_-1px_0_#E5E7EB]">Purpose</th>
+                <th className="px-4 font-medium text-[13px] w-[120px] text-right shadow-[inset_0_-1px_0_#E5E7EB]">
+                  <div className="flex items-center justify-end gap-1">
+                    <span>Amount</span>
+                    <ArrowsDownUp size={14} className="text-[#6B7280]" />
+                  </div>
+                </th>
+                <th className="px-4 font-medium text-[13px] w-[140px] shadow-[inset_0_-1px_0_#E5E7EB]"></th>
+              </tr>
+            </thead>
+            <tbody className="bg-white">
+              {mileages.map((trip, index) => {
+                const isRowHovered = hoveredRowId === trip.id;
+                const bgClass = isRowHovered ? 'bg-[#F3F4F6]' : (index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white');
                 
-                {/* Metadata */}
-                <div className="flex items-center gap-6">
-                   <div className="flex items-center gap-2 text-[13px] text-[#0F2F33] font-medium">
-                      <div className="p-1.5 rounded-lg bg-[#F9FAFB] text-[#6B7280] border border-[#E5E7EB]">
-                         <Car size={16} />
+                return (
+                  <tr 
+                    key={trip.id} 
+                    className={`group transition-all h-[64px] ${bgClass}`}
+                    onMouseEnter={() => setHoveredRowId(trip.id)}
+                    onMouseLeave={() => setHoveredRowId(null)}
+                  >
+                    <td className="px-4 align-middle">
+                      <div className="text-[13px] text-[#000000] font-normal">{trip.date}</div>
+                      <div className="text-[11px] text-[#6B7280]">{trip.country}</div>
+                    </td>
+                    <td className="px-4 align-middle">
+                      <div className="text-[13px] text-[#000000] font-medium truncate">{trip.startAddress}</div>
+                      <div className="text-[11px] text-[#6B7280] truncate">{trip.startCityCountry}</div>
+                    </td>
+                    <td className="px-4 align-middle">
+                      <div className="text-[13px] text-[#000000] font-medium truncate">{trip.endAddress}</div>
+                      <div className="text-[11px] text-[#6B7280] truncate">{trip.endCityCountry}</div>
+                    </td>
+                    <td className="px-4 align-middle text-right">
+                      <div className="text-[13px] text-[#000000] font-medium">{trip.distanceKm.toFixed(1)} km</div>
+                    </td>
+                    <td className="px-4 align-middle">
+                      <div className="text-[13px] text-[#616A6B]">{trip.duration}</div>
+                    </td>
+                    <td className="px-4 align-middle">
+                      <div className="flex items-center gap-2 text-[13px] text-[#000000]">
+                        <Car size={16} className="text-[#6B7280]" />
+                        <span className="truncate">{trip.vehicle}</span>
                       </div>
-                      <span>{trip.vehicle}</span>
-                   </div>
-                   <div className="flex items-center gap-2 text-[13px] text-[#0F2F33] font-medium">
-                      <div className="p-1.5 rounded-lg bg-[#F9FAFB] text-[#6B7280] border border-[#E5E7EB]">
-                         <Suitcase size={16} />
+                    </td>
+                    <td className="px-4 align-middle">
+                      <div className="flex items-center gap-2 text-[13px] text-[#000000]">
+                        <Suitcase size={16} className="text-[#6B7280]" />
+                        <span className="truncate">{trip.drivePurpose}</span>
                       </div>
-                      <span>{trip.drivePurpose}</span>
-                   </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-2 ">
-                   <button 
-                     onClick={() => handleOpenMap(trip)}
-                     className="h-[36px] px-3 bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] rounded-xl text-[12px] font-bold text-[#0F2F33] flex items-center gap-1.5 transition-colors shadow-sm"
-                   >
-                      <MapTrifold size={16} weight="fill" className="text-[#1E6F73]" />
-                      View map
-                   </button>
-                   <button 
-                     className="h-[36px] w-[36px] flex items-center justify-center bg-white border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] rounded-xl text-[#0F2F33] transition-colors shadow-sm"
-                   >
-                      <PencilSimple size={16} />
-                   </button>
-                   <button 
-                     className="h-[36px] w-[36px] flex items-center justify-center text-[#9CA3AF] hover:text-[#991B1B] hover:bg-[#FEF2F2] rounded-xl transition-colors"
-                   >
-                      <Trash size={18} />
-                   </button>
-                </div>
-             </div>
-
-          </div>
-        ))}
+                    </td>
+                    <td className="px-4 align-middle text-right">
+                      <div className="text-[14px] font-bold text-[#1E6F73]">{formatCurrency(trip.claimAmount)}</div>
+                    </td>
+                    <td className="px-4 align-middle">
+                      <div className={`flex items-center justify-end gap-1.5 transition-opacity duration-200 ${isRowHovered ? 'opacity-100' : 'opacity-0'}`}>
+                        <button 
+                          onClick={() => handleOpenMap(trip)}
+                          title="View map"
+                          className="p-2 text-[#1E6F73] hover:bg-[#E5F1F1] rounded-lg transition-colors"
+                        >
+                          <MapTrifold size={18} weight="fill" />
+                        </button>
+                        <button 
+                          title="Edit"
+                          className="p-2 text-[#616A6B] hover:bg-white rounded-lg transition-colors border border-transparent hover:border-[#E5E7EB]"
+                        >
+                          <PencilSimple size={18} />
+                        </button>
+                        <button 
+                          title="Delete"
+                          className="p-2 text-[#616A6B] hover:text-[#991B1B] hover:bg-[#FEF2F2] rounded-lg transition-colors"
+                        >
+                          <Trash size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#616A6B] px-6 border-t border-[#E5E7EB]">
+          <div><span className="font-medium text-[#000000]">{mileages.length}</span> trips found</div>
+        </div>
       </div>
 
       <MileageMapModal 
