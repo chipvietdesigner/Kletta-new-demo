@@ -750,17 +750,18 @@ const MOCK_TAX_RETURNS_DATA: TaxReturnRow[] = [
 
 const MOCK_DASHBOARD_DATA: DashboardData = {
   kpi: {
-    income: 45250.50,
-    expenses: 12400.00,
-    profit: 32850.50
+    income: 7418.00,
+    expenses: 7095.53,
+    profit: 322.47
   },
   chart: [
-    { month: 'Jan', income: 5000, expenses: 2000, profit: 3000 },
-    { month: 'Feb', income: 7500, expenses: 2500, profit: 5000 },
-    { month: 'Mar', income: 4000, expenses: 3000, profit: 1000 },
-    { month: 'Apr', income: 8000, expenses: 1500, profit: 6500 },
-    { month: 'May', income: 6000, expenses: 2000, profit: 4000 },
-    { month: 'Jun', income: 9000, expenses: 3000, profit: 6000 },
+    { month: 'Apr', income: 0, expenses: 680, profit: -680 },
+    { month: 'May', income: 0, expenses: 680, profit: -680 },
+    { month: 'Jun', income: 0, expenses: 680, profit: -680 },
+    { month: 'Jul', income: 0, expenses: 680, profit: -680 },
+    { month: 'Aug', income: 518, expenses: 680, profit: -162 },
+    { month: 'Sept', income: 4200, expenses: 3195.53, profit: 1004.47 },
+    { month: 'Oct', income: 2700, expenses: 500, profit: 2200 },
   ]
 };
 
