@@ -25,8 +25,8 @@ const TaxReturnTable: React.FC<TaxReturnTableProps> = ({ data }) => {
   };
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
-      <div className="overflow-auto flex-1 custom-scrollbar pb-0">
+    <div className="flex flex-col overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
+      <div className="overflow-auto custom-scrollbar pb-0">
         <table className="min-w-[1400px] text-left table-fixed w-full border-collapse">
           {/* Header */}
           <thead className="bg-white text-[#000000] sticky top-0 z-10 h-[48px]">
@@ -45,12 +45,12 @@ const TaxReturnTable: React.FC<TaxReturnTableProps> = ({ data }) => {
           <tbody className="bg-white">
             {data.map((row, index) => {
               const isRowHovered = hoveredRowId === row.id;
-              const bgClass = isRowHovered ? 'bg-[#F3F4F6]' : (index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white');
+              const bgClass = isRowHovered ? 'bg-[#F9FAFB]' : 'bg-white';
               
               return (
                 <tr
                   key={row.id}
-                  className={`group transition-colors h-[64px] ${bgClass}`}
+                  className={`group transition-colors h-[64px] border-b border-[#F3F4F6] last:border-0 ${bgClass}`}
                   onMouseEnter={() => setHoveredRowId(row.id)}
                   onMouseLeave={() => setHoveredRowId(null)}
                 >
@@ -115,10 +115,8 @@ const TaxReturnTable: React.FC<TaxReturnTableProps> = ({ data }) => {
         </table>
       </div>
       {/* Footer */}
-      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#000000] flex-shrink-0 px-6 border-t border-[#E5E7EB]">
-         <div>
-            <span className="font-medium text-[#000000]">{data.length}</span> results
-         </div>
+      <div className="bg-white py-3 flex justify-between items-center text-[13px] text-[#616A6B] px-6 border-t border-[#E5E7EB]">
+         <div><span className="font-medium text-[#000000]">{data.length}</span> results found</div>
       </div>
     </div>
   );

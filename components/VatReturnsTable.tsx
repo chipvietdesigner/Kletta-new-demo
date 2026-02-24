@@ -8,8 +8,8 @@ interface VatReturnsTableProps {
 
 const VatReturnsTable: React.FC<VatReturnsTableProps> = ({ data }) => {
   return (
-    <div className="flex flex-col flex-1 overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
-      <div className="overflow-auto flex-1 custom-scrollbar pb-0">
+    <div className="flex flex-col overflow-hidden mt-4 border border-[#E5E7EB] rounded-xl bg-white shadow-sm">
+      <div className="overflow-auto custom-scrollbar pb-0">
         <table className="min-w-[1200px] text-left table-fixed w-full border-collapse">
           <thead className="bg-white text-[#000000] sticky top-0 z-10 h-[48px]">
             <tr>
@@ -25,9 +25,8 @@ const VatReturnsTable: React.FC<VatReturnsTableProps> = ({ data }) => {
           </thead>
           <tbody className="bg-white">
             {data.map((row, index) => {
-              const bgClass = index % 2 === 1 ? 'bg-[#F9F9F9]' : 'bg-white';
               return (
-                <tr key={row.id} className={`group transition-colors h-[64px] hover:bg-[#F3F4F6] ${bgClass}`}>
+                <tr key={row.id} className="group transition-colors h-[64px] border-b border-[#F3F4F6] last:border-0 hover:bg-[#F9FAFB] bg-white">
                   <td className="p-0"><div className="h-full flex items-center justify-center px-4 text-[#000000] font-normal text-[13px]">{index + 1}</div></td>
                   <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.email}</div></td>
                   <td className="p-0"><div className="h-full flex items-center px-4 text-[#000000] font-medium truncate text-[13px]">{row.companyName}</div></td>
